@@ -1,0 +1,183 @@
+import type { Metadata } from "next";
+import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { site } from "@/data/site";
+import { founder } from "@/data/leadership";
+import { whyLamha } from "@/data/whyLamha";
+import { PageHero } from "@/components/sections/PageHero";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import { Reveal } from "@/components/ui/Reveal";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { Button } from "@/components/ui/Button";
+import { Portrait } from "@/components/leadership/LeadershipCard";
+import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
+import { LeadershipGrid } from "@/components/sections/LeadershipGrid";
+import { CTASection } from "@/components/sections/CTASection";
+
+export const metadata: Metadata = buildMetadata({
+  title: "About — A Technology Company Driven by Real Impact",
+  description:
+    "LAMHA Technologies (Pvt.) Ltd. helps businesses, startups and organizations turn technical requirements and real-world problems into practical software, digital products and technology solutions. Mission, vision, values and leadership.",
+  path: "/about",
+});
+
+const beliefs = [
+  { title: "Problems before technology", description: "We start from the outcome the business needs and let that shape every technical decision." },
+  { title: "Engineering discipline", description: "Architecture, testing, security and documentation are how we respect the people who will run the system." },
+  { title: "Honest communication", description: "Clear scope, visible progress and straightforward answers, including when the answer is no." },
+  { title: "Long-term thinking", description: "We build for the years after launch, and we stay involved to keep systems improving." },
+];
+
+const direction = [
+  { title: "Technology services", description: "Growing the software, digital experience and growth practices that serve clients worldwide." },
+  { title: "Proprietary technology", description: "Developing internal systems and automation that may become reusable products once approved." },
+  { title: "New engineering frontiers", description: "Preparing to expand into engineering and R&D services when LAMHA is operationally ready to deliver them." },
+];
+
+export default function AboutPage() {
+  return (
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "About", path: "/about" }])} />
+      <PageHero
+        number="09"
+        label="About LAMHA"
+        title={
+          <>
+            A Technology Company Driven by <span className="text-gradient-blue">Real Impact.</span>
+          </>
+        }
+        description="We exist to solve meaningful problems through technology, engineering and continuous innovation."
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "About" }]}
+        actions={
+          <>
+            <Button href="/start-a-project" size="lg" icon="arrow">
+              Start a Project
+            </Button>
+            <Button href="/about/leadership" variant="outline-light" size="lg">
+              Leadership
+            </Button>
+          </>
+        }
+      />
+
+      {/* About LAMHA */}
+      <section aria-labelledby="story-heading" className="bg-white">
+        <div className="container-x section-y">
+          <div className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <SectionLabel number="01">About LAMHA</SectionLabel>
+              <h2 id="story-heading" className="mt-4 text-h2 font-semibold text-navy">
+                Who we are
+              </h2>
+            </div>
+            <div className="space-y-5 text-lg leading-relaxed text-slate-600 lg:col-span-7 lg:col-start-6">
+              <p>{site.positioning}</p>
+              <p>{site.legalName} operates as a multidisciplinary team across software engineering, digital product design, quality, security and automation, working with businesses, startups and organizations internationally.</p>
+              <p className="font-medium text-navy">{site.supportingLine}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why we exist */}
+      <section aria-labelledby="why-exist-heading" className="bg-cloud">
+        <div className="container-x section-y">
+          <SectionHeading number="02" label="Why we exist" title={<span id="why-exist-heading">Mission and vision</span>} />
+          <dl className="mt-12 grid gap-6 md:grid-cols-2">
+            <Reveal>
+              <div className="h-full rounded-lg border border-slate-200 bg-white p-8">
+                <dt className="label-caps text-blue">Mission</dt>
+                <dd className="mt-4 text-xl font-medium leading-relaxed text-navy">{site.mission}</dd>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <div className="h-full rounded-lg border border-slate-200 bg-white p-8">
+                <dt className="label-caps text-blue">Vision</dt>
+                <dd className="mt-4 text-xl font-medium leading-relaxed text-navy">{site.vision}</dd>
+              </div>
+            </Reveal>
+          </dl>
+        </div>
+      </section>
+
+      {/* What we believe */}
+      <section aria-labelledby="beliefs-heading" className="bg-white">
+        <div className="container-x section-y">
+          <SectionHeading number="03" label="What we believe" title={<span id="beliefs-heading">Principles that guide the work</span>} />
+          <ul className="mt-12 grid gap-px overflow-hidden rounded-lg border border-slate-200 bg-slate-200 sm:grid-cols-2">
+            {beliefs.map((b, i) => (
+              <Reveal key={b.title} as="li" delay={i * 60}>
+                <div className="h-full bg-white p-7">
+                  <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-4 text-lg font-semibold text-navy">{b.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{b.description}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ul>
+          <ul className="mt-6 flex flex-wrap gap-2" aria-label="Operating principles">
+            {whyLamha.map((w) => (
+              <li key={w.number} className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600">
+                {w.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* How we work */}
+      <section aria-labelledby="about-process-heading" className="bg-cloud">
+        <div className="container-x section-y">
+          <SectionHeading number="04" label="How we work" title={<span id="about-process-heading">Six stages from discovery to evolution</span>} />
+          <div className="mt-12">
+            <ProcessTimeline />
+          </div>
+        </div>
+      </section>
+
+      {/* Founder */}
+      <section aria-labelledby="founder-heading" className="bg-white">
+        <div className="container-x section-y">
+          <div className="grid items-center gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <Reveal>
+                <Portrait leader={founder} size="lg" className="max-w-sm" />
+              </Reveal>
+            </div>
+            <div className="lg:col-span-7">
+              <SectionLabel number="05">Founder</SectionLabel>
+              <h2 id="founder-heading" className="mt-4 text-h2 font-semibold text-navy">
+                {founder.name}
+              </h2>
+              <p className="mt-2 text-lg font-medium text-blue">{founder.role}</p>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">{founder.bio ?? "Approved founder biography coming soon. The founder is the primary public leadership feature at launch; biography and portrait will be published once approved."}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership */}
+      <LeadershipGrid number="06" />
+
+      {/* Where we're going */}
+      <section aria-labelledby="direction-heading" className="dark-section bg-navy text-white">
+        <div className="container-x section-y">
+          <SectionHeading number="07" label="Where we're going" title={<span id="direction-heading">Two engines, one direction</span>} description="LAMHA combines technology services with proprietary technology, and is preparing the ground for future engineering frontiers." tone="dark" />
+          <ol className="mt-12 grid gap-4 md:grid-cols-3">
+            {direction.map((d, i) => (
+              <Reveal key={d.title} as="li" delay={i * 70}>
+                <div className="h-full rounded-lg border border-white/10 bg-white/[0.03] p-7">
+                  <span className="font-mono text-xs text-blue-200">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-4 text-lg font-semibold text-white">{d.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">{d.description}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <CTASection location="about" />
+    </>
+  );
+}

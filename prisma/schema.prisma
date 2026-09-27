@@ -1,0 +1,178 @@
+// LAMHA Technologies — production data model
+// Mirrors the CRM-ready payloads used by the intake APIs.
+//
+// DATABASE_URL  — runtime connection (may be a pooled/pgbouncer URL)
+// DIRECT_URL    — direct connection used by `prisma migrate` (same value if no pooler)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum InquiryStatus {
+  NEW
+  QUALIFIED
+  CONTACTED
+  PROPOSAL
+  WON
+  LOST
+  SPAM
+}
+
+enum ContactStatus {
+  NEW
+  REPLIED
+  CLOSED
+  SPAM
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+  DRAFT
+  DEMO
+}
+
+enum ApplicationStatus {
+  NEW
+  REVIEWING
+  INTERVIEW
+  OFFER
+  REJECTED
+  HIRED
+}
+
+/// Start a Project submissions (website lead intake)
+model ProjectInquiry {
+  id          String        @id @default(uuid())
+  fullName    String
+  company     String?
+  email       String
+  phone       String?
+  country     String?
+  projectName String?
+  service     String
+  industry    String?
+  description String
+  stage       String?
+  budget      String?
+  timeline    String?
+  consent     Boolean
+  source      String        @default("website:start-a-project")
+  status      InquiryStatus @default(NEW)
+
+  // Non-identifying request metadata (spam triage)
+  userAgent String?
+  referer   String?
+  locale    String?
+
+  // Downstream integration references (CRM, LinkedOut, Dialer)
+  crmId       String?
+  linkedOutId String?
+  dialerId    String?
+
+  notifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  attachments ProjectAttachment[]
+
+  @@index([createdAt])
+  @@index([email])
+  @@index([status])
+}
+
+model ProjectAttachment {
+  id              String   @id @default(uuid())
+  inquiryId       String
+  inquiry         ProjectInquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  originalName    String
+  storageProvider String
+  storageKey      String
+  url             String?
+  size            Int
+  mimeType        String
+  createdAt       DateTime @default(now())
+
+  @@index([inquiryId])
+}
+
+/// Contact page messages
+model ContactMessage {
+  id         String        @id @default(uuid())
+  name       String
+  email      String
+  topic      String
+  message    String
+  consent    Boolean
+  source     String        @default("website:contact")
+  status     ContactStatus @default(NEW)
+  userAgent  String?
+  referer    String?
+  notifiedAt DateTime?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([createdAt])
+}
+
+/// Careers positions (seeded from src/data/jobs.ts; CMS-ready)
+model Job {
+  id               String    @id @default(uuid())
+  slug             String    @unique
+  title            String
+  department       String
+  location         String
+  employmentType   String
+  summary          String
+  description      String
+  responsibilities String[]
+  requirements     String[]
+  niceToHave       String[]
+  benefits         String[]
+  status           JobStatus @default(DRAFT)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  applications JobApplication[]
+}
+
+/// Careers applications
+model JobApplication {
+  id          String            @id @default(uuid())
+  jobId       String?
+  job         Job?              @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  roleSlug    String
+  roleTitle   String
+  name        String
+  email       String
+  phone       String?
+  portfolio   String?
+  linkedin    String?
+  github      String?
+  coverLetter String?
+
+  cvOriginalName    String?
+  cvStorageProvider String?
+  cvStorageKey      String?
+  cvUrl             String?
+  cvSize            Int?
+  cvMimeType        String?
+
+  consent    Boolean
+  source     String            @default("website:careers")
+  status     ApplicationStatus @default(NEW)
+  userAgent  String?
+  referer    String?
+  notifiedAt DateTime?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@index([createdAt])
+  @@index([roleSlug])
+}
