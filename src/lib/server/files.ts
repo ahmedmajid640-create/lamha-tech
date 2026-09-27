@@ -32,7 +32,12 @@ export interface FileStorage {
   getReference(key: string): string;
 }
 
-export const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(process.cwd(), ".data");
+// On serverless hosts the bundle is read-only; only /tmp is writable (and ephemeral).
+export const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+    ? path.join("/tmp", "lamha-data")
+    : path.join(process.cwd(), ".data");
 
 const SAFE_KEY = /^[a-zA-Z0-9/_.-]{1,255}$/;
 

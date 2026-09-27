@@ -61,6 +61,40 @@ docs/                   PRD, brand guidelines, MVP status report
 .data/                  local persistence (git-ignored): leads/, applications/, contacts/, uploads/
 ```
 
+## Production setup
+
+| Concern | Provider | Env vars |
+| --- | --- | --- |
+| Database | PostgreSQL via Prisma (`prisma/schema.prisma`) | `DATABASE_URL`, `DIRECT_URL` |
+| Uploads | Vercel Blob, **private** access (falls back to local disk in dev) | `BLOB_READ_WRITE_TOKEN` |
+| Email | Resend (falls back to console logging in dev) | `EMAIL_API_KEY`, `EMAIL_FROM`, `EMAIL_TO` |
+| Site URL | canonical/OG/sitemap | `NEXT_PUBLIC_SITE_URL` |
+
+`npm run build` runs `scripts/prebuild.mjs` first: it generates the Prisma client and applies
+pending migrations (`prisma migrate deploy`) whenever `DATABASE_URL` is set, so a Vercel build
+migrates the production database automatically. Without `DATABASE_URL` the app falls back to
+JSON files under `.data/` (development only).
+
+```bash
+npm run db:migrate:dev    # create/apply migrations locally
+npm run db:seed           # upsert jobs from src/data/jobs.ts
+curl /api/health          # { persistence, database, storage, email } — no secrets
+```
+
+### Deploy to Vercel
+
+```bash
+vercel login
+vercel link                       # create/link the project
+vercel blob store add lamha-uploads   # then attach it to the project (sets BLOB_READ_WRITE_TOKEN)
+# add a Postgres database (Vercel Marketplace → Neon/Supabase) or set DATABASE_URL + DIRECT_URL manually
+vercel env add EMAIL_API_KEY production   # Resend
+vercel env add EMAIL_FROM production
+vercel env add EMAIL_TO production
+vercel env add NEXT_PUBLIC_SITE_URL production
+vercel --prod
+```
+
 ## Intake APIs
 
 | Endpoint            | Body                  | Stores to             | Notes                                              |

@@ -117,6 +117,22 @@ No invented clients, testimonials, statistics, awards, certifications, partnersh
 
 ---
 
+## 5b. Production hardening (2026-09-28, second pass)
+
+| Area | Implementation | Verified |
+| --- | --- | --- |
+| Database | PostgreSQL via Prisma 6 (`prisma/schema.prisma`): `ProjectInquiry`, `ProjectAttachment`, `ContactMessage`, `Job`, `JobApplication`; migration `20260927202909_init` | Applied to local Postgres 16 (Docker); rows verified with `psql` for all three flows |
+| Repository layer | `src/lib/server/repositories.ts` selects Prisma when `DATABASE_URL` is set, JSON files otherwise; routes unchanged in contract | API suite: 13/13 pass on the Postgres backend |
+| File storage | `src/lib/server/files.ts`: Vercel Blob with `access: "private"` when `BLOB_READ_WRITE_TOKEN` is set; local disk (or `/tmp` on serverless) otherwise; randomized keys; magic-byte + MIME + extension + size validation | Local provider verified; Blob provider requires the store token |
+| Email | `src/lib/server/email.ts`: Resend provider with HTML/text templates (escaped), console fallback; `notifiedAt` stamped on success; sent via `after()` so responses stay fast | Console fallback verified; live sending requires `EMAIL_API_KEY` + `EMAIL_TO` |
+| Build pipeline | `scripts/prebuild.mjs`: `prisma generate` + `prisma migrate deploy` when a database is configured | Verified locally ("No pending migrations to apply") |
+| Health | `GET /api/health` reports persistence / database / storage / email status without secrets | Verified |
+| Legal | `/privacy` and `/terms` placeholder pages (clearly marked, noindex), linked in footer | Verified |
+| Git | Repository initialized; `.env*`, `.data`, `node_modules`, `.next` ignored; `.gitattributes` LF | Commits `a602ea9`, `7c7b383` |
+
+CSP remains `script-src 'self' 'unsafe-inline'`: a nonce-based policy would force every page to
+render dynamically (losing static generation); deferred as P1 per the production brief.
+
 ## 6. Production TODOs
 
 1. Supply approved founder/leadership biographies and portraits (`src/data/leadership.ts`).
