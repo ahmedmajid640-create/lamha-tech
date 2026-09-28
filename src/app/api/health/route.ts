@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getBackend } from "@/lib/server/repositories";
 import { getPrisma } from "@/lib/server/db";
 import { getFileStorage } from "@/lib/server/files";
-import { isEmailConfigured } from "@/lib/server/email";
+import { emailProviderName, isEmailConfigured } from "@/lib/server/email";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,7 +28,7 @@ export async function GET() {
     persistence: backend,
     database,
     storage: getFileStorage().provider,
-    email: isEmailConfigured() ? "configured" : "not_configured",
+    email: isEmailConfigured() ? `configured:${emailProviderName()}` : "not_configured",
     version: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
   };
   return NextResponse.json(body, { status: body.ok ? 200 : 503, headers: { "cache-control": "no-store" } });

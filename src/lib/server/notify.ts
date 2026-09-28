@@ -1,7 +1,8 @@
 import "server-only";
 import { site } from "@/data/site";
-import { renderNotification, sendEmail } from "./email";
+import { isEmailConfigured, renderNotification, sendEmail } from "./email";
 import { getFileStorage } from "./files";
+import { getPrisma, isDatabaseConfigured } from "./db";
 import type { ApplicationRecord, ContactRecord, LeadRecord, StoredAttachment } from "./storage";
 
 /**
@@ -13,7 +14,15 @@ import type { ApplicationRecord, ContactRecord, LeadRecord, StoredAttachment } f
  */
 export type NotificationKind = "lead.created" | "application.created" | "contact.created";
 
-export type NotifyResult = { emailed: boolean; emailError?: string; webhooked: boolean };
+export type NotifyResult = { emailed: boolean; emailError?: string; webhooked: boolean; configured: boolean };
+
+/** Human-readable timestamp in the company's timezone plus the ISO value for precision. */
+function formatSubmitted(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const local = new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short", timeZone: "Asia/Karachi" }).format(d);
+  return `${local} (PKT) · ${iso}`;
+}
 
 function attachmentLines(files: StoredAttachment[]): string {
   if (files.length === 0) return "None";
@@ -43,7 +52,7 @@ export function buildLeadEmail(lead: LeadRecord) {
       ["Budget", lead.budget],
       ["Timeline", lead.timeline],
       ["Source", lead.source],
-      ["Submitted", lead.createdAt],
+      ["Submitted", formatSubmitted(lead.createdAt)],
     ],
     longText: [
       { label: "Project description", value: lead.description },
@@ -51,7 +60,7 @@ export function buildLeadEmail(lead: LeadRecord) {
     ],
     footer: `Open in the owner portal: ${siteLink(`/admin/inquiries/${lead.id}`)} · Reply directly to this email to contact the requester.`,
   });
-  return { subject, ...body, replyTo: lead.email };
+  return { subject, ...body, replyTo: lead.email, idempotencyKey: `lead.created:${lead.id}` };
 }
 
 export function buildContactEmail(msg: ContactRecord) {
@@ -63,12 +72,12 @@ export function buildContactEmail(msg: ContactRecord) {
       ["Name", msg.name],
       ["Email", msg.email],
       ["Topic", msg.topic],
-      ["Submitted", msg.createdAt],
+      ["Submitted", formatSubmitted(msg.createdAt)],
     ],
     longText: [{ label: "Message", value: msg.message }],
     footer: `Open in the owner portal: ${siteLink(`/admin/contacts/${msg.id}`)} · Reply directly to this email to respond.`,
   });
-  return { subject, ...body, replyTo: msg.email };
+  return { subject, ...body, replyTo: msg.email, idempotencyKey: `contact.created:${msg.id}` };
 }
 
 export function buildApplicationEmail(app: ApplicationRecord) {
@@ -84,7 +93,7 @@ export function buildApplicationEmail(app: ApplicationRecord) {
       ["Portfolio", app.portfolio],
       ["LinkedIn", app.linkedin],
       ["GitHub", app.github],
-      ["Submitted", app.createdAt],
+      ["Submitted", formatSubmitted(app.createdAt)],
     ],
     longText: [
       { label: "Cover letter", value: app.coverLetter },
@@ -92,7 +101,7 @@ export function buildApplicationEmail(app: ApplicationRecord) {
     ],
     footer: `Open in the owner portal: ${siteLink(`/admin/applications/${app.id}`)} · CVs are stored privately and downloadable from the portal.`,
   });
-  return { subject, ...body, replyTo: app.email };
+  return { subject, ...body, replyTo: app.email, idempotencyKey: `application.created:${app.id}` };
 }
 
 async function postWebhook(kind: NotificationKind, payload: Record<string, unknown>): Promise<boolean> {
@@ -118,6 +127,20 @@ async function postWebhook(kind: NotificationKind, payload: Record<string, unkno
   }
 }
 
+const ENTITY: Record<NotificationKind, string> = { "lead.created": "inquiry", "contact.created": "contact", "application.created": "application" };
+
+/** Makes a delivery failure visible in the owner portal (audit log + record activity). Never throws. */
+async function recordNotificationFailure(kind: NotificationKind, recordId: string, provider: string, error: string): Promise<void> {
+  if (!isDatabaseConfigured()) return;
+  try {
+    await getPrisma().auditLog.create({
+      data: { actorEmail: "system@website", action: "notification.failed", entityType: ENTITY[kind], entityId: recordId, details: { kind, provider, error: error.slice(0, 300) } },
+    });
+  } catch (err) {
+    console.error("[notify] could not record failure:", err instanceof Error ? err.message : "unknown error");
+  }
+}
+
 export async function notify(
   kind: NotificationKind,
   record: LeadRecord | ContactRecord | ApplicationRecord,
@@ -129,13 +152,16 @@ export async function notify(
         ? buildContactEmail(record as ContactRecord)
         : buildApplicationEmail(record as ApplicationRecord);
 
+  const configured = isEmailConfigured();
   const [emailResult, webhooked] = await Promise.all([
     sendEmail(email),
     postWebhook(kind, { id: record.id, createdAt: record.createdAt, record }),
   ]);
 
-  if (!emailResult.ok && emailResult.error !== "email_not_configured" && emailResult.error !== "EMAIL_TO is not configured") {
-    console.error(`[notify] ${kind} email failed (${emailResult.provider}): ${emailResult.error}`);
+  if (!emailResult.ok && configured) {
+    // Safe diagnostics only: kind, record id, provider and the provider's error text. Never the message body or credentials.
+    console.error(`[notify] ${kind} email failed for ${record.id} (${emailResult.provider}): ${emailResult.error}`);
+    await recordNotificationFailure(kind, record.id, emailResult.provider, emailResult.error ?? "unknown error");
   }
-  return { emailed: emailResult.ok, emailError: emailResult.ok ? undefined : emailResult.error, webhooked };
+  return { emailed: emailResult.ok, emailError: emailResult.ok ? undefined : emailResult.error, webhooked, configured };
 }

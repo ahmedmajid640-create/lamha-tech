@@ -10,7 +10,7 @@
 | Deploy method | `vercel deploy --prod` from the repo (CLI). Connecting the GitHub repo in the Vercel dashboard enables automatic deploys on push. |
 | Blob storage | `lamha-uploads` (store_nnjDkArwWH6hmHMl), private, linked; `BLOB_READ_WRITE_TOKEN` set for all environments |
 | Database | Neon PostgreSQL `neon-blue-sail` via Vercel Marketplace, connected to the project; `DATABASE_URL` (pooled) injected, `DIRECT_URL` set to the unpooled URL in all environments; migration `20260927202909_init` applied by the production build |
-| Email | **Pending key**: `EMAIL_TO=syedalaibawork@gmail.com` and interim `EMAIL_FROM` are set; `EMAIL_API_KEY` (Resend) still required. After Resend domain verification, set `EMAIL_FROM` to an `@lamhatechnologies.com` address. |
+| Email | `EMAIL_TO=syedalaibawork@gmail.com` and interim `EMAIL_FROM=LAMHA Website <onboarding@resend.dev>` are set. **`EMAIL_API_KEY` must be added by the account owner** in Vercel → Settings → Environment Variables (Production), then redeploy. Until the domain is verified in Resend, `onboarding@resend.dev` can only deliver to the Resend account owner's own address. After verification, set `EMAIL_FROM` to an `@lamhatechnologies.com` address. Failures are visible in the portal (dashboard banner + audit action `notification.failed`); records are never lost. |
 | Local note | Outbound port 5432 is blocked on the dev machine; use the Neon HTTP driver or the Vercel build for migrations |
 | `NEXT_PUBLIC_SITE_URL` | `https://lamhatechnologies.com` (Production + Preview) |
 | `.vercelignore` | excludes `.env*`, `.data`, `node_modules`, `.next`, doc binaries |

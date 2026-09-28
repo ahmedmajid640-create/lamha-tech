@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireUser } from "@/lib/server/auth";
 import { getPrisma } from "@/lib/server/db";
+import { isEmailConfigured } from "@/lib/server/email";
 import { Card, Empty, PageHeader, Stat, StatusBadge, Td, Th, fmtDate } from "@/components/admin/ui";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -31,11 +32,34 @@ export default async function DashboardPage() {
   ]);
 
   const statusCount = Object.fromEntries(inqByStatus.map((s) => [s.status, s._count._all]));
+  const emailConfigured = isEmailConfigured();
+  const [unsentInq, unsentApps, unsentContacts] = emailConfigured
+    ? await Promise.all([
+        prisma.projectInquiry.count({ where: { notifiedAt: null, createdAt: { gte: d7 } } }),
+        prisma.jobApplication.count({ where: { notifiedAt: null, createdAt: { gte: d7 } } }),
+        prisma.contactMessage.count({ where: { notifiedAt: null, createdAt: { gte: d7 } } }),
+      ])
+    : [0, 0, 0];
+  const unsent = unsentInq + unsentApps + unsentContacts;
   const pipeline = ["NEW", "QUALIFIED", "CONTACTED", "PROPOSAL", "WON", "LOST", "SPAM"] as const;
 
   return (
     <>
       <PageHeader title={`Welcome, ${user.name.split(" ")[0]}`} description={`Live data from the website database · ${fmtDate(now)} PKT`} />
+      {!emailConfigured && (
+        <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Email notifications are <strong>not configured</strong> (EMAIL_API_KEY is missing). Every submission is still saved here; add the key in Vercel to receive an email per lead.
+        </div>
+      )}
+      {emailConfigured && unsent > 0 && (
+        <div className="mb-6 rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+          {unsent} submission{unsent === 1 ? "" : "s"} in the last 7 days did not produce an email notification.{" "}
+          <Link href="/admin/audit?action=notification.failed" className="underline">
+            See failures in the audit log
+          </Link>
+          . The records themselves are safe.
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label="New inquiries" value={inqNew} hint={`${inqTotal} total · ${inq7} in the last 7 days`} href="/admin/inquiries?status=NEW" />

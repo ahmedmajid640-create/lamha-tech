@@ -39,6 +39,8 @@ export function describeAction(e: Pick<AuditLog, "action" | "details">): string 
       return `Backup created (${String(d.trigger ?? "")}, ${Math.round(Number(d.bytes ?? 0) / 1024)} KB)`;
     case "backup.downloaded":
       return "Backup downloaded";
+    case "notification.failed":
+      return `Email notification failed (${String(d.provider ?? "")}): ${String(d.error ?? "")}`;
     default:
       return e.action;
   }

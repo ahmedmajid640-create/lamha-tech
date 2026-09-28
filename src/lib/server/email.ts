@@ -15,7 +15,10 @@ export type EmailMessage = {
   subject: string;
   text: string;
   html: string;
+  /** Visitor address for replies. Never used as the sender. */
   replyTo?: string;
+  /** Stable key per record so provider retries cannot produce duplicate emails. */
+  idempotencyKey?: string;
 };
 
 export type EmailResult = { ok: boolean; provider: string; id?: string; error?: string };
@@ -32,15 +35,19 @@ class ResendProvider implements EmailProvider {
     this.client = new Resend(apiKey);
   }
   async send(message: EmailMessage & { to: string[]; from: string }): Promise<EmailResult> {
-    const { data, error } = await this.client.emails.send({
-      from: message.from,
-      to: message.to,
-      subject: message.subject,
-      text: message.text,
-      html: message.html,
-      replyTo: message.replyTo,
-    });
-    if (error) return { ok: false, provider: this.name, error: error.message };
+    const { data, error } = await this.client.emails.send(
+      {
+        from: message.from,
+        to: message.to,
+        subject: message.subject,
+        text: message.text,
+        html: message.html,
+        replyTo: message.replyTo,
+      },
+      message.idempotencyKey ? { idempotencyKey: message.idempotencyKey } : undefined,
+    );
+    // Resend error messages are safe, non-secret diagnostics (e.g. "domain not verified").
+    if (error) return { ok: false, provider: this.name, error: `${error.name}: ${error.message}`.slice(0, 300) };
     return { ok: true, provider: this.name, id: data?.id };
   }
 }
@@ -54,35 +61,48 @@ class ConsoleProvider implements EmailProvider {
   }
 }
 
-export const emailConfig = {
-  apiKey: process.env.EMAIL_API_KEY ?? process.env.RESEND_API_KEY ?? null,
-  from: process.env.EMAIL_FROM ?? "LAMHA Website <onboarding@resend.dev>",
-  to: (process.env.EMAIL_TO ?? "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean),
-};
+/** Read lazily so tests and serverless cold starts always see the current environment. */
+export function getEmailConfig() {
+  return {
+    apiKey: process.env.EMAIL_API_KEY ?? process.env.RESEND_API_KEY ?? null,
+    from: (process.env.EMAIL_FROM ?? "").trim() || "LAMHA Website <onboarding@resend.dev>",
+    to: (process.env.EMAIL_TO ?? "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  };
+}
 
 export function isEmailConfigured(): boolean {
-  return Boolean(emailConfig.apiKey && emailConfig.to.length > 0);
+  const c = getEmailConfig();
+  return Boolean(c.apiKey && c.to.length > 0);
+}
+
+/** "resend" | "console" — safe to expose (no secrets). */
+export function emailProviderName(): string {
+  return getEmailConfig().apiKey ? "resend" : "console";
 }
 
 let provider: EmailProvider | null = null;
+let providerKey: string | null = null;
 
 function getProvider(): EmailProvider {
-  if (provider) return provider;
-  provider = emailConfig.apiKey ? new ResendProvider(emailConfig.apiKey) : new ConsoleProvider();
+  const { apiKey } = getEmailConfig();
+  if (provider && providerKey === apiKey) return provider;
+  provider = apiKey ? new ResendProvider(apiKey) : new ConsoleProvider();
+  providerKey = apiKey;
   return provider;
 }
 
 /** Sends an internal notification email. Never throws. */
 export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
-  const to = message.to && message.to.length ? message.to : emailConfig.to;
+  const config = getEmailConfig();
+  const to = message.to && message.to.length ? message.to : config.to;
   if (to.length === 0) return { ok: false, provider: "none", error: "EMAIL_TO is not configured" };
   try {
-    return await getProvider().send({ ...message, to, from: emailConfig.from });
+    return await getProvider().send({ ...message, to, from: config.from });
   } catch (err) {
-    return { ok: false, provider: getProvider().name, error: err instanceof Error ? err.message : "unknown error" };
+    return { ok: false, provider: getProvider().name, error: (err instanceof Error ? err.message : "unknown error").slice(0, 300) };
   }
 }
 
