@@ -4,15 +4,15 @@
 
 | Item | Value |
 | --- | --- |
-| Production URL | https://lamha-tech.vercel.app |
+| Production URL | **https://lamhatechnologies.com** (bought 2026-09-28 via Vercel registrar, Vercel nameservers, auto-renew $11.25/yr). `www.lamhatechnologies.com` and `lamha-tech.vercel.app` 308-redirect to it. |
 | Vercel project | `lamha-tech` in team `syedalaibawork-8834` (Hobby) |
 | Source | https://github.com/ahmedmajid640-create/lamha-tech (branch `main`) |
 | Deploy method | `vercel deploy --prod` from the repo (CLI). Connecting the GitHub repo in the Vercel dashboard enables automatic deploys on push. |
 | Blob storage | `lamha-uploads` (store_nnjDkArwWH6hmHMl), private, linked; `BLOB_READ_WRITE_TOKEN` set for all environments |
 | Database | Neon PostgreSQL `neon-blue-sail` via Vercel Marketplace, connected to the project; `DATABASE_URL` (pooled) injected, `DIRECT_URL` set to the unpooled URL in all environments; migration `20260927202909_init` applied by the production build |
-| Email | **Pending**: needs `EMAIL_API_KEY` (Resend), `EMAIL_FROM`, `EMAIL_TO` in Production |
+| Email | **Pending key**: `EMAIL_TO=syedalaibawork@gmail.com` and interim `EMAIL_FROM` are set; `EMAIL_API_KEY` (Resend) still required. After Resend domain verification, set `EMAIL_FROM` to an `@lamhatechnologies.com` address. |
 | Local note | Outbound port 5432 is blocked on the dev machine; use the Neon HTTP driver or the Vercel build for migrations |
-| `NEXT_PUBLIC_SITE_URL` | set to the production URL (Production + Preview) |
+| `NEXT_PUBLIC_SITE_URL` | `https://lamhatechnologies.com` (Production + Preview) |
 | `.vercelignore` | excludes `.env*`, `.data`, `node_modules`, `.next`, doc binaries |
 
 Target platform: **Vercel** (Next.js 16). Database: **PostgreSQL** (any provider; Neon via the Vercel

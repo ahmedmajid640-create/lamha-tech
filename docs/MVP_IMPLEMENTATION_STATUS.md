@@ -135,7 +135,7 @@ render dynamically (losing static generation); deferred as P1 per the production
 
 ## 5c. Deployment (2026-09-28)
 
-Live at **https://lamha-tech.vercel.app** (Vercel, CLI deploy of `main`). Verified live: sampled routes 200, 404/405 correct, canonical + sitemap on the production domain, 6/6 security headers, TTFB ≈ 0.4–0.5 s. Blob storage connected (private). Database: Neon PostgreSQL connected and migrated (production persistence verified with live submissions read back from the database). Email pending Resend credentials; see `docs/DEPLOYMENT.md`.
+Live at **https://lamhatechnologies.com** (custom domain on Vercel; `www` and the vercel.app address redirect to it). Verified live: sampled routes 200, 404/405 correct, canonical + sitemap on the production domain, 6/6 security headers, TTFB ≈ 0.4–0.5 s. Blob storage connected (private). Database: Neon PostgreSQL connected and migrated (production persistence verified with live submissions read back from the database). Email pending Resend credentials; see `docs/DEPLOYMENT.md`.
 
 ## 5d. Production hardening pass (2026-09-28, launch prep)
 
