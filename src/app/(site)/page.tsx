@@ -25,7 +25,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
 
 export const metadata: Metadata = buildMetadata({
-  title: `${site.shortName} — Tech Agency`,
+  title: `${site.name} — Tech Agency`,
   description: site.description,
   path: "/",
   absoluteTitle: true,
@@ -34,7 +34,7 @@ export const metadata: Metadata = buildMetadata({
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={webPageJsonLd({ title: `${site.shortName} — Tech Agency`, description: site.description, path: "/" })} />
+      <JsonLd data={webPageJsonLd({ title: `${site.name} — Tech Agency`, description: site.description, path: "/" })} />
       {/* 01 Hero — pinned, scroll-driven particle field */}
       <ImmersiveHero />
 

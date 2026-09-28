@@ -29,7 +29,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.shortName} — Tech Agency`,
+    default: `${site.name} — Tech Agency`,
     template: `%s | ${site.name}`,
   },
   description: site.description,
@@ -53,13 +53,13 @@ export const metadata: Metadata = {
     type: "website",
     siteName: site.name,
     locale: "en_US",
-    title: `${site.shortName} — Tech Agency`,
+    title: `${site.name} — Tech Agency`,
     description: site.description,
     url: site.url,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.shortName} — Tech Agency`,
+    title: `${site.name} — Tech Agency`,
     description: site.description,
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
