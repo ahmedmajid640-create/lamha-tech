@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
+import { SiteShell } from "@/components/layout/SiteShell";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
+    <SiteShell>
     <section className="dark-section relative flex min-h-[80vh] items-center overflow-hidden bg-abyss text-white">
       <DarkBackdrop />
       <div className="container-x relative py-[calc(var(--header-h)+4rem)]">
@@ -33,5 +35,6 @@ export default function NotFound() {
         </div>
       </div>
     </section>
+    </SiteShell>
   );
 }

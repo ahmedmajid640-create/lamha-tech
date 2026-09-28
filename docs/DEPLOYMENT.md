@@ -57,6 +57,7 @@ vercel env add EMAIL_API_KEY production
 vercel env add EMAIL_FROM production          # e.g. "LAMHA Website <notifications@lamhatech.com>"
 vercel env add EMAIL_TO production            # comma-separated internal recipients
 vercel env add NEXT_PUBLIC_SITE_URL production   # e.g. https://lamha-website.vercel.app (or the custom domain)
+vercel env add ADMIN_SETUP_TOKEN production      # one-time: bootstrap the first portal Owner, then remove (docs/ADMIN_PORTAL.md)
 ```
 
 `BLOB_READ_WRITE_TOKEN` is added automatically when the Blob store is connected to the project.

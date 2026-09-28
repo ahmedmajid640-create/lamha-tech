@@ -49,7 +49,7 @@ export function buildLeadEmail(lead: LeadRecord) {
       { label: "Project description", value: lead.description },
       { label: "Attachments", value: attachmentLines(lead.attachments) },
     ],
-    footer: "Reply directly to this email to contact the requester. Attachments are stored privately and referenced by key.",
+    footer: `Open in the owner portal: ${siteLink(`/admin/inquiries/${lead.id}`)} · Reply directly to this email to contact the requester.`,
   });
   return { subject, ...body, replyTo: lead.email };
 }
@@ -66,7 +66,7 @@ export function buildContactEmail(msg: ContactRecord) {
       ["Submitted", msg.createdAt],
     ],
     longText: [{ label: "Message", value: msg.message }],
-    footer: "Reply directly to this email to respond.",
+    footer: `Open in the owner portal: ${siteLink(`/admin/contacts/${msg.id}`)} · Reply directly to this email to respond.`,
   });
   return { subject, ...body, replyTo: msg.email };
 }
@@ -90,7 +90,7 @@ export function buildApplicationEmail(app: ApplicationRecord) {
       { label: "Cover letter", value: app.coverLetter },
       { label: "CV", value: app.cv ? attachmentLines([app.cv]) : "None" },
     ],
-    footer: "CVs are stored privately and referenced by key.",
+    footer: `Open in the owner portal: ${siteLink(`/admin/applications/${app.id}`)} · CVs are stored privately and downloadable from the portal.`,
   });
   return { subject, ...body, replyTo: app.email };
 }
