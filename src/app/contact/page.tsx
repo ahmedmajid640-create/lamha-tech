@@ -91,7 +91,10 @@ export default function ContactPage() {
                 </a>
                 <div className="flex items-start gap-3 rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-600">
                   <Globe2 className="mt-0.5 h-4 w-4 shrink-0 text-blue" aria-hidden="true" />
-                  <p>{site.contact.deliveryNote} Office address will be published once confirmed.</p>
+                  <p>
+                    <span className="block font-medium text-navy">{site.contact.city}, {site.contact.country}</span>
+                    Remote-first delivery for clients worldwide. Full office address will be published once confirmed.
+                  </p>
                 </div>
               </div>
             </div>

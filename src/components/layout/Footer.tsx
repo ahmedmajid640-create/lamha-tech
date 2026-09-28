@@ -64,7 +64,8 @@ export function Footer() {
           <div>
             <h2 className="label-caps text-slate-500">Company</h2>
             <p className="mt-3 text-sm text-slate-300">{site.legalName}</p>
-            <p className="mt-1 text-sm text-slate-500">{site.contact.deliveryNote}</p>
+            <p className="mt-1 text-sm text-slate-400">{site.contact.city}, {site.contact.country}</p>
+            <p className="mt-1 text-sm text-slate-500">Remote-first delivery for clients worldwide.</p>
           </div>
         </div>
 

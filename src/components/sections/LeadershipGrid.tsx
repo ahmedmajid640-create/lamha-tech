@@ -36,8 +36,8 @@ export function LeadershipGrid({ number = "10", tone = "light", showLink = true 
                 <dd className={cn("mt-1", dark ? "text-slate-200" : "text-navy")}>{site.legalName}</dd>
               </div>
               <div>
-                <dt className="label-caps text-slate-500">Delivery</dt>
-                <dd className={cn("mt-1", dark ? "text-slate-200" : "text-navy")}>{site.contact.deliveryNote}</dd>
+                <dt className="label-caps text-slate-500">Based in</dt>
+                <dd className={cn("mt-1", dark ? "text-slate-200" : "text-navy")}>{site.contact.city}, {site.contact.country} · remote-first, worldwide</dd>
               </div>
             </dl>
             <div className="mt-8 flex flex-wrap gap-3">

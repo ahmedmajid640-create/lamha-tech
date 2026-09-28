@@ -79,7 +79,7 @@ export function ImmersiveHero() {
             {/* Phase 01 */}
             <motion.div style={{ opacity: o1, y: y1 }} className={phase === 0 ? "max-w-4xl" : "pointer-events-none max-w-4xl"} aria-hidden={phase !== 0}>
               <SectionLabel number="01" tone="dark">
-                {"LAMHA Technologies · Remote-first · Worldwide".split(" ").map((w, i) => (
+                {"LAMHA Technologies · Islamabad · Remote-first · Worldwide".split(" ").map((w, i) => (
                   <span key={i} className="word-hover inline-block">
                     {w}
                     {" "}

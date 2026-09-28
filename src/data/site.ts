@@ -27,7 +27,11 @@ export const site = {
     phone: "+92 334 1606621" as string | null,
     phoneDisplay: "0334 1606621",
     address: null as string | null,
-    deliveryNote: "Remote-first delivery for clients worldwide.",
+    city: "Islamabad",
+    country: "Pakistan",
+    countryCode: "PK",
+    timeZone: "Asia/Karachi",
+    deliveryNote: "Based in Islamabad. Remote-first delivery for clients worldwide.",
   },
   about: {
     short:

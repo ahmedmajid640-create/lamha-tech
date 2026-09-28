@@ -63,6 +63,9 @@ export function organizationJsonLd() {
     slogan: site.tagline,
     description: site.description,
     email: site.contact.generalEmail,
+    telephone: site.contact.phone ?? undefined,
+    address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressCountry: site.contact.countryCode },
+    areaServed: "Worldwide",
   };
 }
 
