@@ -29,7 +29,7 @@ export function Footer() {
           <div className="grid gap-10 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-4">
             {footerNav.map((group) => (
               <nav key={group.heading} aria-label={group.heading}>
-                <h2 className="label-caps text-slate-500">{group.heading}</h2>
+                <p className="label-caps text-slate-500">{group.heading}</p>
                 <ul className="mt-5 space-y-3">
                   {group.items.map((item) => (
                     <li key={item.href + item.label}>
@@ -46,7 +46,7 @@ export function Footer() {
 
         <div className="mt-16 grid gap-6 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h2 className="label-caps text-slate-500">Email</h2>
+            <p className="label-caps text-slate-500">Email</p>
             <a href={`mailto:${site.contact.generalEmail}`} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white">
               <Mail className="h-4 w-4 text-blue-2" aria-hidden="true" />
               {site.contact.generalEmail}
@@ -54,7 +54,7 @@ export function Footer() {
           </div>
           {site.contact.phone && (
             <div>
-              <h2 className="label-caps text-slate-500">Phone</h2>
+              <p className="label-caps text-slate-500">Phone</p>
               <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white">
                 <Phone className="h-4 w-4 text-blue-2" aria-hidden="true" />
                 {site.contact.phone}
@@ -62,7 +62,7 @@ export function Footer() {
             </div>
           )}
           <div>
-            <h2 className="label-caps text-slate-500">Company</h2>
+            <p className="label-caps text-slate-500">Company</p>
             <p className="mt-3 text-sm text-slate-300">{site.legalName}</p>
             <p className="mt-1 text-sm text-slate-400">{site.contact.city}, {site.contact.country}</p>
             <p className="mt-1 text-sm text-slate-500">Remote-first delivery for clients worldwide.</p>

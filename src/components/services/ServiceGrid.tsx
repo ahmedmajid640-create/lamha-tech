@@ -20,9 +20,9 @@ export function ServiceGrid({ tone = "light", compact = false }: { tone?: "light
                 <SectionLabel number={family.number} tone={tone}>
                   Family {family.number}
                 </SectionLabel>
-                <h3 id={`family-${family.id}`} className={cn("mt-4 text-h3 font-semibold", dark ? "text-white" : "text-navy")}>
+                <h2 id={`family-${family.id}`} className={cn("mt-4 text-h3 font-semibold", dark ? "text-white" : "text-navy")}>
                   {family.title}
-                </h3>
+                </h2>
                 <p className={cn("mt-3 text-[0.95rem] leading-relaxed", dark ? "text-slate-400" : "text-slate-600")}>{family.description}</p>
               </div>
               <div className={cn("grid gap-4 sm:grid-cols-2 lg:col-span-8", compact ? "xl:grid-cols-3" : "xl:grid-cols-3")}>
