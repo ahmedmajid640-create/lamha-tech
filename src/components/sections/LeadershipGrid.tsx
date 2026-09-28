@@ -4,14 +4,17 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { LeadershipCard } from "@/components/leadership/LeadershipCard";
+import { GhostNumber } from "@/components/motion/GhostNumber";
+import { Tilt } from "@/components/motion/Motion";
 import { cn } from "@/lib/utils";
 
 /** About the company + leadership. The company column keeps this section from reading as executives only. */
 export function LeadershipGrid({ number = "10", tone = "light", showLink = true }: { number?: string; tone?: "light" | "dark"; showLink?: boolean }) {
   const dark = tone === "dark";
   return (
-    <section aria-labelledby="leadership-heading" className={dark ? "dark-section bg-deep text-white" : "bg-cloud"}>
-      <div className="container-x section-y">
+    <section aria-labelledby="leadership-heading" className={cn("relative overflow-hidden", dark ? "dark-section bg-deep text-white" : "bg-cloud")}>
+      <GhostNumber value={number} tone={tone} />
+      <div className="container-x section-y relative">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Company column */}
           <div className="lg:col-span-4">
@@ -55,7 +58,9 @@ export function LeadershipGrid({ number = "10", tone = "light", showLink = true 
             <ul className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {publishedLeadership.map((l, i) => (
                 <Reveal key={l.slug} as="li" delay={i * 70}>
-                  <LeadershipCard leader={l} tone={tone} />
+                  <Tilt max={5}>
+                    <LeadershipCard leader={l} tone={tone} />
+                  </Tilt>
                 </Reveal>
               ))}
             </ul>

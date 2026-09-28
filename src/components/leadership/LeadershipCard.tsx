@@ -20,7 +20,7 @@ export function Portrait({ leader, className, size = "md" }: { leader: Leader; c
           alt={`Portrait of ${leader.name}, ${leader.role} at LAMHA Technologies`}
           fill
           sizes="(min-width: 1024px) 420px, 60vw"
-          className="object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
+          className="object-cover grayscale-[0.35] transition-[transform,filter] duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04] group-hover:grayscale-0"
           style={{ objectPosition: leader.portraitPosition ?? "50% 25%" }}
           priority={size === "lg"}
         />
