@@ -15,7 +15,15 @@ export function Portrait({ leader, className, size = "md" }: { leader: Leader; c
       <div aria-hidden="true" className="absolute inset-0 grid-texture opacity-60" />
       <div aria-hidden="true" className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-blue/30 blur-3xl" />
       {leader.portrait ? (
-        <Image src={leader.portrait} alt={`Portrait of ${leader.name}, ${leader.role} at LAMHA Technologies`} fill sizes="(min-width: 1024px) 320px, 50vw" className="object-cover" />
+        <Image
+          src={leader.portrait}
+          alt={`Portrait of ${leader.name}, ${leader.role} at LAMHA Technologies`}
+          fill
+          sizes="(min-width: 1024px) 420px, 60vw"
+          className="object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
+          style={{ objectPosition: leader.portraitPosition ?? "50% 25%" }}
+          priority={size === "lg"}
+        />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center" role="img" aria-label={`Placeholder portrait for ${leader.name}`}>
           <span className={cn("font-semibold tracking-tight text-white/90", size === "lg" ? "text-6xl" : "text-4xl")}>{leader.initials}</span>
