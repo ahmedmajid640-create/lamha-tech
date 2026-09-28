@@ -26,7 +26,10 @@ export function Header() {
     let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 32);
+      // Stay in the transparent/dark state while a pinned hero (data-hero) is still on screen.
+      const hero = document.querySelector<HTMLElement>("[data-hero]");
+      const overHero = hero ? hero.getBoundingClientRect().bottom > window.innerHeight * 0.5 : false;
+      setScrolled(y > 32 && !overHero);
       // Hide when scrolling down past the hero, reveal on any upward scroll.
       setHidden(y > 320 && y > lastY + 4);
       lastY = y;

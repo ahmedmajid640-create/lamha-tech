@@ -49,8 +49,16 @@ export function ImmersiveHero() {
 
   // Statement hand-over (opacity + drift per phase). Explicit ramps: fully 0 outside each window.
   const ramp = (v: number, a: number, b: number) => Math.min(1, Math.max(0, (v - a) / (b - a)));
-  const o1 = useTransform(scrollYProgress, (v) => 1 - ramp(v, 0.18, 0.3));
-  const y1 = useTransform(scrollYProgress, (v) => -60 * ramp(v, 0, 0.3));
+  // Phase 1 blows apart with the sphere: fades, scales up and blurs during the burst window.
+  const o1 = useTransform(scrollYProgress, (v) => 1 - ramp(v, 0.05, 0.16));
+  const y1 = useTransform(scrollYProgress, (v) => -60 * ramp(v, 0, 0.2));
+  const s1 = useTransform(scrollYProgress, (v) => 1 + 0.22 * ramp(v, 0.04, 0.2));
+  const blur1 = useTransform(scrollYProgress, (v) => `blur(${(14 * ramp(v, 0.05, 0.18)).toFixed(1)}px)`);
+  // Screen flash at ignition
+  const flash = useTransform(scrollYProgress, (v) => {
+    const t = Math.min(1, Math.max(0, (v - 0.04) / 0.11));
+    return Math.sin(t * Math.PI) * 0.55;
+  });
   const o2 = useTransform(scrollYProgress, (v) => ramp(v, 0.32, 0.42) * (1 - ramp(v, 0.56, 0.64)));
   const y2 = useTransform(scrollYProgress, (v) => 60 - 120 * ramp(v, 0.32, 0.64));
   const o3 = useTransform(scrollYProgress, (v) => ramp(v, 0.66, 0.76));
@@ -62,7 +70,7 @@ export function ImmersiveHero() {
 
   return (
     <>
-      <section ref={wrap} className="dark-section relative h-[300vh] bg-abyss text-white md:h-[340vh]" aria-labelledby="hero-heading">
+      <section ref={wrap} data-hero className="dark-section relative h-[300vh] bg-abyss text-white md:h-[340vh]" aria-labelledby="hero-heading">
         <div className="sticky top-0 h-screen overflow-hidden">
           {/* Field */}
           <div className="absolute inset-0">
@@ -73,12 +81,14 @@ export function ImmersiveHero() {
             ) : (
               <NetworkVisual className="absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 opacity-70" />
             )}
+            {/* Ignition flash */}
+            <motion.div aria-hidden="true" style={{ opacity: flash }} className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.95),rgba(127,176,255,0.55)_25%,rgba(46,124,246,0.15)_50%,transparent_70%)] mix-blend-screen" />
           </div>
 
           {/* Stage content */}
           <div className="container-x relative flex h-full flex-col justify-end pb-16 pt-[var(--header-h)] sm:justify-center sm:pb-0">
             {/* Phase 01 */}
-            <motion.div style={{ opacity: o1, y: y1 }} className={phase === 0 ? "max-w-4xl" : "pointer-events-none max-w-4xl"} aria-hidden={phase !== 0}>
+            <motion.div style={{ opacity: o1, y: y1, scale: s1, filter: blur1, transformOrigin: "left center" }} className={phase === 0 ? "max-w-4xl" : "pointer-events-none max-w-4xl"} aria-hidden={phase !== 0}>
               <SectionLabel number="01" tone="dark">
                 LAMHA Technologies · Remote-first · Worldwide
               </SectionLabel>
