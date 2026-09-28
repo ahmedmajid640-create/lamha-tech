@@ -3,13 +3,14 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Reveal } from "@/components/ui/Reveal";
 import { ServiceCard } from "./ServiceCard";
 import { Tilt } from "@/components/motion/Motion";
+import { HoverPreview } from "./HoverPreview";
 import { cn } from "@/lib/utils";
 
 /** All published services grouped by family. Used on the home page and /services. */
 export function ServiceGrid({ tone = "light", compact = false }: { tone?: "light" | "dark"; compact?: boolean }) {
   const dark = tone === "dark";
   return (
-    <div className="space-y-16 lg:space-y-20">
+    <HoverPreview className="space-y-16 lg:space-y-20">
       {serviceFamilies.map((family) => {
         const items = servicesByFamily(family.id);
         return (
@@ -37,6 +38,6 @@ export function ServiceGrid({ tone = "light", compact = false }: { tone?: "light
           </section>
         );
       })}
-    </div>
+    </HoverPreview>
   );
 }

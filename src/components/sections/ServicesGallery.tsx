@@ -7,6 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import { publishedServices, getFamily } from "@/data/services";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Button } from "@/components/ui/Button";
+import { HoverPreview } from "@/components/services/HoverPreview";
 
 /**
  * Horizontal scroll gallery of all services (desktop). The section pins while the
@@ -56,6 +57,7 @@ export function ServicesGallery() {
           </div>
         </div>
 
+        <HoverPreview>
         <motion.div ref={track} style={{ x }} className="flex w-max gap-5 pl-[max(1.25rem,calc((100vw-1320px)/2+3rem))] pr-24 will-change-transform">
           {publishedServices.map((s) => {
             const family = getFamily(s.family);
@@ -63,6 +65,8 @@ export function ServicesGallery() {
               <Link
                 key={s.slug}
                 href={`/services/${s.slug}`}
+                data-preview-kind={s.visual}
+                data-preview-label={s.title}
                 className="group relative flex h-[440px] w-[360px] shrink-0 flex-col justify-between border border-slate-300 bg-white p-8 transition-[transform,border-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-2 hover:border-navy"
               >
                 <div className="relative flex items-start justify-between">
@@ -87,6 +91,7 @@ export function ServicesGallery() {
             <ArrowUpRight className="mt-6 h-6 w-6 text-blue transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </motion.div>
+        </HoverPreview>
       </div>
     </section>
   );

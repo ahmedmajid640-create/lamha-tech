@@ -22,7 +22,7 @@ export function SectionNav({ sections }: { sections: { id: string; label: string
   }, [sections]);
 
   return (
-    <nav aria-label="On this page" className="dark-section sticky top-0 z-40 border-b border-white/10 bg-deep/85 text-white backdrop-blur">
+    <nav data-subnav aria-label="On this page" className="dark-section sticky top-0 z-40 border-b border-white/10 bg-deep/85 text-white backdrop-blur">
       <div className="container-x -mx-5 overflow-x-auto px-5 sm:mx-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <ul className="flex gap-6 whitespace-nowrap py-3.5 text-sm">
           {sections.map((s) => (

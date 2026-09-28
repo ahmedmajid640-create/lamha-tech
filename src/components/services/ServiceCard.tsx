@@ -9,6 +9,8 @@ export function ServiceCard({ service, tone = "light", showNumber = true, classN
   return (
     <Link
       href={`/services/${service.slug}`}
+      data-preview-kind={service.visual}
+      data-preview-label={service.title}
       className={cn(
         "group relative flex h-full flex-col justify-between border p-6 transition-[border-color,background-color,transform] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5",
         dark ? "border-white/12 bg-transparent hover:border-blue-2/60 hover:bg-white/[0.04]" : "border-slate-300 bg-white hover:border-navy",

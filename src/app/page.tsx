@@ -8,7 +8,6 @@ import { ServicesGallery } from "@/components/sections/ServicesGallery";
 import { ServiceGrid } from "@/components/services/ServiceGrid";
 import { EngagementStrip } from "@/components/sections/EngagementStrip";
 import { GhostNumber } from "@/components/motion/GhostNumber";
-import { SectionReveal } from "@/components/motion/SectionReveal";
 import { Spotlight } from "@/components/motion/Spotlight";
 import { TextReveal } from "@/components/motion/Motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -66,8 +65,7 @@ export default function HomePage() {
       {/* 04 How we work — scroll-drawn timeline */}
       <section aria-labelledby="process-heading" className="relative overflow-hidden bg-white">
         <GhostNumber value="04" />
-        <SectionReveal>
-          <div className="container-x section-y relative">
+        <div className="container-x section-y relative">
             <SectionHeading
               number="04"
               label="How we work"
@@ -82,7 +80,6 @@ export default function HomePage() {
               <ProcessTimeline />
             </div>
           </div>
-        </SectionReveal>
       </section>
 
       {/* 05 Why LAMHA — stacking cards */}

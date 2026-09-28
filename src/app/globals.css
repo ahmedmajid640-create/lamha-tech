@@ -5,7 +5,7 @@
 /* ------------------------------------------------------------------ */
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-display), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Brand */
@@ -189,18 +189,15 @@
 /* Word hover — headline words react to the pointer */
 .word-hover {
   transform-origin: 50% 85%;
-  margin-inline: 0;
   transition:
     transform 0.4s var(--ease-out-expo),
-    margin 0.4s var(--ease-out-expo),
     filter 0.4s var(--ease-out-expo),
     color 0.4s var(--ease-out-expo);
 }
 @media (hover: hover) and (pointer: fine) {
   .word-hover:hover {
     /* grow, and push neighbouring words aside instead of overlapping them */
-    transform: translateY(-4px) scale(1.07);
-    margin-inline: 0.12em;
+    transform: translateY(-3px) scale(1.06);
     position: relative;
     z-index: 1;
     color: color-mix(in srgb, currentColor 55%, #2e7cf6);
@@ -221,6 +218,11 @@
 html.custom-cursor,
 html.custom-cursor * {
   cursor: none !important;
+}
+html.custom-cursor input,
+html.custom-cursor textarea,
+html.custom-cursor select {
+  cursor: auto !important;
 }
 html.preloading {
   overflow: hidden;

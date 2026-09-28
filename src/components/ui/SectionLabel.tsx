@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { DecodeText } from "@/components/motion/DecodeText";
 
 export function SectionLabel({
   number,
@@ -27,7 +28,7 @@ export function SectionLabel({
         </span>
       )}
       {number && <span aria-hidden="true" className={cn("h-px w-6", tone === "dark" ? "bg-white/25" : "bg-slate-300")} />}
-      <span>{children}</span>
+      <span>{typeof children === "string" ? <DecodeText text={children} /> : children}</span>
     </Tag>
   );
 }

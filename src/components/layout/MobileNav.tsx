@@ -105,7 +105,7 @@ export function MobileNav({ open, onClose }: { open: boolean; onClose: () => voi
               track(ANALYTICS_EVENTS.START_PROJECT_CLICK, { location: "mobile_nav" });
               onClose();
             }}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-blue px-5 text-base font-medium text-white hover:bg-blue-700"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-sm bg-blue px-5 text-xs font-semibold uppercase tracking-[0.12em] text-white hover:bg-white hover:text-navy"
           >
             {site.cta.primary.label}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -113,7 +113,7 @@ export function MobileNav({ open, onClose }: { open: boolean; onClose: () => voi
           <Link
             href="/contact"
             onClick={onClose}
-            className="inline-flex h-12 items-center justify-center rounded-md border border-white/20 px-5 text-base font-medium text-white hover:bg-white/10"
+            className="inline-flex h-12 items-center justify-center rounded-sm border border-white/20 px-5 text-xs font-semibold uppercase tracking-[0.12em] text-white hover:bg-white/10"
           >
             Contact
           </Link>

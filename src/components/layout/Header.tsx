@@ -30,8 +30,11 @@ export function Header() {
       const hero = document.querySelector<HTMLElement>("[data-hero]");
       const overHero = hero ? hero.getBoundingClientRect().bottom > window.innerHeight * 0.5 : false;
       setScrolled(y > 32 && !overHero);
+      // A stuck in-page section bar owns the top edge; the header stays out of its way.
+      const subnav = document.querySelector<HTMLElement>("[data-subnav]");
+      const subnavStuck = subnav ? subnav.getBoundingClientRect().top <= 1 : false;
       // Hide when scrolling down past the hero, reveal on any upward scroll.
-      setHidden(y > 320 && y > lastY + 4);
+      setHidden(subnavStuck || (y > 320 && y > lastY + 4));
       lastY = y;
     };
     onScroll();
@@ -95,7 +98,7 @@ export function Header() {
               href={site.cta.primary.href}
               onClick={() => track(ANALYTICS_EVENTS.START_PROJECT_CLICK, { location: "header" })}
               className={cn(
-                "group hidden h-10 items-center gap-2 rounded-md bg-blue px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700 sm:inline-flex",
+                "group hidden h-10 items-center gap-2 rounded-sm bg-blue px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-navy sm:inline-flex",
               )}
             >
               {site.cta.primary.label}
