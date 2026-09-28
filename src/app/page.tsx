@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { site } from "@/data/site";
 import { buildMetadata } from "@/lib/seo";
-import { HomeHero } from "@/components/sections/HomeHero";
+import { ImmersiveHero } from "@/components/sections/ImmersiveHero";
+import { Statement } from "@/components/sections/Statement";
 import { WhatWeDo } from "@/components/sections/WhatWeDo";
+import { ServicesGallery } from "@/components/sections/ServicesGallery";
 import { ServiceGrid } from "@/components/services/ServiceGrid";
+import { KineticMarquee } from "@/components/motion/KineticMarquee";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
@@ -27,14 +30,18 @@ export const metadata: Metadata = buildMetadata({
 export default function HomePage() {
   return (
     <>
-      {/* 01 Hero */}
-      <HomeHero />
+      {/* 01 Hero — pinned, scroll-driven particle field */}
+      <ImmersiveHero />
 
-      {/* 02 What we do */}
+      {/* 02 Statement — scroll-fill tagline */}
+      <Statement />
+
+      {/* BUILD / ENGINEER / EVOLVE */}
       <WhatWeDo />
 
-      {/* 03 Services */}
-      <section aria-labelledby="services-heading" className="bg-cloud">
+      {/* 03 Services — horizontal gallery (desktop) / grouped grid (mobile) */}
+      <ServicesGallery />
+      <section aria-labelledby="services-heading" className="bg-cloud lg:hidden">
         <div className="container-x section-y">
           <SectionHeading
             number="03"
@@ -51,6 +58,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Kinetic strip */}
+      <div className="dark-section bg-abyss text-white">
+        <KineticMarquee words={["Build", "Engineer", "Evolve", "Design", "Test", "Secure", "Scale"]} />
+      </div>
 
       {/* 04 How we work */}
       <section aria-labelledby="process-heading" className="bg-white">
@@ -100,7 +112,7 @@ export default function HomePage() {
       {/* 09 About / Founder */}
       <FounderBlock number="09" />
 
-      {/* 10 Leadership */}
+      {/* 10 Company + Leadership */}
       <LeadershipGrid number="10" />
 
       {/* 11 Careers */}
