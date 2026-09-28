@@ -98,7 +98,7 @@ vercel --prod
 
 ## Owner / Admin portal
 
-Staff console at `/admin` (login, RBAC, inquiries, applications, contact messages, customers, reports, audit log, users). Runbook, roles and first-owner bootstrap: [docs/ADMIN_PORTAL.md](docs/ADMIN_PORTAL.md).
+Staff console at `/admin` (login, RBAC, inquiries, applications, contact messages, customers, reports, audit log, users). Runbook, roles and first-owner bootstrap: [docs/ADMIN_PORTAL.md](docs/ADMIN_PORTAL.md). Nightly encrypted database backups and restore: [docs/BACKUPS.md](docs/BACKUPS.md).
 
 ## Intake APIs
 

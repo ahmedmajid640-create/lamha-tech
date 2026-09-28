@@ -19,7 +19,10 @@ export type Permission =
   | "files:download"
   | "export"
   | "users:manage"
-  | "users:manageAdmins";
+  | "users:manageAdmins"
+  | "backups:view"
+  | "backups:run"
+  | "backups:download";
 
 const MIN_ROLE: Record<Permission, Role> = {
   "view:dashboard": "VIEWER",
@@ -37,6 +40,9 @@ const MIN_ROLE: Record<Permission, Role> = {
   export: "MANAGER",
   "users:manage": "ADMIN",
   "users:manageAdmins": "OWNER",
+  "backups:view": "ADMIN",
+  "backups:run": "ADMIN",
+  "backups:download": "OWNER",
 };
 
 export function roleRank(role: Role): number {

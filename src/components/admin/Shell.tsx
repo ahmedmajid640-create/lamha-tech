@@ -16,6 +16,7 @@ const NAV: NavItem[] = [
   { href: "/admin/reports", label: "Reports", permission: "view:reports" },
   { href: "/admin/audit", label: "Audit log", permission: "view:audit" },
   { href: "/admin/users", label: "Users", permission: "view:users" },
+  { href: "/admin/backups", label: "Backups", permission: "backups:view" },
 ];
 
 export function AdminShell({ user, children }: { user: SessionUser; children: React.ReactNode }) {

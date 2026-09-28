@@ -44,7 +44,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           </select>
           <select name="entity" defaultValue={entity} className={inputCls}>
             <option value="">All record types</option>
-            {["inquiry", "application", "contact", "user", "cv", "attachment", "inquiries", "applications", "contacts"].map((e) => (
+            {["inquiry", "application", "contact", "user", "cv", "attachment", "backup", "inquiries", "applications", "contacts"].map((e) => (
               <option key={e} value={e}>
                 {e}
               </option>

@@ -8,6 +8,7 @@ import { audit } from "@/lib/server/audit";
 import { rateLimit } from "@/lib/server/rate-limit";
 import { createSession, destroySession, ForbiddenError, generatePassword, getSessionUser, hashPassword, passwordPolicyError, requestContext, requirePermission, requireUser, verifyPassword } from "@/lib/server/auth";
 import { assignableRoles, roleRank } from "@/lib/server/rbac";
+import { runBackup } from "@/lib/server/backup";
 
 export type ActionState = { ok: boolean; message?: string; secret?: string } | null;
 
@@ -314,6 +315,22 @@ export async function resetUserPasswordAction(_prev: ActionState, fd: FormData):
     revalidatePath("/admin/users");
     return { ok: true, message: "Temporary password issued; the user must change it at next login.", secret: password };
   } catch (err) {
+    return handle(err);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Backups                                                              */
+/* ------------------------------------------------------------------ */
+export async function runBackupAction(): Promise<ActionState> {
+  try {
+    const user = await requirePermission("backups:run");
+    const result = await runBackup("manual", user.email);
+    revalidatePath("/admin/backups");
+    const rows = Object.values(result.counts).reduce((a, b) => a + b, 0);
+    return { ok: true, message: `Backup stored (${Math.round(result.bytes / 1024)} KB, ${rows} rows across ${Object.keys(result.counts).length} tables).` };
+  } catch (err) {
+    if (err instanceof Error && /BACKUP_ENCRYPTION_KEY/.test(err.message)) return fail("Backups are not configured: set BACKUP_ENCRYPTION_KEY.");
     return handle(err);
   }
 }

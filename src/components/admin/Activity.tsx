@@ -35,6 +35,10 @@ export function describeAction(e: Pick<AuditLog, "action" | "details">): string 
       return "Temporary password issued";
     case "setup.owner_created":
       return "Owner account created";
+    case "backup.created":
+      return `Backup created (${String(d.trigger ?? "")}, ${Math.round(Number(d.bytes ?? 0) / 1024)} KB)`;
+    case "backup.downloaded":
+      return "Backup downloaded";
     default:
       return e.action;
   }

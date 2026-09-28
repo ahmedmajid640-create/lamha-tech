@@ -20,7 +20,9 @@ export type AuditAction =
   | "user.role_changed"
   | "user.active_changed"
   | "user.password_reset"
-  | "setup.owner_created";
+  | "setup.owner_created"
+  | "backup.created"
+  | "backup.downloaded";
 
 /** Appends an immutable audit entry. Failures are logged, never thrown into the user flow. */
 export async function audit(args: {

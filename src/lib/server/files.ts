@@ -1,7 +1,7 @@
 import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { put, del } from "@vercel/blob";
+import { put, del, get, list } from "@vercel/blob";
 
 /**
  * File storage abstraction.
@@ -24,10 +24,16 @@ export type StoredFile = {
   originalName: string;
 };
 
+export type StoredObject = { key: string; size: number; uploadedAt: Date };
+
 export interface FileStorage {
   readonly provider: StorageProvider;
   upload(args: { key: string; bytes: Uint8Array; contentType: string; originalName: string }): Promise<StoredFile>;
   delete(key: string): Promise<void>;
+  /** Objects whose key starts with `prefix` (non-recursive listing is not required; returns all matches). */
+  list(prefix: string): Promise<StoredObject[]>;
+  /** Raw bytes of a stored object. Throws when missing. */
+  read(key: string): Promise<Uint8Array>;
   /** Human-readable reference for emails/CRM (never a public download link for private files). */
   getReference(key: string): string;
 }
@@ -62,6 +68,35 @@ class LocalFileStorage implements FileStorage {
     await fs.rm(path.join(this.root, ...key.split("/")), { force: true });
   }
 
+  async list(prefix: string): Promise<StoredObject[]> {
+    assertKey(prefix.replace(/\/$/, "") || "x");
+    const dir = path.join(this.root, ...prefix.replace(/\/$/, "").split("/"));
+    const out: StoredObject[] = [];
+    const walk = async (d: string) => {
+      let entries: import("node:fs").Dirent[] = [];
+      try {
+        entries = await fs.readdir(d, { withFileTypes: true });
+      } catch {
+        return;
+      }
+      for (const e of entries) {
+        const full = path.join(d, e.name);
+        if (e.isDirectory()) await walk(full);
+        else {
+          const st = await fs.stat(full);
+          out.push({ key: path.relative(this.root, full).split(path.sep).join("/"), size: st.size, uploadedAt: st.mtime });
+        }
+      }
+    };
+    await walk(dir);
+    return out;
+  }
+
+  async read(key: string): Promise<Uint8Array> {
+    assertKey(key);
+    return new Uint8Array(await fs.readFile(path.join(this.root, ...key.split("/"))));
+  }
+
   getReference(key: string): string {
     return `local:${path.relative(process.cwd(), path.join(this.root, key)).split(path.sep).join("/")}`;
   }
@@ -85,6 +120,24 @@ class VercelBlobStorage implements FileStorage {
   async delete(key: string): Promise<void> {
     assertKey(key);
     await del(key, { token: this.token });
+  }
+
+  async list(prefix: string): Promise<StoredObject[]> {
+    const out: StoredObject[] = [];
+    let cursor: string | undefined;
+    do {
+      const page = await list({ prefix, token: this.token, limit: 1000, cursor });
+      for (const b of page.blobs) out.push({ key: b.pathname, size: b.size, uploadedAt: new Date(b.uploadedAt) });
+      cursor = page.hasMore ? page.cursor : undefined;
+    } while (cursor);
+    return out;
+  }
+
+  async read(key: string): Promise<Uint8Array> {
+    assertKey(key);
+    const result = await get(key, { access: "private", token: this.token, useCache: false });
+    if (!result || result.statusCode !== 200 || !result.stream) throw new Error("Object not found");
+    return new Uint8Array(await new Response(result.stream).arrayBuffer());
   }
 
   getReference(key: string): string {
