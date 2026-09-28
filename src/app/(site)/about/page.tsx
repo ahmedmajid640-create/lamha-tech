@@ -16,7 +16,7 @@ import { LeadershipGrid } from "@/components/sections/LeadershipGrid";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About LAMHA Technologies",
+  title: "About Us",
   description:
     "About LAMHA Technologies (Pvt.) Ltd., Islamabad: turning real-world problems into practical software and digital products. Mission, vision and leadership.",
   path: "/about",
