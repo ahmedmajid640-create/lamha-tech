@@ -179,7 +179,7 @@ export function ServiceDetail({ service }: { service: Service }) {
       </section>
 
       {/* 05 Technology */}
-      <section id="technology" className="dark-section scroll-mt-20 relative overflow-hidden bg-navy text-white">
+      <section id="technology" className="dark-section scroll-mt-20 relative overflow-hidden bg-deep text-white">
         <DarkBackdrop glow={false} />
         <div className="container-x section-y relative">
           <SectionHeading

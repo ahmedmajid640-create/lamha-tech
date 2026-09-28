@@ -69,7 +69,7 @@ function PinnedStory() {
                   <p className="mt-3 max-w-lg text-[0.95rem] leading-relaxed text-slate-600">{p.description}</p>
                   <ul className="mt-6 flex flex-wrap gap-2">
                     {p.points.map((pt) => (
-                      <li key={pt} className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600">
+                      <li key={pt} className="border border-slate-300 bg-white px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-slate-600">
                         {pt}
                       </li>
                     ))}

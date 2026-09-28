@@ -92,7 +92,7 @@ export default function HomePage() {
       <EngagementStrip number="05" />
 
       {/* 06 Technology — cursor spotlight grid */}
-      <section aria-labelledby="technology-heading" className="dark-section relative overflow-hidden bg-navy text-white">
+      <section aria-labelledby="technology-heading" className="dark-section relative overflow-hidden bg-deep text-white">
         <DarkBackdrop glow={false} />
         <GhostNumber value="06" tone="dark" side="left" />
         <Spotlight>

@@ -3,6 +3,7 @@ import { ArrowRight, Mail, Phone } from "lucide-react";
 import { footerNav } from "@/data/navigation";
 import { site } from "@/data/site";
 import { LamhaLogo } from "@/components/ui/Logo";
+import { LocalTime } from "@/components/motion/LocalTime";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -67,9 +68,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <p aria-hidden="true" className="mt-16 select-none font-display text-[clamp(4rem,17vw,15rem)] font-bold leading-[0.85] tracking-[-0.06em] text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.22)]">
+          LAMHA
+        </p>
+
+        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {site.legalName} All rights reserved.
+            © {year} {site.legalName} · <LocalTime />
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <Link href="/privacy" className="hover:text-white">

@@ -1,9 +1,16 @@
+"use client";
+
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
 import { technologyCategories, type TechnologyCategory } from "@/data/technology";
-import { Icon } from "@/components/ui/Icon";
-import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
-/** Category-level technology presentation (no unverified vendor claims). */
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+/**
+ * Category-level technology presentation as an editorial index: numbered rows with
+ * hairlines, focus areas inline and a hover highlight. No icon cards.
+ */
 export function TechnologyGrid({
   items = technologyCategories,
   tone = "dark",
@@ -13,45 +20,39 @@ export function TechnologyGrid({
   items?: TechnologyCategory[];
   tone?: "light" | "dark";
   detailed?: boolean;
-  /** Category titles to visually emphasize (e.g. from a service's technology list). */
+  /** Category titles to emphasize (others are dimmed). */
   highlight?: string[];
 }) {
   const dark = tone === "dark";
   return (
-    <ul className={cn("grid gap-3", detailed ? "sm:grid-cols-2 xl:grid-cols-5" : "grid-cols-2 lg:grid-cols-5")}>
+    <ol className={cn("border-t", dark ? "border-white/12" : "border-slate-300")}>
       {items.map((cat, i) => {
         const on = !highlight || highlight.includes(cat.title);
         return (
-          <Reveal key={cat.slug} as="li" delay={i * 40}>
-            <div
-              className={cn(
-                "flex h-full flex-col rounded-lg border p-5 transition-colors",
-                dark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white",
-                highlight && !on && "opacity-45",
-                highlight && on && (dark ? "border-blue-2/50 bg-blue/10" : "border-blue-200 bg-blue-50/50"),
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <Icon name={cat.icon} className={cn("h-5 w-5", dark ? "text-blue-200" : "text-blue")} strokeWidth={1.75} />
-                <span className={cn("font-mono text-[0.65rem]", dark ? "text-slate-500" : "text-slate-400")}>{cat.number}</span>
-              </div>
-              <h3 className={cn("mt-4 text-[0.95rem] font-semibold", dark ? "text-white" : "text-navy")}>{cat.title}</h3>
+          <motion.li
+            key={cat.slug}
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.6, ease: EASE, delay: (i % 5) * 0.05 }}
+            className={cn(
+              "group grid grid-cols-[3rem_1fr_auto] items-baseline gap-4 border-b py-4 transition-colors md:grid-cols-[4rem_14rem_1fr_auto] md:py-5",
+              dark ? "border-white/12 hover:bg-white/[0.04]" : "border-slate-300 hover:bg-white",
+              highlight && !on && "opacity-40",
+            )}
+          >
+            <span className={cn("font-mono text-xs", dark ? "text-blue-200" : "text-blue")}>{cat.number}</span>
+            <h3 className={cn("font-display text-lg font-semibold tracking-tight md:text-xl", dark ? "text-white" : "text-navy")}>{cat.title}</h3>
+            <div className="col-span-3 md:col-span-1 md:col-start-3">
+              {(detailed || !highlight) && <p className={cn("text-sm leading-relaxed", dark ? "text-slate-400" : "text-slate-600")}>{cat.description}</p>}
               {detailed && (
-                <>
-                  <p className={cn("mt-2 text-sm leading-relaxed", dark ? "text-slate-400" : "text-slate-600")}>{cat.description}</p>
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {cat.focus.map((f) => (
-                      <li key={f} className={cn("rounded border px-2 py-0.5 text-[0.7rem]", dark ? "border-white/10 text-slate-300" : "border-slate-200 text-slate-600")}>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                <p className={cn("mt-2 font-mono text-[0.68rem] uppercase tracking-[0.14em]", dark ? "text-slate-500" : "text-slate-500")}>{cat.focus.join("  ·  ")}</p>
               )}
             </div>
-          </Reveal>
+            <ArrowUpRight aria-hidden="true" className={cn("hidden h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 md:block", dark ? "text-slate-600 group-hover:text-blue-200" : "text-slate-400 group-hover:text-blue")} />
+          </motion.li>
         );
       })}
-    </ul>
+    </ol>
   );
 }

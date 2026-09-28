@@ -164,7 +164,7 @@ export default function AboutPage() {
       <LeadershipGrid number="06" />
 
       {/* Where we're going */}
-      <section aria-labelledby="direction-heading" className="dark-section bg-navy text-white">
+      <section aria-labelledby="direction-heading" className="dark-section bg-deep text-white">
         <div className="container-x section-y">
           <SectionHeading number="07" label="Where we're going" title={<span id="direction-heading">Two engines, one direction</span>} description="LAMHA combines technology services with proprietary technology, and is preparing the ground for future engineering frontiers." tone="dark" />
           <ol className="mt-12 grid gap-4 md:grid-cols-3">

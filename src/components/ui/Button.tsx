@@ -7,10 +7,10 @@ export type ButtonVariant = "primary" | "secondary" | "outline" | "outline-light
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "group/btn inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-[background-color,color,border-color,box-shadow,transform] duration-200 ease-out disabled:pointer-events-none disabled:opacity-60 select-none";
+  "group/btn inline-flex items-center justify-center gap-2 rounded-sm font-semibold uppercase tracking-[0.12em] whitespace-nowrap transition-[background-color,color,border-color,box-shadow,transform] duration-200 ease-out disabled:pointer-events-none disabled:opacity-60 select-none";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-blue text-white shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_8px_20px_-10px_rgba(23,105,224,0.7)] hover:bg-blue-700 active:translate-y-px",
+  primary: "bg-blue text-white hover:bg-white hover:text-navy active:translate-y-px",
   secondary: "bg-navy text-white hover:bg-navy-800 active:translate-y-px",
   outline: "border border-slate-300 bg-white text-ink hover:border-slate-400 hover:bg-slate-50 active:translate-y-px",
   "outline-light": "border border-white/25 bg-white/0 text-white hover:border-white/50 hover:bg-white/10 active:translate-y-px",
@@ -19,9 +19,9 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-9 px-3.5 text-sm",
-  md: "h-11 px-5 text-[0.9375rem]",
-  lg: "h-12 px-6 text-base",
+  sm: "h-9 px-3.5 text-[0.7rem]",
+  md: "h-11 px-5 text-xs",
+  lg: "h-12 px-6 text-[0.8rem]",
 };
 
 type CommonProps = {

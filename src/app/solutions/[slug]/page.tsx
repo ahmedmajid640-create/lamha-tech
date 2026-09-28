@@ -121,7 +121,7 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
       </section>
 
       {/* Engagement models */}
-      <section aria-labelledby="models-heading" className="dark-section bg-navy text-white">
+      <section aria-labelledby="models-heading" className="dark-section bg-deep text-white">
         <div className="container-x section-y">
           <SectionHeading number="04" label="Engagement models" title={<span id="models-heading">Ways of working together</span>} description="Example engagement models. The right structure is agreed during discovery." tone="dark" />
           <ul className="mt-12 grid gap-4 md:grid-cols-3">

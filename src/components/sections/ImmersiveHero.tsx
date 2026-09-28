@@ -15,6 +15,7 @@ import { Magnetic, Marquee, TextReveal } from "@/components/motion/Motion";
 import { useMediaQuery, useMounted, usePrefersReducedMotion, useWebGLSupport } from "@/components/motion/useReducedMotion";
 import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
 import type { ProgressRef } from "@/components/three/ScrollField";
+import { LocalTime } from "@/components/motion/LocalTime";
 
 const ScrollField = dynamic(() => import("@/components/three/ScrollField"), { ssr: false });
 
@@ -143,6 +144,13 @@ export function ImmersiveHero() {
               Scroll to explore
             </motion.div>
 
+            {/* Corner meta */}
+            <div className="pointer-events-none absolute bottom-6 left-5 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-slate-500 sm:left-8 sm:block lg:left-12">
+              {site.legalName}
+            </div>
+            <div className="pointer-events-none absolute bottom-6 right-5 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-slate-400 sm:right-8 sm:block lg:right-12">
+              <LocalTime />
+            </div>
             {/* Phase indicator */}
             <ol className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 flex-col gap-4 sm:right-8 lg:right-12 lg:flex" aria-hidden="true">
               {["Progress", "Systems", "Impact"].map((label, i) => (

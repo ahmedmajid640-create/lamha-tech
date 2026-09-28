@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /** Subtle technical grid + radial blue glow for dark sections. Purely decorative. */
-export function DarkBackdrop({ className, glow = true }: { className?: string; glow?: boolean }) {
+export function DarkBackdrop({ className, glow = false }: { className?: string; glow?: boolean }) {
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
       <div className="absolute inset-0 grid-texture [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)]" />

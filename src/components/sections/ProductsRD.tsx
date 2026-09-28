@@ -14,7 +14,7 @@ const points = [
 
 export function ProductsRD({ number = "07" }: { number?: string }) {
   return (
-    <section aria-labelledby="products-heading" className="dark-section relative overflow-hidden bg-navy text-white">
+    <section aria-labelledby="products-heading" className="dark-section relative overflow-hidden bg-deep text-white">
       <DarkBackdrop />
       <GhostNumber value={number} tone="dark" side="left" />
       <div className="container-x section-y relative">

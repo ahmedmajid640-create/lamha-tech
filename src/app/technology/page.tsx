@@ -66,7 +66,7 @@ export default function TechnologyPage() {
         </div>
       </section>
 
-      <section aria-labelledby="categories-heading" className="dark-section bg-navy text-white">
+      <section aria-labelledby="categories-heading" className="dark-section bg-deep text-white">
         <div className="container-x section-y">
           <SectionHeading
             number="02"
