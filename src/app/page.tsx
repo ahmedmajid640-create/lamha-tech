@@ -6,7 +6,7 @@ import { Statement } from "@/components/sections/Statement";
 import { WhatWeDo } from "@/components/sections/WhatWeDo";
 import { ServicesGallery } from "@/components/sections/ServicesGallery";
 import { ServiceGrid } from "@/components/services/ServiceGrid";
-import { KineticMarquee } from "@/components/motion/KineticMarquee";
+import { EngagementStrip } from "@/components/sections/EngagementStrip";
 import { GhostNumber } from "@/components/motion/GhostNumber";
 import { SectionReveal } from "@/components/motion/SectionReveal";
 import { Spotlight } from "@/components/motion/Spotlight";
@@ -63,11 +63,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Kinetic strip */}
-      <div className="dark-section bg-abyss text-white">
-        <KineticMarquee words={["Build", "Engineer", "Evolve", "Design", "Test", "Secure", "Scale"]} />
-      </div>
-
       {/* 04 How we work — scroll-drawn timeline */}
       <section aria-labelledby="process-heading" className="relative overflow-hidden bg-white">
         <GhostNumber value="04" />
@@ -92,6 +87,9 @@ export default function HomePage() {
 
       {/* 05 Why LAMHA — stacking cards */}
       <WhyLamhaSection number="05" />
+
+      {/* Ways to work with us — factual engagement models */}
+      <EngagementStrip number="05" />
 
       {/* 06 Technology — cursor spotlight grid */}
       <section aria-labelledby="technology-heading" className="dark-section relative overflow-hidden bg-navy text-white">
@@ -137,7 +135,7 @@ export default function HomePage() {
       <CareersPreview number="11" />
 
       {/* 12 Final CTA — 3D torus */}
-      <CTASection location="home_final" />
+      <CTASection location="home_final" showSteps />
     </>
   );
 }

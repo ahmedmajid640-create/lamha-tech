@@ -76,7 +76,7 @@ export function ServiceDetail({ service }: { service: Service }) {
       />
 
       {/* Hero */}
-      <section data-hero className="dark-section relative flex min-h-[80vh] flex-col justify-center overflow-hidden bg-deep text-white">
+      <section data-hero className="dark-section relative flex min-h-[68vh] flex-col justify-center overflow-hidden bg-deep text-white">
         <DarkBackdrop />
         <HeroField base={FIELD_BY_FAMILY[service.family] ?? "sphere"} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,41,0.85)_0%,rgba(7,17,41,0.5)_45%,rgba(7,17,41,0)_75%)]" />

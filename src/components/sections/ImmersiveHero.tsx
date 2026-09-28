@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
-import { capabilityStrip } from "@/data/whyLamha";
 import { publishedServices } from "@/data/services";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Button } from "@/components/ui/Button";
@@ -19,7 +18,6 @@ import type { ProgressRef } from "@/components/three/ScrollField";
 
 const ScrollField = dynamic(() => import("@/components/three/ScrollField"), { ssr: false });
 
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * Pinned, scroll-driven hero. The section is tall; the viewport-sized stage sticks while the
@@ -62,11 +60,11 @@ export function ImmersiveHero() {
 
   return (
     <>
-      <section ref={wrap} data-hero className="dark-section relative h-[300vh] bg-abyss text-white md:h-[340vh]" aria-labelledby="hero-heading">
+      <section ref={wrap} data-hero className="dark-section relative h-[240vh] bg-abyss text-white md:h-[270vh]" aria-labelledby="hero-heading">
         <div className="sticky top-0 h-screen overflow-hidden">
           {/* Field */}
           <div className="absolute inset-0">
-            <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(46,124,246,0.18),transparent_60%)]" />
+            <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(46,124,246,0.10),transparent_60%)]" />
             <div aria-hidden="true" className="absolute inset-0 grid-texture opacity-60 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
             {mounted && webgl ? (
               <ScrollField progress={progress} active={active} reduced={reduced} mobile={mobile} />
@@ -170,21 +168,19 @@ export function ImmersiveHero() {
               </Link>
             ))}
           </Marquee>
-          <ol className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-t-lg border border-b-0 border-white/10 bg-white/10 md:grid-cols-5">
-            {capabilityStrip.map((c, i) => (
-              <motion.li
-                key={c.number}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.7, ease: EASE, delay: i * 0.07 }}
-                className="bg-abyss/90 px-5 py-5 last:col-span-2 md:last:col-span-1"
-              >
-                <span className="font-mono text-xs text-blue-200">{c.number}</span>
-                <p className="mt-2 text-sm font-semibold text-white sm:text-base">{c.title}</p>
-              </motion.li>
+          <dl className="mt-8 grid gap-px overflow-hidden rounded-t-lg border border-b-0 border-white/10 bg-white/10 sm:grid-cols-3">
+            {[
+              ["Services", "13 services across 3 families", "Technology Engineering · Digital Experience · Growth & Optimization"],
+              ["Delivery", "Remote-first, worldwide", "Full lifecycle: discover, define, design, build, test, deploy & evolve"],
+              ["Start", "One project form", "Contact, project, service, budget, timeline and an optional brief"],
+            ].map(([k, v, d]) => (
+              <div key={k} className="bg-abyss/90 px-5 py-5">
+                <dt className="label-caps text-slate-500">{k}</dt>
+                <dd className="mt-2 text-base font-semibold text-white">{v}</dd>
+                <dd className="mt-1 text-xs leading-relaxed text-slate-400">{d}</dd>
+              </div>
             ))}
-          </ol>
+          </dl>
         </div>
       </div>
     </>

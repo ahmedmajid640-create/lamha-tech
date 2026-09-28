@@ -7,8 +7,8 @@ export function DarkBackdrop({ className, glow = true }: { className?: string; g
       <div className="absolute inset-0 grid-texture [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)]" />
       {glow && (
         <>
-          <div className="absolute -top-32 right-[-10%] h-[36rem] w-[36rem] rounded-full bg-blue/20 blur-[120px]" />
-          <div className="absolute bottom-[-20%] left-[-10%] h-[28rem] w-[28rem] rounded-full bg-blue-2/10 blur-[110px]" />
+          <div className="absolute -top-32 right-[-10%] h-[36rem] w-[36rem] rounded-full bg-blue/10 blur-[120px]" />
+          <div className="absolute bottom-[-20%] left-[-10%] h-[28rem] w-[28rem] rounded-full bg-blue-2/5 blur-[110px]" />
         </>
       )}
     </div>

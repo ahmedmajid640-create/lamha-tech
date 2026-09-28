@@ -41,7 +41,7 @@ export function PageHero({
   const hasVisual = Boolean(visual || accent);
   const titleNode = typeof title === "string" ? <TextReveal lines={[title]} delay={0.05} /> : title;
   return (
-    <section data-hero className={cn("dark-section relative overflow-hidden bg-deep text-white", !compact && "flex min-h-[78vh] flex-col justify-center", className)}>
+    <section data-hero className={cn("dark-section relative overflow-hidden bg-deep text-white", !compact && "flex min-h-[64vh] flex-col justify-center", className)}>
       <DarkBackdrop />
       {field && !compact && <HeroField base={field} />}
       {/* readability veil over the field on the text side */}

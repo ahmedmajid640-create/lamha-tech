@@ -51,7 +51,7 @@ function PinnedStory() {
   const p = pillars[active];
 
   return (
-    <div ref={ref} className="relative hidden h-[300vh] lg:block">
+    <div ref={ref} className="relative hidden h-[230vh] lg:block">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <div className="container-x grid w-full grid-cols-12 items-center gap-10">
           <div className="col-span-6">

@@ -25,15 +25,23 @@ function LinesFallback() {
 }
 
 /** Final conversion section with a 3D technical accent. */
+const steps = [
+  { n: "01", title: "Tell us about the project", body: "One form: contact, project, service, budget, timeline and optional brief." },
+  { n: "02", title: "We review the requirements", body: "Your inquiry becomes an internal lead record and is read by the team." },
+  { n: "03", title: "We contact you", body: "Using the details you submitted, with questions or a proposed next step." },
+];
+
 export function CTASection({
   headline = "Have a problem worth solving?",
   description = "Tell us about the challenge. We will review your requirements and respond using the details you provide.",
   location = "cta_section",
+  showSteps = false,
   className,
 }: {
   headline?: string;
   description?: string;
   location?: string;
+  showSteps?: boolean;
   className?: string;
 }) {
   return (
@@ -52,6 +60,19 @@ export function CTASection({
           <Rise delay={0.25}>
             <p className="mt-5 text-lg leading-relaxed text-slate-300">{description}</p>
           </Rise>
+          {showSteps && (
+            <Rise delay={0.3}>
+              <ol className="mt-8 grid gap-4 sm:grid-cols-3">
+                {steps.map((s) => (
+                  <li key={s.n} className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                    <span className="font-mono text-xs text-blue-200">{s.n}</span>
+                    <p className="mt-2 text-sm font-semibold text-white">{s.title}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-400">{s.body}</p>
+                  </li>
+                ))}
+              </ol>
+            </Rise>
+          )}
           <Rise delay={0.4}>
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>

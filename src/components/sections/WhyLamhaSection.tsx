@@ -14,9 +14,9 @@ function StackCard({ pillar, index, total }: { pillar: Pillar; index: number; to
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
   const brightness = useTransform(scrollYProgress, [0, 1], ["brightness(1)", "brightness(0.85)"]);
-  const top = 96 + index * 26;
+  const top = 88 + index * 18;
   return (
-    <div ref={ref} className="pb-[14vh] last:pb-0">
+    <div ref={ref} className="pb-[7vh] last:pb-0">
       <motion.div
         style={{ top, scale, filter: brightness, transformOrigin: "50% 0%" }}
         className="sticky"
@@ -51,7 +51,7 @@ export function WhyLamhaSection({ number = "05" }: { number?: string }) {
           number={number}
           label="Why LAMHA"
           title={<span id="why-heading">Engineering that starts with the business.</span>}
-          description="Six principles that shape how we scope, build and support technology. Keep scrolling; they stack."
+          description="Six principles that shape how we scope, build and support technology."
         />
         <div className="mt-14">
           {whyLamha.map((p, i) => (

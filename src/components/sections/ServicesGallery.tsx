@@ -38,7 +38,7 @@ export function ServicesGallery() {
   const progressW = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section ref={ref} className="relative hidden bg-cloud lg:block" style={{ height: `${Math.max(220, 120 + distance / 8)}vh` }} aria-labelledby="gallery-heading">
+    <section ref={ref} className="relative hidden bg-cloud lg:block" style={{ height: `${Math.max(170, 100 + distance / 11)}vh` }} aria-labelledby="gallery-heading">
       <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
         <div className="container-x flex items-end justify-between pb-8">
           <div>

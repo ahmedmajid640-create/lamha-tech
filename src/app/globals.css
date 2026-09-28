@@ -176,11 +176,9 @@
     @apply -translate-y-0.5 border-slate-300 shadow-[var(--shadow-card-hover)];
   }
 }
+/* Accent words: solid electric blue (kept as a utility name for existing markup). */
 @utility text-gradient-blue {
-  background: linear-gradient(92deg, #2e7cf6 0%, #7fb0ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #6ea6ff;
 }
 @utility sr-only-focusable {
   @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-ink focus:shadow-lg;
