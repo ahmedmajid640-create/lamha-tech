@@ -5,25 +5,16 @@ import { AnimatePresence, motion } from "motion/react";
 import { LamhaMark } from "@/components/ui/Logo";
 import { usePrefersReducedMotion } from "./useReducedMotion";
 
-const KEY = "lamha:preloaded";
 const noop = () => () => {};
 
-function readSeen(): boolean {
-  try {
-    return sessionStorage.getItem(KEY) === "1";
-  } catch {
-    return true; // storage unavailable: skip the intro
-  }
-}
-
-/** Brief first-visit intro: counter to 100 with the mark, then the curtain lifts. Once per session. */
+/** Intro on every page open (full load / refresh): counter to 100 with the mark, then the curtain lifts. */
 export function Preloader() {
   const reduced = usePrefersReducedMotion();
-  // Server snapshot = "seen" so nothing renders during SSR/hydration; the client snapshot decides afterwards.
-  const seen = useSyncExternalStore(noop, readSeen, () => true);
+  // Server snapshot = false so nothing renders during SSR/hydration; the client mounts it immediately after.
+  const mounted = useSyncExternalStore(noop, () => true, () => false);
   const [done, setDone] = useState(false);
   const [count, setCount] = useState(0);
-  const show = !seen && !reduced && !done;
+  const show = mounted && !reduced && !done;
 
   useEffect(() => {
     if (!show) return;
@@ -38,11 +29,6 @@ export function Preloader() {
       if (p < 1) raf = requestAnimationFrame(tick);
       else {
         timer = window.setTimeout(() => {
-          try {
-            sessionStorage.setItem(KEY, "1");
-          } catch {
-            /* ignore */
-          }
           document.documentElement.classList.remove("preloading");
           setDone(true);
         }, 250);
