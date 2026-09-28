@@ -80,7 +80,12 @@ export function ImmersiveHero() {
             {/* Phase 01 */}
             <motion.div style={{ opacity: o1, y: y1 }} className={phase === 0 ? "max-w-4xl" : "pointer-events-none max-w-4xl"} aria-hidden={phase !== 0}>
               <SectionLabel number="01" tone="dark">
-                LAMHA Technologies · Remote-first · Worldwide
+                {"LAMHA Technologies · Remote-first · Worldwide".split(" ").map((w, i) => (
+                  <span key={i} className="word-hover inline-block">
+                    {w}
+                    {" "}
+                  </span>
+                ))}
               </SectionLabel>
               <h1 id="hero-heading" className="mt-6 text-display font-semibold tracking-tight text-white">
                 <TextReveal lines={["Technology That Turns", "Problems Into", <span key="p" className="text-gradient-blue">Progress.</span>]} delay={0.1} />
@@ -158,7 +163,7 @@ export function ImmersiveHero() {
         <div className="container-x">
           <Marquee duration={60} className="border-y border-white/10 py-4">
             {publishedServices.map((s) => (
-              <Link key={s.slug} href={`/services/${s.slug}`} className="group inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-slate-300 transition-colors hover:text-white">
+              <Link key={s.slug} href={`/services/${s.slug}`} className="group inline-flex origin-center items-center gap-2 whitespace-nowrap text-sm font-medium text-slate-300 transition-[color,transform] duration-300 ease-[var(--ease-out-expo)] hover:scale-110 hover:text-white">
                 <span className="font-mono text-[0.65rem] text-blue-200">{s.globalNumber}</span>
                 {s.navLabel}
                 <ArrowUpRight className="h-3.5 w-3.5 text-slate-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-200" aria-hidden="true" />

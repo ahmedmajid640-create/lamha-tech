@@ -188,6 +188,7 @@
 
 /* Word hover — headline words react to the pointer */
 .word-hover {
+  transform-origin: 50% 85%;
   transition:
     transform 0.4s var(--ease-out-expo),
     filter 0.4s var(--ease-out-expo),
@@ -195,7 +196,9 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .word-hover:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px) scale(1.12);
+    position: relative;
+    z-index: 1;
     color: color-mix(in srgb, currentColor 55%, #2e7cf6);
     filter: brightness(1.15) drop-shadow(0 0 14px rgba(46, 124, 246, 0.55));
   }
