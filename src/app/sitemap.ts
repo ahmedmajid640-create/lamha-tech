@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { publishedServices } from "@/data/services";
 import { solutions } from "@/data/solutions";
-import { visibleJobs } from "@/data/jobs";
+import { openJobs } from "@/data/jobs";
 import { absoluteUrl } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -24,6 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticRoutes.map((r) => ({ url: absoluteUrl(r.path), lastModified: now, changeFrequency: r.changeFrequency, priority: r.priority })),
     ...publishedServices.map((s) => ({ url: absoluteUrl(`/services/${s.slug}`), lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
     ...solutions.map((s) => ({ url: absoluteUrl(`/solutions/${s.slug}`), lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
-    ...visibleJobs.map((j) => ({ url: absoluteUrl(`/careers/${j.slug}`), lastModified: now, changeFrequency: "weekly" as const, priority: 0.5 })),
+    ...openJobs.map((j) => ({ url: absoluteUrl(`/careers/${j.slug}`), lastModified: now, changeFrequency: "weekly" as const, priority: 0.5 })),
   ];
 }

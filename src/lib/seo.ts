@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/data/site";
+import { publishedLeadership, founder } from "@/data/leadership";
+import { publishedServices } from "@/data/services";
 
 type BuildMetadataArgs = {
   title: string;
@@ -52,20 +54,41 @@ export function buildMetadata({
 /* ------------------------------------------------------------------ */
 /* JSON-LD helpers                                                      */
 /* ------------------------------------------------------------------ */
+export const ORG_ID = () => `${site.url.replace(/\/$/, "")}/#organization`;
+export const WEBSITE_ID = () => `${site.url.replace(/\/$/, "")}/#website`;
+
+/** Organization entity. Every field comes from data already published on the site; nothing is inferred. */
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: site.legalName,
-    alternateName: site.name,
+    "@id": ORG_ID(),
+    name: site.name,
+    legalName: site.legalName,
+    alternateName: ["LAMHA", "LAMHA Tech", "lamhatechnologies"],
     url: site.url,
-    logo: absoluteUrl("/icon.svg"),
+    logo: { "@type": "ImageObject", url: absoluteUrl("/icon.svg") },
+    image: absoluteUrl("/opengraph-image"),
     slogan: site.tagline,
     description: site.description,
     email: site.contact.generalEmail,
     telephone: site.contact.phone ?? undefined,
-    address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressCountry: site.contact.countryCode },
+    address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressRegion: "Islamabad Capital Territory", addressCountry: site.contact.countryCode },
+    foundingLocation: { "@type": "Place", name: `${site.contact.city}, ${site.contact.country}` },
     areaServed: "Worldwide",
+    founder: { "@type": "Person", name: founder.name, jobTitle: founder.role, worksFor: { "@id": ORG_ID() } },
+    member: publishedLeadership.map((l) => ({ "@type": "Person", name: l.name, jobTitle: l.role })),
+    contactPoint: [
+      { "@type": "ContactPoint", contactType: "sales", email: site.contact.projectsEmail, telephone: site.contact.phone ?? undefined, availableLanguage: ["English"], url: absoluteUrl("/start-a-project") },
+      { "@type": "ContactPoint", contactType: "customer support", email: site.contact.generalEmail, availableLanguage: ["English"], url: absoluteUrl("/contact") },
+    ],
+    knowsAbout: publishedServices.map((s) => s.title),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "LAMHA Technologies services",
+      itemListElement: publishedServices.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s.title, url: absoluteUrl(`/services/${s.slug}`) } })),
+    },
+    sameAs: site.social.map((s) => s.href).filter((h): h is string => Boolean(h)),
   };
 }
 
@@ -73,8 +96,27 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": WEBSITE_ID(),
     name: site.name,
+    alternateName: "LAMHA Tech",
     url: site.url,
+    inLanguage: "en",
+    publisher: { "@id": ORG_ID() },
+  };
+}
+
+/** WebPage entity for a specific route; links the page to the site and organization graph. */
+export function webPageJsonLd(args: { title: string; description: string; path: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${absoluteUrl(args.path)}#webpage`,
+    url: absoluteUrl(args.path),
+    name: args.title,
+    description: args.description,
+    inLanguage: "en",
+    isPartOf: { "@id": WEBSITE_ID() },
+    about: { "@id": ORG_ID() },
   };
 }
 
@@ -98,7 +140,7 @@ export function serviceJsonLd(args: { name: string; description: string; path: s
     name: args.name,
     description: args.description,
     url: absoluteUrl(args.path),
-    provider: { "@type": "Organization", name: site.legalName, url: site.url },
+    provider: { "@id": ORG_ID() },
     areaServed: "Worldwide",
   };
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/data/site";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, webPageJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/ui/JsonLd";
 import { ImmersiveHero } from "@/components/sections/ImmersiveHero";
 import { Statement } from "@/components/sections/Statement";
 import { WhatWeDo } from "@/components/sections/WhatWeDo";
@@ -24,8 +25,8 @@ import { CTASection } from "@/components/sections/CTASection";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
 
 export const metadata: Metadata = buildMetadata({
-  title: `${site.name} — ${site.tagline}`,
-  description: site.description,
+  title: `${site.name} | Software Engineering & Digital Product Company, Islamabad, Pakistan`,
+  description: `${site.description} ${site.tagline}`,
   path: "/",
   absoluteTitle: true,
 });
@@ -33,6 +34,7 @@ export const metadata: Metadata = buildMetadata({
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={webPageJsonLd({ title: `${site.name} | Software Engineering & Digital Product Company`, description: site.description, path: "/" })} />
       {/* 01 Hero — pinned, scroll-driven particle field */}
       <ImmersiveHero />
 

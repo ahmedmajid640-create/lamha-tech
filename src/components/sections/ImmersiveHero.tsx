@@ -90,7 +90,7 @@ export function ImmersiveHero() {
                 <TextReveal lines={["Technology That Turns", "Problems Into", <span key="p" className="text-gradient-blue">Progress.</span>]} delay={0.1} />
               </h1>
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-slate-300 sm:text-xl">
-                We design, build, test and evolve software, digital products and technology solutions for businesses worldwide.
+                LAMHA Technologies is a software engineering and digital product company in Islamabad, Pakistan. We design, build, test and evolve software, web and mobile products, and technology solutions for businesses worldwide.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
                 <Magnetic>

@@ -12,7 +12,7 @@ export const site = {
   positioning:
     "LAMHA Technologies helps businesses, startups and organizations turn technical requirements and real-world problems into practical software, digital products and technology solutions.",
   description:
-    "LAMHA Technologies designs, builds, tests and evolves software, digital products and technology solutions for businesses worldwide.",
+    "LAMHA Technologies is a software engineering and digital product company based in Islamabad, Pakistan. We design, build, test and evolve software, web and mobile products, and technology solutions for businesses, startups and organizations worldwide.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   locale: "en",
   cta: {

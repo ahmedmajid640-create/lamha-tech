@@ -2,7 +2,7 @@
   "name": "lamha-website",
   "version": "0.1.0",
   "private": true,
-  "description": "LAMHA Technologies (Pvt.) Ltd. — corporate website MVP",
+  "description": "LAMHA Technologies (Pvt.) Ltd. \u2014 corporate website MVP",
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/prebuild.mjs",
@@ -16,7 +16,8 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:seed": "node --env-file-if-exists=.env prisma/seed.ts",
     "db:studio": "prisma studio",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seo:indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.0",
