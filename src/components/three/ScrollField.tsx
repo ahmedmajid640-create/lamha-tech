@@ -15,7 +15,7 @@ export type ProgressRef = { current: number };
 // Phase windows (shared between shader and JS)
 const BURST_START = 0.04;
 const BURST_END = 0.2;
-const WAVE_START = 0.3;
+const WAVE_START = 0.26;
 const WAVE_END = 0.66;
 const RING_START = 0.7;
 const RING_END = 0.98;
@@ -52,7 +52,7 @@ function buildFormations(count: number) {
     const sz = Math.sin(th) * r;
     sphere.set([sx * R, sy * R, sz * R], i * 3);
     // burst: thrown far out along its own direction (many fly past the camera), heavy jitter
-    const k = R * (3.2 + rand() * 6.5);
+    const k = R * (2.6 + rand() * 4.8);
     burst.set([sx * k + (rand() - 0.5) * 3, sy * k + (rand() - 0.5) * 3, sz * k + (rand() - 0.5) * 3 + 1.2], i * 3);
     const cx = (i % cols) / (cols - 1) - 0.5;
     const cz = Math.floor(i / cols) / (rows - 1) - 0.5;
@@ -109,7 +109,7 @@ const vertex = /* glsl */ `
     mv.xy += dir * rep * 0.55;
     gl_Position = projectionMatrix * mv;
     float size = (1.6 + 2.6 * aSeed) * (1.0 + 2.2 * uBoom) * uPixelRatio * (7.0 / max(0.4, -mv.z));
-    gl_PointSize = min(size, 46.0 * uPixelRatio);
+    gl_PointSize = clamp(size, 1.6 * uPixelRatio, 46.0 * uPixelRatio);
     vSeed = aSeed;
     vBoom = uBoom;
   }
@@ -124,7 +124,7 @@ const fragment = /* glsl */ `
     vec2 c = gl_PointCoord - 0.5;
     float d = length(c);
     if (d > 0.5) discard;
-    float a = smoothstep(0.5, 0.08, d) * (0.35 + 0.65 * vSeed) * (1.0 + 0.6 * vBoom);
+    float a = smoothstep(0.5, 0.08, d) * (0.45 + 0.55 * vSeed) * (1.0 + 0.6 * vBoom);
     vec3 col = mix(uColorA, uColorB, vSeed);
     col = mix(col, vec3(1.0), vBoom * 0.85);
     gl_FragColor = vec4(col, min(a, 1.0));
