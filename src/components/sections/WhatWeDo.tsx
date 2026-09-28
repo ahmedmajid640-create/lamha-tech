@@ -52,7 +52,7 @@ function PinnedStory() {
 
   return (
     <div ref={ref} className="relative hidden h-[230vh] lg:block">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+      <div className="sticky top-0 flex h-screen items-start overflow-hidden pt-[calc(var(--header-h)+3.5rem)]">
         <div className="container-x grid w-full grid-cols-12 items-center gap-10">
           <div className="col-span-6">
             <SectionLabel number="02">What we do</SectionLabel>

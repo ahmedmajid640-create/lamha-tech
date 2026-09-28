@@ -39,7 +39,7 @@ export function ServicesGallery() {
 
   return (
     <section ref={ref} className="relative hidden bg-cloud lg:block" style={{ height: `${Math.max(150, 100 + distance / 16)}vh` }} aria-labelledby="gallery-heading">
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+      <div className="sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-[calc(var(--header-h)+2.5rem)]">
         <div className="container-x flex items-end justify-between pb-8">
           <div>
             <SectionLabel number="03">Our services</SectionLabel>
@@ -47,14 +47,9 @@ export function ServicesGallery() {
               Technology services for real-world solutions.
             </h2>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="h-px w-40 bg-slate-200">
-              <motion.div style={{ width: progressW }} className="h-px bg-blue" />
-            </div>
-            <Button href="/services" variant="outline" size="sm" icon="arrow">
-              All services
-            </Button>
-          </div>
+          <Button href="/services" variant="outline" size="sm" icon="arrow">
+            All services
+          </Button>
         </div>
 
         <HoverPreview>
@@ -67,7 +62,7 @@ export function ServicesGallery() {
                 href={`/services/${s.slug}`}
                 data-preview-kind={s.visual}
                 data-preview-label={s.title}
-                className="group relative flex h-[440px] w-[360px] shrink-0 flex-col justify-between border border-slate-300 bg-white p-8 transition-[transform,border-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-2 hover:border-navy"
+                className="group relative flex h-[clamp(420px,56vh,540px)] w-[360px] shrink-0 flex-col justify-between border border-slate-300 bg-white p-8 transition-[transform,border-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-2 hover:border-navy"
               >
                 <div className="relative flex items-start justify-between">
                   <span className="font-mono text-xs text-blue">{s.globalNumber}</span>
@@ -92,6 +87,12 @@ export function ServicesGallery() {
           </Link>
         </motion.div>
         </HoverPreview>
+        <div className="container-x mt-auto flex items-center justify-between gap-6 pb-10 pt-8">
+          <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-slate-500">Scroll to explore · {publishedServices.length} services across 3 families</p>
+          <div className="h-px w-56 bg-slate-200">
+            <motion.div style={{ width: progressW }} className="h-px bg-blue" />
+          </div>
+        </div>
       </div>
     </section>
   );

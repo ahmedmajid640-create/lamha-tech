@@ -24,7 +24,11 @@ export function Header() {
 
   useEffect(() => {
     let lastY = window.scrollY;
-    const onScroll = () => {
+    let upTravel = 0; // accumulated upward movement since the last downward move
+    let hiddenNow = false;
+    let ticking = false;
+    const measure = () => {
+      ticking = false;
       const y = window.scrollY;
       // Stay in the transparent/dark state while a pinned hero (data-hero) is still on screen.
       const hero = document.querySelector<HTMLElement>("[data-hero]");
@@ -33,11 +37,25 @@ export function Header() {
       // A stuck in-page section bar owns the top edge; the header stays out of its way.
       const subnav = document.querySelector<HTMLElement>("[data-subnav]");
       const subnavStuck = subnav ? subnav.getBoundingClientRect().top <= 1 : false;
-      // Hide when scrolling down past the hero, reveal on any upward scroll.
-      setHidden(subnavStuck || (y > 320 && y > lastY + 4));
+      // Direction with hysteresis: hide once the page moves down past the hero; reveal only after a
+      // deliberate upward scroll (> 24px) or near the top. Inertia tail-off never toggles it.
+      const delta = y - lastY;
+      if (delta > 0) {
+        upTravel = 0;
+        if (y > 320) hiddenNow = true;
+      } else if (delta < 0) {
+        upTravel += -delta;
+        if (upTravel > 24 || y < 120) hiddenNow = false;
+      }
+      setHidden(subnavStuck || hiddenNow);
       lastY = y;
     };
-    onScroll();
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(measure);
+    };
+    measure();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);

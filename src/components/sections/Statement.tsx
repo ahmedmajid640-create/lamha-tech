@@ -7,7 +7,7 @@ import { Tunnel } from "@/components/visuals/Tunnel";
 import { cn } from "@/lib/utils";
 
 /**
- * Pinned statement: as the visitor scrolls, each word fills from dim to bright.
+ * Statement: as the section scrolls through the viewport, each word fills from dim to bright (no pinning, no dead space).
  * Reusable on any page (home tagline, solution intro, about vision, technology philosophy).
  */
 const DEFAULT_TEXT =
@@ -50,8 +50,8 @@ export function Statement({
 
   return (
     <section ref={ref} className={cn("relative", dark ? "dark-section bg-abyss text-white" : "bg-white", className)} aria-label={label}>
-      <div className={size === "lg" ? "h-[140vh] md:h-[160vh]" : "h-[110vh] md:h-[125vh]"}>
-        <div className="sticky top-0 flex h-screen items-start pt-[calc(var(--header-h)+3.5rem)] md:pt-[calc(var(--header-h)+5rem)]">
+      <div className={cn("relative overflow-hidden", size === "lg" ? "py-20 md:py-24 lg:py-28" : "py-16 md:py-20")}>
+        <div className="relative">
           <Tunnel tone={tone} />
           <div className="container-x relative">
             <div className="grid gap-10 lg:grid-cols-12">
