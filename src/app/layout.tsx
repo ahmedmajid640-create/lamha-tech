@@ -32,7 +32,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | Software Engineering & Digital Products, Islamabad, Pakistan`,
+    default: `${site.name} | Software & Digital Products, Islamabad`,
     template: `%s | ${site.name}`,
   },
   description: site.description,
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     description: site.description,
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/icon.svg", apple: "/apple-icon" },
   authors: [{ name: site.legalName, url: site.url }],
   creator: site.legalName,
   publisher: site.legalName,
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050b18",
+  themeColor: "#06070b",
   width: "device-width",
   initialScale: 1,
 };

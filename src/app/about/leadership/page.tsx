@@ -14,7 +14,7 @@ import { CTASection } from "@/components/sections/CTASection";
 export const metadata: Metadata = buildMetadata({
   title: "Leadership",
   description:
-    "Meet the leadership of LAMHA Technologies (Pvt.) Ltd.: Syeda Laiba Haider (Founder), Ahmed Majid (Co-Founder), Maira Almas (CEO) and Syed Hamad Haider (Board of Directors).",
+    "Leadership of LAMHA Technologies: Syeda Laiba Haider (Founder), Ahmed Majid (Co-Founder), Maira Almas (CEO) and Syed Hamad Haider (Board).",
   path: "/about/leadership",
 });
 

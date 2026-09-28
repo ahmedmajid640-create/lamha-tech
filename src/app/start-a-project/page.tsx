@@ -13,7 +13,7 @@ import { HeroParallax } from "@/components/motion/HeroParallax";
 export const metadata: Metadata = buildMetadata({
   title: "Start a Project",
   description:
-    "Tell LAMHA Technologies about your project. Share your requirements, service needs, budget and timeline, and our team will review the information and contact you using the details submitted.",
+    "Tell LAMHA Technologies about your project: requirements, service, budget and timeline. Our team reviews every inquiry and contacts you directly.",
   path: "/start-a-project",
 });
 

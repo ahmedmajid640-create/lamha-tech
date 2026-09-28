@@ -9,7 +9,7 @@ import { ArchitectureVisual } from "@/components/visuals/ArchitectureVisual";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Products & R&D — We Build for Ourselves, Too",
+  title: "Products & R&D",
   description:
     "LAMHA Technologies develops internal systems, automation and technology to solve real operational problems. Selected technologies may later become reusable products.",
   path: "/products",

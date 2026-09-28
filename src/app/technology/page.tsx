@@ -12,9 +12,9 @@ import { ArchitectureVisual } from "@/components/visuals/ArchitectureVisual";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Technology — Chosen for the Problem, Not the Trend",
+  title: "Technology Approach",
   description:
-    "LAMHA Technologies' technology philosophy and category-level capabilities across frontend, backend, mobile, cloud, databases, DevOps, testing, AI/automation, security and APIs.",
+    "How LAMHA Technologies chooses technology: capabilities across frontend, backend, mobile, cloud, databases, DevOps, testing, AI, security and APIs.",
   path: "/technology",
 });
 

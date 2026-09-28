@@ -11,9 +11,9 @@ import { Button } from "@/components/ui/Button";
 import { KineticMarquee } from "@/components/motion/KineticMarquee";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Services — Software, Digital Experience and Growth",
+  title: "Services",
   description:
-    "Explore LAMHA Technologies services across three families: Technology Engineering, Digital Experience and Growth & Optimization. Software, web, mobile, QA, security, design, branding, motion, strategy, SEO and analytics.",
+    "LAMHA Technologies services: software, web and mobile development, QA, security, UI/UX, brand identity, motion, digital strategy, SEO and analytics.",
   path: "/services",
 });
 

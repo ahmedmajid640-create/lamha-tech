@@ -24,7 +24,8 @@ export async function generateMetadata({ params }: PageProps<"/solutions/[slug]"
   const { slug } = await params;
   const solution = getSolution(slug);
   if (!solution) return { title: "Solution not found" };
-  return buildMetadata({ title: solution.title, description: solution.intro, path: `/solutions/${solution.slug}` });
+  const description = solution.intro.length > 160 ? `${solution.intro.slice(0, solution.intro.lastIndexOf(" ", 157))}…` : solution.intro;
+  return buildMetadata({ title: solution.title, description, path: `/solutions/${solution.slug}` });
 }
 
 export default async function SolutionPage({ params }: PageProps<"/solutions/[slug]">) {

@@ -25,8 +25,8 @@ import { CTASection } from "@/components/sections/CTASection";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
 
 export const metadata: Metadata = buildMetadata({
-  title: `${site.name} | Software Engineering & Digital Product Company, Islamabad, Pakistan`,
-  description: `${site.description} ${site.tagline}`,
+  title: `${site.name} | Software & Digital Products, Islamabad`,
+  description: site.description,
   path: "/",
   absoluteTitle: true,
 });

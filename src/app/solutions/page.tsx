@@ -11,9 +11,9 @@ import { CTASection } from "@/components/sections/CTASection";
 import { WhyLamhaSection } from "@/components/sections/WhyLamhaSection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Solutions for Startups, SMEs, Enterprise and Custom Needs",
+  title: "Solutions for Startups, SMEs and Enterprise",
   description:
-    "How LAMHA Technologies helps startups, SMEs and enterprises solve real problems with software, engineering and digital products, plus custom solutions for requirements that do not fit a category.",
+    "How LAMHA Technologies helps startups, SMEs and enterprises solve real problems with software, engineering and digital products, plus custom solutions.",
   path: "/solutions",
 });
 

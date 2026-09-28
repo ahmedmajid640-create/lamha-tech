@@ -14,9 +14,9 @@ import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Careers — Build What Comes Next With Us",
+  title: "Careers at LAMHA Technologies",
   description:
-    "Join LAMHA Technologies, a team building a global technology company around software, engineering and emerging technologies. Culture, growth, global opportunities and open positions.",
+    "Join LAMHA Technologies, a team building a global technology company around software and engineering. Culture, growth and open positions.",
   path: "/careers",
 });
 

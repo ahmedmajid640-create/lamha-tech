@@ -16,9 +16,9 @@ import { LeadershipGrid } from "@/components/sections/LeadershipGrid";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About — A Technology Company Driven by Real Impact",
+  title: "About LAMHA Technologies",
   description:
-    "LAMHA Technologies (Pvt.) Ltd. helps businesses, startups and organizations turn technical requirements and real-world problems into practical software, digital products and technology solutions. Mission, vision, values and leadership.",
+    "About LAMHA Technologies (Pvt.) Ltd., Islamabad: a technology company turning real-world problems into practical software and digital products. Mission, vision and leadership.",
   path: "/about",
 });
 
