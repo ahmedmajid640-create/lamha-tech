@@ -22,6 +22,8 @@ export type NotifiableKind = "lead" | "application" | "contact";
 export interface Repositories {
   backend: Backend;
   createLead(record: LeadRecord): Promise<{ id: string }>;
+  /** Same email + same content within the window: returns the earlier record id (double-click / retry protection). */
+  findRecentDuplicate(kind: NotifiableKind, email: string, fingerprint: string, windowMs: number): Promise<string | null>;
   createContact(record: ContactRecord): Promise<{ id: string }>;
   /** Ensures the job exists (Postgres) and returns its database id, or null on the file backend. */
   ensureJob(job: Job): Promise<string | null>;
@@ -36,8 +38,25 @@ const fileLeads = new FileRepository<LeadRecord>("leads");
 const fileApplications = new FileRepository<ApplicationRecord>("applications");
 const fileContacts = new FileRepository<ContactRecord>("contacts");
 
+function fp(s: string): string {
+  return s.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
 const fileRepositories: Repositories = {
   backend: "file",
+  async findRecentDuplicate(kind, email, fingerprint, windowMs) {
+    const since = Date.now() - windowMs;
+    if (kind === "lead") {
+      const hit = (await fileLeads.list()).find((r) => r.email === email && fp(r.description) === fp(fingerprint) && Date.parse(r.createdAt) > since);
+      return hit?.id ?? null;
+    }
+    if (kind === "contact") {
+      const hit = (await fileContacts.list()).find((r) => r.email === email && fp(r.message) === fp(fingerprint) && Date.parse(r.createdAt) > since);
+      return hit?.id ?? null;
+    }
+    const hit = (await fileApplications.list()).find((r) => r.email === email && r.roleSlug === fingerprint && Date.parse(r.createdAt) > since);
+    return hit?.id ?? null;
+  },
   async createLead(record) {
     const saved = await fileLeads.create(record);
     return { id: saved.id };
@@ -65,6 +84,21 @@ const upper = <T extends string>(s: T) => s.toUpperCase();
 
 const prismaRepositories: Repositories = {
   backend: "postgres",
+
+  async findRecentDuplicate(kind, email, fingerprint, windowMs) {
+    const prisma = getPrisma();
+    const since = new Date(Date.now() - windowMs);
+    if (kind === "lead") {
+      const hit = await prisma.projectInquiry.findFirst({ where: { email, description: fingerprint, createdAt: { gt: since } }, select: { id: true }, orderBy: { createdAt: "desc" } });
+      return hit?.id ?? null;
+    }
+    if (kind === "contact") {
+      const hit = await prisma.contactMessage.findFirst({ where: { email, message: fingerprint, createdAt: { gt: since } }, select: { id: true }, orderBy: { createdAt: "desc" } });
+      return hit?.id ?? null;
+    }
+    const hit = await prisma.jobApplication.findFirst({ where: { email, roleSlug: fingerprint, createdAt: { gt: since } }, select: { id: true }, orderBy: { createdAt: "desc" } });
+    return hit?.id ?? null;
+  },
 
   async createLead(record) {
     const prisma = getPrisma();

@@ -87,10 +87,19 @@ subject starts with "New project inquiry" / "New contact message" / "New job app
 Optional: `npm run db:seed` locally with the production `DATABASE_URL` to populate the `Job` table
 (the applications route also upserts the job on first application, so this is not required).
 
-## 5. Custom domain
+## 5. Custom domain (after purchase)
 
-Vercel Dashboard → Project → Settings → Domains → add `lamhatech.com` + `www`, follow the DNS
-instructions, then update `NEXT_PUBLIC_SITE_URL` and redeploy so canonical/OG URLs match.
+Nothing in the app hard-codes the vercel.app hostname: canonicals, sitemap, robots, Open Graph and
+JSON-LD all derive from `NEXT_PUBLIC_SITE_URL`. Flow: **domain → DNS → Vercel → LAMHA site**.
+
+1. Buy the domain at any registrar (not done; no domain has been purchased yet).
+2. `vercel domains add <domain>` (or Dashboard → Project → Settings → Domains → Add). Vercel then prints the
+   exact DNS records it needs; typical values are an `A` record for the apex pointing at Vercel and a `CNAME`
+   for `www`, but use the records Vercel reports, not these examples.
+3. Add those records at the registrar; Vercel verifies and issues TLS automatically.
+4. `vercel env rm NEXT_PUBLIC_SITE_URL production && vercel env add NEXT_PUBLIC_SITE_URL production`
+   with `https://<domain>`, then `vercel deploy --prod` so canonical/OG URLs switch to the new domain.
+5. In Resend, verify the same domain and change `EMAIL_FROM` to an address on it.
 
 ## Rollback
 

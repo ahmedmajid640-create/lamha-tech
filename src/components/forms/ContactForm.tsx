@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -24,12 +24,18 @@ export function ContactForm() {
     handleSubmit,
     setError,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema) as unknown as Resolver<ContactFormValues>,
-    defaultValues: { name: "", email: "", topic: "" as ContactFormValues["topic"], message: "", consent: false, website: "" },
+    defaultValues: { name: "", email: "", topic: "" as ContactFormValues["topic"], message: "", consent: false, website: "", startedAt: "" },
     mode: "onBlur",
   });
+
+  // Records when the form was opened; the server ignores submissions made within ~2.5 s (bots).
+  useEffect(() => {
+    setValue("startedAt", String(Date.now()));
+  }, [setValue]);
 
   const onSubmit = handleSubmit(async (values) => {
     setServerMessage(null);
@@ -84,6 +90,7 @@ export function ContactForm() {
         <label htmlFor="c-website">Website</label>
         <input id="c-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
       </div>
+      <input type="hidden" {...register("startedAt")} />
       <fieldset disabled={busy} className="grid gap-5 sm:grid-cols-2">
         <legend className="sr-only">Your message</legend>
         <FormField id="c-name" label="Name" required autoComplete="name" error={errors.name?.message} {...register("name")} />

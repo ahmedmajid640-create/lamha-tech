@@ -36,7 +36,8 @@ Quality gates:
 ```bash
 npm run lint
 npm run typecheck
-npm run check                   # lint + typecheck + build
+npm test                        # vitest: validation, uploads, sanitization, rate limit, request guards
+npm run check                   # lint + typecheck + tests + build
 ```
 
 ## Project structure

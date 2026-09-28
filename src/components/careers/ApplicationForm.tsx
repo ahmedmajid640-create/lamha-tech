@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -27,12 +27,18 @@ export function ApplicationForm({ roleTitle, roleSlug }: { roleTitle: string; ro
     handleSubmit,
     setError,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema) as unknown as Resolver<ApplicationFormValues>,
-    defaultValues: { role: roleTitle, roleSlug, name: "", email: "", phone: "", portfolio: "", linkedin: "", github: "", coverLetter: "", consent: false, website: "" },
+    defaultValues: { role: roleTitle, roleSlug, name: "", email: "", phone: "", portfolio: "", linkedin: "", github: "", coverLetter: "", consent: false, website: "", startedAt: "" },
     mode: "onBlur",
   });
+
+  // Records when the form was opened; the server ignores submissions made within ~2.5 s (bots).
+  useEffect(() => {
+    setValue("startedAt", String(Date.now()));
+  }, [setValue]);
 
   const markStarted = () => {
     if (started.current) return;
@@ -101,6 +107,7 @@ export function ApplicationForm({ roleTitle, roleSlug }: { roleTitle: string; ro
         <label htmlFor="a-website">Website</label>
         <input id="a-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
       </div>
+      <input type="hidden" {...register("startedAt")} />
       <input type="hidden" {...register("roleSlug")} />
       <fieldset disabled={busy} className="grid gap-5 sm:grid-cols-2">
         <legend className="sr-only">Your details</legend>

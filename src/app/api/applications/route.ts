@@ -5,7 +5,7 @@ import type { ApplicationRecord } from "@/lib/server/storage";
 import { getRepositories } from "@/lib/server/repositories";
 import { validateFiles, storeFiles } from "@/lib/server/uploads";
 import { cleanLine, cleanText, formDataToObject, nullable } from "@/lib/server/sanitize";
-import { apiError, bodyTooLarge, enforceRateLimit, flattenIssues, requestMeta } from "@/lib/server/request";
+import { apiError, bodyTooLarge, enforceRateLimit, flattenIssues, rejectCrossSite, requestMeta, submittedTooFast } from "@/lib/server/request";
 import { notify } from "@/lib/server/notify";
 import { jobs } from "@/data/jobs";
 
@@ -18,6 +18,8 @@ export const maxDuration = 30;
  * Flow: validation → job upsert → persistence → private CV storage → email/webhook → 201.
  */
 export async function POST(req: Request) {
+  const crossSite = rejectCrossSite(req);
+  if (crossSite) return crossSite;
   const limited = enforceRateLimit(req, "applications", { limit: 8, windowMs: 10 * 60 * 1000 });
   if (limited) return limited;
 
@@ -36,7 +38,7 @@ export async function POST(req: Request) {
   }
 
   const raw = formDataToObject(formData);
-  if (raw.website && raw.website.length > 0) {
+  if ((raw.website && raw.website.length > 0) || submittedTooFast(raw.startedAt)) {
     return NextResponse.json({ ok: true, id: randomUUID(), discarded: true }, { status: 201 });
   }
 
@@ -65,6 +67,9 @@ export async function POST(req: Request) {
   const repositories = getRepositories();
 
   try {
+    const dup = await repositories.findRecentDuplicate("application", cleanLine(d.email, 254), job.slug, 24 * 60 * 60 * 1000).catch(() => null);
+    if (dup) return NextResponse.json({ ok: true, id: dup, duplicate: true }, { status: 200 });
+
     const jobId = await repositories.ensureJob(job);
     const [cv] = await storeFiles(validation.files, `applications/${id}`);
     const meta = requestMeta(req);

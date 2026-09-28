@@ -11,6 +11,8 @@ export const contactSchema = z.object({
   message: trimmed(3000).min(10, "Please write at least 10 characters."),
   consent: z.literal(true, { message: "Please confirm that LAMHA may contact you." }),
   website: z.string().max(0).optional().or(z.literal("")),
+  /** Epoch ms when the form was opened (bot dwell-time check). Optional. */
+  startedAt: z.string().max(20).optional().or(z.literal("")),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;

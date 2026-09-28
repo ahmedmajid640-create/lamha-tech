@@ -23,6 +23,8 @@ export const applicationSchema = z.object({
   coverLetter: optionalTrimmed(5000),
   consent: z.literal(true, { message: "Please confirm that LAMHA may contact you about your application." }),
   website: z.string().max(0).optional().or(z.literal("")),
+  /** Epoch ms when the form was opened (bot dwell-time check). Optional. */
+  startedAt: z.string().max(20).optional().or(z.literal("")),
 });
 
 export type ApplicationInput = z.infer<typeof applicationSchema>;

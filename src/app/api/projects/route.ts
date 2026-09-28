@@ -5,7 +5,7 @@ import type { LeadRecord } from "@/lib/server/storage";
 import { getRepositories } from "@/lib/server/repositories";
 import { validateFiles, storeFiles } from "@/lib/server/uploads";
 import { cleanLine, cleanText, formDataToObject, nullable } from "@/lib/server/sanitize";
-import { apiError, bodyTooLarge, enforceRateLimit, flattenIssues, requestMeta } from "@/lib/server/request";
+import { apiError, bodyTooLarge, enforceRateLimit, flattenIssues, rejectCrossSite, requestMeta, submittedTooFast } from "@/lib/server/request";
 import { notify } from "@/lib/server/notify";
 
 export const runtime = "nodejs";
@@ -19,6 +19,8 @@ const MAX_BODY_BYTES = ATTACHMENT_RULES.maxFiles * ATTACHMENT_RULES.maxBytesPerF
  * Flow: validation → persistence (Postgres or file) → private attachment storage → email/webhook → 201.
  */
 export async function POST(req: Request) {
+  const crossSite = rejectCrossSite(req);
+  if (crossSite) return crossSite;
   const limited = enforceRateLimit(req, "projects", { limit: 8, windowMs: 10 * 60 * 1000 });
   if (limited) return limited;
 
@@ -38,8 +40,8 @@ export async function POST(req: Request) {
 
   const raw = formDataToObject(formData);
 
-  // Honeypot: silently accept and discard.
-  if (raw.website && raw.website.length > 0) {
+  // Honeypot / instant submission: silently accept and discard.
+  if ((raw.website && raw.website.length > 0) || submittedTooFast(raw.startedAt)) {
     return NextResponse.json({ ok: true, id: randomUUID(), discarded: true }, { status: 201 });
   }
 
@@ -59,6 +61,10 @@ export async function POST(req: Request) {
   const repositories = getRepositories();
 
   try {
+    // Double submit (double-click, retry after a slow response): return the earlier record instead of a second one.
+    const dup = await repositories.findRecentDuplicate("lead", cleanLine(d.email, 254), cleanText(d.description, 5000), 10 * 60 * 1000).catch(() => null);
+    if (dup) return NextResponse.json({ ok: true, id: dup, duplicate: true }, { status: 200 });
+
     const attachments = await storeFiles(validation.files, `leads/${id}`);
 
     const record: LeadRecord = {

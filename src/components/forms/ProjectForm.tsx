@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -54,12 +54,18 @@ export function ProjectForm({ initialService }: { initialService?: string }) {
     handleSubmit,
     setError,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ProjectInquiryFormValues>({
     resolver: zodResolver(projectInquirySchema) as unknown as Resolver<ProjectInquiryFormValues>,
     defaultValues: { ...projectInquiryDefaults, service: validInitial as ProjectInquiryFormValues["service"] },
     mode: "onBlur",
   });
+
+  // Records when the form was opened; the server ignores submissions made within ~2.5 s (bots).
+  useEffect(() => {
+    setValue("startedAt", String(Date.now()));
+  }, [setValue]);
 
   const markStarted = () => {
     if (started.current) return;
@@ -162,6 +168,7 @@ export function ProjectForm({ initialService }: { initialService?: string }) {
         <label htmlFor="website">Website</label>
         <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
       </div>
+      <input type="hidden" {...register("startedAt")} />
       <input type="hidden" {...register("source")} />
 
       <fieldset disabled={busy} className="min-w-0">

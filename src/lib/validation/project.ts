@@ -59,6 +59,8 @@ export const projectInquirySchema = z.object({
   consent: z.literal(true, { message: "Please confirm that LAMHA may contact you about this inquiry." }),
   /** Honeypot: must remain empty. Bots that fill it are silently discarded. */
   website: z.string().max(0).optional().or(z.literal("")),
+  /** Epoch ms when the form was opened (bot dwell-time check). Optional. */
+  startedAt: z.string().max(20).optional().or(z.literal("")),
   source: optionalTrimmed(120),
 });
 
@@ -82,5 +84,6 @@ export const projectInquiryDefaults: ProjectInquiryFormValues = {
   timeline: "",
   consent: false,
   website: "",
+  startedAt: "",
   source: "website:start-a-project",
 };

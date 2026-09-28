@@ -55,3 +55,28 @@ export function flattenIssues(issues: { path: PropertyKey[]; message: string }[]
   }
   return out;
 }
+
+/**
+ * Cross-site POST protection (CSRF-style). Browsers always send Origin on cross-origin POSTs;
+ * same-origin fetches send it too. When present it must match the request host. Requests with
+ * neither Origin nor Referer (e.g. curl, server-to-server) are allowed through and still rate-limited.
+ */
+export function rejectCrossSite(req: Request) {
+  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+  const source = req.headers.get("origin") ?? req.headers.get("referer");
+  if (!host || !source) return null;
+  try {
+    const srcHost = new URL(source).host;
+    if (srcHost !== host) return apiError(403, "forbidden_origin", "Cross-site form submissions are not accepted.");
+  } catch {
+    return apiError(403, "forbidden_origin", "Cross-site form submissions are not accepted.");
+  }
+  return null;
+}
+
+/** Bots submit instantly. If the form reports when it was opened, require a minimum dwell time. */
+export function submittedTooFast(startedAt: unknown, minMs = 2500): boolean {
+  const n = typeof startedAt === "string" ? Number(startedAt) : NaN;
+  if (!Number.isFinite(n) || n <= 0) return false; // field absent or malformed: ignore, other defences apply
+  return Date.now() - n < minMs;
+}

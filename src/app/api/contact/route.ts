@@ -4,7 +4,7 @@ import { contactSchema } from "@/lib/validation/contact";
 import type { ContactRecord } from "@/lib/server/storage";
 import { getRepositories } from "@/lib/server/repositories";
 import { cleanLine, cleanText } from "@/lib/server/sanitize";
-import { apiError, bodyTooLarge, enforceRateLimit, flattenIssues, requestMeta } from "@/lib/server/request";
+import { apiError, bodyTooLarge, enforceRateLimit, flattenIssues, rejectCrossSite, requestMeta, submittedTooFast } from "@/lib/server/request";
 import { notify } from "@/lib/server/notify";
 
 export const runtime = "nodejs";
@@ -13,6 +13,8 @@ export const maxDuration = 15;
 
 /** POST /api/contact — general inquiry (application/json). */
 export async function POST(req: Request) {
+  const crossSite = rejectCrossSite(req);
+  if (crossSite) return crossSite;
   const limited = enforceRateLimit(req, "contact", { limit: 8, windowMs: 10 * 60 * 1000 });
   if (limited) return limited;
   if (bodyTooLarge(req, 64 * 1024)) return apiError(413, "payload_too_large", "The message is too large.");
@@ -25,7 +27,7 @@ export async function POST(req: Request) {
   }
 
   const raw = (body ?? {}) as Record<string, unknown>;
-  if (typeof raw.website === "string" && raw.website.length > 0) {
+  if ((typeof raw.website === "string" && raw.website.length > 0) || submittedTooFast(raw.startedAt)) {
     return NextResponse.json({ ok: true, id: randomUUID(), discarded: true }, { status: 201 });
   }
 
@@ -37,6 +39,9 @@ export async function POST(req: Request) {
   const d = parsed.data;
   const repositories = getRepositories();
   try {
+    const dup = await repositories.findRecentDuplicate("contact", cleanLine(d.email, 254), cleanText(d.message, 3000), 10 * 60 * 1000).catch(() => null);
+    if (dup) return NextResponse.json({ ok: true, id: dup, duplicate: true }, { status: 200 });
+
     const meta = requestMeta(req);
     const record: ContactRecord = {
       id: randomUUID(),

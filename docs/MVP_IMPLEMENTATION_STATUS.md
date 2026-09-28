@@ -137,6 +137,17 @@ render dynamically (losing static generation); deferred as P1 per the production
 
 Live at **https://lamha-tech.vercel.app** (Vercel, CLI deploy of `main`). Verified live: sampled routes 200, 404/405 correct, canonical + sitemap on the production domain, 6/6 security headers, TTFB ≈ 0.4–0.5 s. Blob storage connected (private). Database and email are pending credentials/terms acceptance; see `docs/DEPLOYMENT.md`.
 
+## 5d. Production hardening pass (2026-09-28, launch prep)
+
+| Area | Change | Verified |
+| --- | --- | --- |
+| CSRF / cross-site | All three POST endpoints reject requests whose `Origin`/`Referer` host differs from the request host (`rejectCrossSite`) | Unit + integration test (403) |
+| Duplicate submissions | Same email + same content within 10 min (24 h for applications) returns the earlier record id with `duplicate: true` instead of creating a second row | Integration test against Postgres |
+| Bot dwell time | Forms record when they were opened; submissions faster than 2.5 s are silently discarded (like the honeypot) | Unit + integration test |
+| Error states | `src/app/error.tsx` and `src/app/global-error.tsx` boundaries with safe messages and a digest reference | Build |
+| Tests | Vitest suite (`npm test`): validation schemas, upload sniffing, sanitization, rate limiter, request guards; `npm run check` runs lint, typecheck, tests, build | 20 tests passing |
+| Deploy hygiene | `.vercelignore` keeps env files and local data out of CLI uploads; prebuild never loads local env on Vercel/CI | Production build on Vercel |
+
 ## 6. Production TODOs
 
 1. Supply approved founder/leadership biographies and portraits (`src/data/leadership.ts`).
