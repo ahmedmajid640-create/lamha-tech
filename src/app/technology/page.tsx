@@ -36,11 +36,8 @@ export default function TechnologyPage() {
             Start a Project
           </Button>
         }
-        visual={
-          <Reveal>
-            <ArchitectureVisual />
-          </Reveal>
-        }
+        accent="cluster"
+        visual={<ArchitectureVisual />}
       />
 
       <section aria-labelledby="principles-heading" className="bg-white">

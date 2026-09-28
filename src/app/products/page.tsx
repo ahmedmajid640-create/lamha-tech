@@ -46,11 +46,8 @@ export default function ProductsPage() {
             </Button>
           </>
         }
-        visual={
-          <Reveal>
-            <ArchitectureVisual />
-          </Reveal>
-        }
+        accent="octahedron"
+        visual={<ArchitectureVisual />}
       />
 
       <section aria-labelledby="approach-heading" className="bg-white">

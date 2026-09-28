@@ -12,6 +12,9 @@ import { TrackedCTA } from "@/components/analytics/TrackedLink";
 import { ViewTracker } from "@/components/analytics/ViewTracker";
 import { ServiceVisual } from "@/components/visuals/ServiceVisual";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
+import { AccentCanvas } from "@/components/three/AccentCanvas";
+import { accentForVisual } from "@/components/three/variants";
+import { Magnetic, Rise, TextReveal, Tilt } from "@/components/motion/Motion";
 import { ServiceCard } from "./ServiceCard";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { TechnologyGrid } from "@/components/sections/TechnologyGrid";
@@ -73,21 +76,31 @@ export function ServiceDetail({ service }: { service: Service }) {
               <SectionLabel number={service.globalNumber} tone="dark">
                 {family.title} · Service {service.number}
               </SectionLabel>
-              <h1 className="mt-6 text-h1 font-semibold">{service.title}</h1>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">{service.outcome}</p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <TrackedCTA href={startHref} event={ANALYTICS_EVENTS.START_PROJECT_CLICK} eventProps={{ location: "service_hero", service: service.slug }} size="lg" icon="arrow">
-                  Start a Project
-                </TrackedCTA>
-                <Button href="/contact" variant="outline-light" size="lg">
-                  Talk to us
-                </Button>
-              </div>
+              <h1 className="mt-6 text-h1 font-semibold">
+                <TextReveal lines={[service.title]} delay={0.05} />
+              </h1>
+              <Rise delay={0.35}>
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">{service.outcome}</p>
+              </Rise>
+              <Rise delay={0.5}>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Magnetic>
+                    <TrackedCTA href={startHref} event={ANALYTICS_EVENTS.START_PROJECT_CLICK} eventProps={{ location: "service_hero", service: service.slug }} size="lg" icon="arrow">
+                      Start a Project
+                    </TrackedCTA>
+                  </Magnetic>
+                  <Magnetic strength={0.2}>
+                    <Button href="/contact" variant="outline-light" size="lg">
+                      Talk to us
+                    </Button>
+                  </Magnetic>
+                </div>
+              </Rise>
             </div>
             <div className="lg:col-span-6">
-              <Reveal>
-                <ServiceVisual kind={service.visual} label={service.title} />
-              </Reveal>
+              <Rise delay={0.2}>
+                <AccentCanvas variant={accentForVisual[service.visual]} fallback={<ServiceVisual kind={service.visual} label={service.title} />} />
+              </Rise>
             </div>
           </div>
         </div>
@@ -143,11 +156,13 @@ export function ServiceDetail({ service }: { service: Service }) {
           <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {service.capabilities.map((c, i) => (
               <Reveal key={c.title} as="li" delay={i * 60}>
-                <div className="card-surface card-hover h-full p-6">
-                  <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className="mt-4 text-lg font-semibold text-navy">{c.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{c.description}</p>
-                </div>
+                <Tilt className="h-full">
+                  <div className="card-surface card-hover h-full p-6">
+                    <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="mt-4 text-lg font-semibold text-navy">{c.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{c.description}</p>
+                  </div>
+                </Tilt>
               </Reveal>
             ))}
           </ul>

@@ -20,8 +20,17 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const [hidden, setHidden] = useState(false);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 32);
+      // Hide when scrolling down past the hero, reveal on any upward scroll.
+      setHidden(y > 320 && y > lastY + 4);
+      lastY = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -44,7 +53,8 @@ export function Header() {
       </a>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
+          "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter,transform] duration-300",
+          hidden && !open && "-translate-y-full",
           light ? "border-b border-transparent bg-transparent" : "border-b border-slate-200/80 bg-white/85 shadow-[0_1px_0_rgba(11,27,58,0.02)] backdrop-blur-md",
           light && "dark-section",
         )}

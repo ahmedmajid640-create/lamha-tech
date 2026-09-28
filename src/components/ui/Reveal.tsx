@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+
+type RevealTag = "div" | "li" | "p" | "span" | "section" | "article" | "ul" | "ol";
 
 /**
  * Progressive scroll reveal. Content is visible without JS and when the user
@@ -11,13 +13,13 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  as: Tag = "div",
+  as = "div",
   once = true,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
-  as?: ElementType;
+  as?: RevealTag;
   once?: boolean;
 }) {
   const ref = useRef<HTMLElement | null>(null);
@@ -46,8 +48,9 @@ export function Reveal({
     return () => io.disconnect();
   }, [once]);
 
+  const Tag = as as "div";
   return (
-    <Tag ref={ref} className={cn("reveal", className)} style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}>
+    <Tag ref={ref as React.RefObject<HTMLDivElement | null>} className={cn("reveal", className)} style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}>
       {children}
     </Tag>
   );

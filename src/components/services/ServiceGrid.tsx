@@ -2,6 +2,7 @@ import { serviceFamilies, servicesByFamily } from "@/data/services";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Reveal } from "@/components/ui/Reveal";
 import { ServiceCard } from "./ServiceCard";
+import { Tilt } from "@/components/motion/Motion";
 import { cn } from "@/lib/utils";
 
 /** All published services grouped by family. Used on the home page and /services. */
@@ -26,7 +27,9 @@ export function ServiceGrid({ tone = "light", compact = false }: { tone?: "light
               <div className={cn("grid gap-4 sm:grid-cols-2 lg:col-span-8", compact ? "xl:grid-cols-3" : "xl:grid-cols-3")}>
                 {items.map((service, i) => (
                   <Reveal key={service.slug} delay={i * 60}>
-                    <ServiceCard service={service} tone={tone} className="h-full" />
+                    <Tilt className="h-full">
+                      <ServiceCard service={service} tone={tone} className="h-full" />
+                    </Tilt>
                   </Reveal>
                 ))}
               </div>

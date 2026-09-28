@@ -51,11 +51,8 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
             </Button>
           </>
         }
-        visual={
-          <Reveal>
-            <ArchitectureVisual />
-          </Reveal>
-        }
+        accent={(["cluster", "grid", "icosahedron", "rings"] as const)[solutions.findIndex((s) => s.slug === solution.slug) % 4]}
+        visual={<ArchitectureVisual />}
       />
 
       {/* Typical problems */}
