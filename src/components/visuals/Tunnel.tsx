@@ -22,8 +22,16 @@ export function Tunnel({ className, tone = "light", frames = 9 }: { className?: 
           return (
             <div
               key={i}
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border"
-              style={{ width: size, height: size * 0.62, borderColor: stroke, transform: `translate(-50%, -50%) translateZ(${-i * 140}px)`, opacity: 1 - i / (frames + 1) }}
+              className="absolute border"
+              style={{
+                width: size,
+                height: size * 0.62,
+                left: -size / 2,
+                top: -(size * 0.62) / 2,
+                borderColor: stroke,
+                transform: `translateZ(${-i * 140}px)`,
+                opacity: 1 - i / (frames + 1),
+              }}
             />
           );
         })}

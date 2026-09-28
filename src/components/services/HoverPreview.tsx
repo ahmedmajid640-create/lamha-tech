@@ -26,8 +26,13 @@ export function HoverPreview({ children, className }: { children: React.ReactNod
       if (t) {
         setKind(t.dataset.previewKind as ServiceVisualKind);
         setLabel(t.dataset.previewLabel ?? "");
-        x.set(e.clientX + 24);
-        y.set(e.clientY - 120);
+        // Keep the 300×~260 panel inside the viewport: flip to the left near the right edge, clamp vertically.
+        const W = 300;
+        const H = 260;
+        const px = e.clientX + 24 + W > window.innerWidth ? e.clientX - 24 - W : e.clientX + 24;
+        const py = Math.min(Math.max(e.clientY - H / 2, 16), window.innerHeight - H - 16);
+        x.set(px);
+        y.set(py);
       } else setKind(null);
     };
     const leave = () => setKind(null);
