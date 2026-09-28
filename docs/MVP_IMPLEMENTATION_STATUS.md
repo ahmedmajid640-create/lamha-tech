@@ -133,6 +133,10 @@ No invented clients, testimonials, statistics, awards, certifications, partnersh
 CSP remains `script-src 'self' 'unsafe-inline'`: a nonce-based policy would force every page to
 render dynamically (losing static generation); deferred as P1 per the production brief.
 
+## 5c. Deployment (2026-09-28)
+
+Live at **https://lamha-tech.vercel.app** (Vercel, CLI deploy of `main`). Verified live: sampled routes 200, 404/405 correct, canonical + sitemap on the production domain, 6/6 security headers, TTFB ≈ 0.4–0.5 s. Blob storage connected (private). Database and email are pending credentials/terms acceptance; see `docs/DEPLOYMENT.md`.
+
 ## 6. Production TODOs
 
 1. Supply approved founder/leadership biographies and portraits (`src/data/leadership.ts`).

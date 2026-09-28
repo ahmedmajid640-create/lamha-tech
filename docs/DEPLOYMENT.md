@@ -1,5 +1,19 @@
 # LAMHA Website — Production Deployment Runbook
 
+## Current production state (2026-09-28)
+
+| Item | Value |
+| --- | --- |
+| Production URL | https://lamha-tech.vercel.app |
+| Vercel project | `lamha-tech` in team `syedalaibawork-8834` (Hobby) |
+| Source | https://github.com/ahmedmajid640-create/lamha-tech (branch `main`) |
+| Deploy method | `vercel deploy --prod` from the repo (CLI). Connecting the GitHub repo in the Vercel dashboard enables automatic deploys on push. |
+| Blob storage | `lamha-uploads` (store_nnjDkArwWH6hmHMl), private, linked; `BLOB_READ_WRITE_TOKEN` set for all environments |
+| Database | **Pending**: Neon (Vercel Marketplace) requires one-time terms acceptance at https://vercel.com/syedalaibawork-8834/~/integrations/accept-terms/neon?source=cli, then `vercel integration add neon`, map `DATABASE_URL`/`DIRECT_URL`, redeploy. Until then submissions fall back to ephemeral `/tmp` storage on the server. |
+| Email | **Pending**: needs `EMAIL_API_KEY` (Resend), `EMAIL_FROM`, `EMAIL_TO` in Production |
+| `NEXT_PUBLIC_SITE_URL` | set to the production URL (Production + Preview) |
+| `.vercelignore` | excludes `.env*`, `.data`, `node_modules`, `.next`, doc binaries |
+
 Target platform: **Vercel** (Next.js 16). Database: **PostgreSQL** (any provider; Neon via the Vercel
 Marketplace is the fastest). Uploads: **Vercel Blob (private)**. Email: **Resend**.
 
