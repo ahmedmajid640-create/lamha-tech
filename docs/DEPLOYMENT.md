@@ -9,8 +9,9 @@
 | Source | https://github.com/ahmedmajid640-create/lamha-tech (branch `main`) |
 | Deploy method | `vercel deploy --prod` from the repo (CLI). Connecting the GitHub repo in the Vercel dashboard enables automatic deploys on push. |
 | Blob storage | `lamha-uploads` (store_nnjDkArwWH6hmHMl), private, linked; `BLOB_READ_WRITE_TOKEN` set for all environments |
-| Database | **Pending**: Neon (Vercel Marketplace) requires one-time terms acceptance at https://vercel.com/syedalaibawork-8834/~/integrations/accept-terms/neon?source=cli, then `vercel integration add neon`, map `DATABASE_URL`/`DIRECT_URL`, redeploy. Until then submissions fall back to ephemeral `/tmp` storage on the server. |
+| Database | Neon PostgreSQL `neon-blue-sail` via Vercel Marketplace, connected to the project; `DATABASE_URL` (pooled) injected, `DIRECT_URL` set to the unpooled URL in all environments; migration `20260927202909_init` applied by the production build |
 | Email | **Pending**: needs `EMAIL_API_KEY` (Resend), `EMAIL_FROM`, `EMAIL_TO` in Production |
+| Local note | Outbound port 5432 is blocked on the dev machine; use the Neon HTTP driver or the Vercel build for migrations |
 | `NEXT_PUBLIC_SITE_URL` | set to the production URL (Production + Preview) |
 | `.vercelignore` | excludes `.env*`, `.data`, `node_modules`, `.next`, doc binaries |
 
