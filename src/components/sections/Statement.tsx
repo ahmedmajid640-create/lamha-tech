@@ -50,7 +50,7 @@ export function Statement({
   return (
     <section ref={ref} className={cn("relative", dark ? "dark-section bg-abyss text-white" : "bg-white", className)} aria-label={label}>
       <div className={size === "lg" ? "h-[140vh] md:h-[160vh]" : "h-[110vh] md:h-[125vh]"}>
-        <div className="sticky top-0 flex h-screen items-center">
+        <div className="sticky top-0 flex h-screen items-start pt-[calc(var(--header-h)+3.5rem)] md:pt-[calc(var(--header-h)+5rem)]">
           <div className="container-x">
             <div className="grid gap-10 lg:grid-cols-12">
               <div className="lg:col-span-3">
