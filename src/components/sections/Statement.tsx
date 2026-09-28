@@ -18,7 +18,7 @@ function Word({ word, index, total, progress, dark }: { word: string; index: num
   const opacity = useTransform(progress, [start, end], [dark ? 0.22 : 0.18, 1]);
   const y = useTransform(progress, [start, end], [6, 0]);
   return (
-    <motion.span style={{ opacity, y }} className="inline-block will-change-[opacity,transform]">
+    <motion.span style={{ opacity, y }} className="word-hover-soft inline-block transition-[color,filter] duration-300 will-change-[opacity,transform]">
       {word}&nbsp;
     </motion.span>
   );
