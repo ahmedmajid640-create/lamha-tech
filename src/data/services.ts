@@ -253,7 +253,7 @@ export const services: Service[] = [
     ],
     related: ["web-design-ui-ux", "seo", "software-development", "scale-optimization"],
     metaDescription:
-      "Web development by LAMHA Technologies: corporate websites, web applications, SaaS front-ends, dashboards, portals and e-commerce built for speed, security and growth.",
+      "Web development by LAMHA Technologies: corporate websites, web apps, SaaS front-ends, dashboards, portals and e-commerce built for speed and security.",
     status: "published",
   },
   {

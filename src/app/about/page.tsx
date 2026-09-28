@@ -18,7 +18,7 @@ import { CTASection } from "@/components/sections/CTASection";
 export const metadata: Metadata = buildMetadata({
   title: "About LAMHA Technologies",
   description:
-    "About LAMHA Technologies (Pvt.) Ltd., Islamabad: a technology company turning real-world problems into practical software and digital products. Mission, vision and leadership.",
+    "About LAMHA Technologies (Pvt.) Ltd., Islamabad: turning real-world problems into practical software and digital products. Mission, vision and leadership.",
   path: "/about",
 });
 
