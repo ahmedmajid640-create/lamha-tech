@@ -20,13 +20,22 @@ export const site = {
     secondary: { label: "Explore Services", href: "/services" },
   },
   contact: {
-    // Placeholder addresses — replace with approved company details before launch.
-    generalEmail: "info@lamhatech.com",
-    projectsEmail: "hello@lamhatech.com",
-    careersEmail: "careers@lamhatech.com",
-    phone: null as string | null,
+    // Interim contact details supplied by LAMHA (2026-09-28). Replace with the company domain addresses when ready.
+    generalEmail: "syedalaibawork@gmail.com",
+    projectsEmail: "syedalaibawork@gmail.com",
+    careersEmail: "syedalaibawork@gmail.com",
+    phone: "+92 334 1606621" as string | null,
+    phoneDisplay: "0334 1606621",
     address: null as string | null,
     deliveryNote: "Remote-first delivery for clients worldwide.",
+  },
+  about: {
+    short:
+      "LAMHA Technologies (Pvt.) Ltd. is a technology company that designs, builds, tests and evolves software, digital products and technology solutions for businesses, startups and organizations worldwide.",
+    paragraphs: [
+      "We work across three service families: Technology Engineering (software, web, mobile, full-stack, QA and security), Digital Experience (UI/UX, brand identity and motion) and Growth & Optimization (strategy, SEO, analytics and scale).",
+      "Alongside client work, LAMHA develops its own internal systems and automation. Selected technologies may later become reusable products, and the company is preparing to expand into new engineering frontiers as it becomes operationally ready.",
+    ],
   },
   social: [
     // Add approved profile URLs when available. Entries with null href are hidden.

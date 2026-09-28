@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight, Briefcase, Globe2, Mail, MessageSquare } from "lucide-react";
+import { ArrowRight, Briefcase, Globe2, Mail, MessageSquare, Phone } from "lucide-react";
 import Link from "next/link";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { site } from "@/data/site";
@@ -72,9 +72,27 @@ export default function ContactPage() {
                 Send a message
               </h2>
               <p className="mt-4 text-[0.95rem] leading-relaxed text-slate-600">For anything that is not a project inquiry. We will review your message and contact you using the details submitted.</p>
-              <div className="mt-8 flex items-start gap-3 rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-600">
-                <Globe2 className="mt-0.5 h-4 w-4 shrink-0 text-blue" aria-hidden="true" />
-                <p>{site.contact.deliveryNote} Office address and phone details will be published once confirmed.</p>
+              <div className="mt-8 space-y-3">
+                {site.contact.phone && (
+                  <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`} className="flex items-center gap-3 rounded-md border border-slate-200 bg-white p-4 text-sm text-navy hover:border-blue-200">
+                    <Phone className="h-4 w-4 shrink-0 text-blue" aria-hidden="true" />
+                    <span>
+                      <span className="block text-xs uppercase tracking-[0.12em] text-slate-500">Phone</span>
+                      {site.contact.phone}
+                    </span>
+                  </a>
+                )}
+                <a href={`mailto:${site.contact.generalEmail}`} className="flex items-center gap-3 rounded-md border border-slate-200 bg-white p-4 text-sm text-navy hover:border-blue-200">
+                  <Mail className="h-4 w-4 shrink-0 text-blue" aria-hidden="true" />
+                  <span>
+                    <span className="block text-xs uppercase tracking-[0.12em] text-slate-500">Email</span>
+                    {site.contact.generalEmail}
+                  </span>
+                </a>
+                <div className="flex items-start gap-3 rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-600">
+                  <Globe2 className="mt-0.5 h-4 w-4 shrink-0 text-blue" aria-hidden="true" />
+                  <p>{site.contact.deliveryNote} Office address will be published once confirmed.</p>
+                </div>
               </div>
             </div>
             <div className="lg:col-span-8">

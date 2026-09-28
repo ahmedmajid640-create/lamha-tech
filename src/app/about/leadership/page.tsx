@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { founder, publishedLeadership } from "@/data/leadership";
+import { site } from "@/data/site";
 import { PageHero } from "@/components/sections/PageHero";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -35,6 +36,30 @@ export default function LeadershipPage() {
         }
         compact
       />
+
+      <section aria-labelledby="company-heading" className="border-b border-slate-200 bg-white">
+        <div className="container-x section-y-sm">
+          <div className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <SectionLabel number="00">About the company</SectionLabel>
+              <h2 id="company-heading" className="mt-4 text-h3 font-semibold text-navy">
+                {site.legalName}
+              </h2>
+            </div>
+            <div className="space-y-4 text-[0.95rem] leading-relaxed text-slate-700 lg:col-span-7 lg:col-start-6">
+              <p className="text-lg text-navy">{site.about.short}</p>
+              {site.about.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+              <p className="text-sm text-slate-500">
+                <a className="text-blue underline-offset-2 hover:underline" href="/about">
+                  Read more about LAMHA
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section aria-labelledby="founder-heading" className="bg-white">
         <div className="container-x section-y">

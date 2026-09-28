@@ -23,7 +23,8 @@ export const leadership: Leader[] = [
     name: "Syeda Laiba Haider",
     role: "Founder",
     initials: "SL",
-    bio: null,
+    // Role description approved for interim use; a full biography will replace it when supplied.
+    bio: "Founder of LAMHA Technologies (Pvt.) Ltd. Syeda Laiba Haider sets the company's vision and direction: building practical technology for businesses while developing LAMHA's own systems, automation and future products.",
     portrait: null,
     profileUrl: null,
     featured: true,

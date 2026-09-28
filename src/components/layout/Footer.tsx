@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 import { footerNav } from "@/data/navigation";
 import { site } from "@/data/site";
 import { LamhaLogo } from "@/components/ui/Logo";
@@ -45,25 +45,25 @@ export function Footer() {
 
         <div className="mt-16 grid gap-6 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h2 className="label-caps text-slate-500">Projects</h2>
-            <a href={`mailto:${site.contact.projectsEmail}`} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white">
-              <Mail className="h-4 w-4 text-blue-2" aria-hidden="true" />
-              {site.contact.projectsEmail}
-            </a>
-          </div>
-          <div>
-            <h2 className="label-caps text-slate-500">General</h2>
+            <h2 className="label-caps text-slate-500">Email</h2>
             <a href={`mailto:${site.contact.generalEmail}`} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white">
               <Mail className="h-4 w-4 text-blue-2" aria-hidden="true" />
               {site.contact.generalEmail}
             </a>
           </div>
+          {site.contact.phone && (
+            <div>
+              <h2 className="label-caps text-slate-500">Phone</h2>
+              <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white">
+                <Phone className="h-4 w-4 text-blue-2" aria-hidden="true" />
+                {site.contact.phone}
+              </a>
+            </div>
+          )}
           <div>
-            <h2 className="label-caps text-slate-500">Careers</h2>
-            <a href={`mailto:${site.contact.careersEmail}`} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white">
-              <Mail className="h-4 w-4 text-blue-2" aria-hidden="true" />
-              {site.contact.careersEmail}
-            </a>
+            <h2 className="label-caps text-slate-500">Company</h2>
+            <p className="mt-3 text-sm text-slate-300">{site.legalName}</p>
+            <p className="mt-1 text-sm text-slate-500">{site.contact.deliveryNote}</p>
           </div>
         </div>
 
@@ -78,7 +78,6 @@ export function Footer() {
             <Link href="/terms" className="hover:text-white">
               Terms of Use
             </Link>
-            <span>{site.contact.deliveryNote}</span>
             {socials.map((s) => (
               <a key={s.label} href={s.href!} target="_blank" rel="noopener noreferrer" className="hover:text-white">
                 {s.label}

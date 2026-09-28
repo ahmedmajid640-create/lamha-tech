@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Globe2, Mail, ShieldCheck, Workflow } from "lucide-react";
+import { Globe2, Mail, Phone, ShieldCheck, Workflow } from "lucide-react";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { site } from "@/data/site";
 import { ProjectForm } from "@/components/forms/ProjectForm";
@@ -20,6 +20,7 @@ const reassurance = [
   { icon: ShieldCheck, title: "Secure handling", description: "Submissions are validated server-side and stored securely. Attachments are type- and size-checked." },
   { icon: Workflow, title: "Structured review", description: "Each inquiry becomes an internal lead record reviewed by our team." },
   { icon: Mail, title: "Prefer email?", description: site.contact.projectsEmail },
+  ...(site.contact.phone ? [{ icon: Phone, title: "Prefer to call?", description: site.contact.phone }] : []),
 ];
 
 const steps = ["Submit the form", "We review your requirements", "We contact you using the details submitted"];
@@ -72,6 +73,10 @@ export default async function StartAProjectPage({ searchParams }: PageProps<"/st
                         <p className="font-semibold text-navy">{r.title}</p>
                         {r.title === "Prefer email?" ? (
                           <a href={`mailto:${site.contact.projectsEmail}`} className="mt-1 block text-sm text-blue underline-offset-2 hover:underline">
+                            {r.description}
+                          </a>
+                        ) : r.title === "Prefer to call?" ? (
+                          <a href={`tel:${(site.contact.phone ?? "").replace(/\s+/g, "")}`} className="mt-1 block text-sm text-blue underline-offset-2 hover:underline">
                             {r.description}
                           </a>
                         ) : (
