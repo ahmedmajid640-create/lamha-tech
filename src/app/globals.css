@@ -199,8 +199,8 @@
 @media (hover: hover) and (pointer: fine) {
   .word-hover:hover {
     /* grow, and push neighbouring words aside instead of overlapping them */
-    transform: translateY(-4px) scale(1.1);
-    margin-inline: 0.06em;
+    transform: translateY(-4px) scale(1.07);
+    margin-inline: 0.12em;
     position: relative;
     z-index: 1;
     color: color-mix(in srgb, currentColor 55%, #2e7cf6);

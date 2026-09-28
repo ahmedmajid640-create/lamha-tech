@@ -118,8 +118,8 @@ export function ImmersiveHero() {
             </motion.div>
 
             {/* Phase 03 */}
-            <motion.div style={{ opacity: o3, y: y3 }} className="absolute inset-x-5 top-1/2 -translate-y-1/2 sm:inset-x-8 lg:inset-x-12" aria-hidden={phase !== 2}>
-              <div className={phase === 2 ? "mx-auto max-w-5xl text-center" : "pointer-events-none mx-auto max-w-5xl text-center"}>
+            <motion.div style={{ opacity: o3, y: y3 }} className={phase === 2 ? "absolute inset-x-5 top-1/2 -translate-y-1/2 sm:inset-x-8 lg:inset-x-12" : "pointer-events-none absolute inset-x-5 top-1/2 -translate-y-1/2 sm:inset-x-8 lg:inset-x-12"} aria-hidden={phase !== 2}>
+              <div className="mx-auto max-w-5xl text-center">
                 <p className="label-caps text-blue-200">03 · From Systems to Impact</p>
                 <p className="mt-6 text-h1 font-semibold text-white">
                   Software, engineering and digital products that keep improving <span className="text-gradient-blue">long after launch.</span>
