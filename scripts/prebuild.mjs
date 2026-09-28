@@ -8,8 +8,8 @@ const run = (cmd) => {
   execSync(cmd, { stdio: "inherit" });
 };
 
-// Local convenience: pick up .env when present (hosting platforms inject real env vars).
-for (const file of [".env", ".env.local"]) {
+// Local convenience: pick up .env when present. Never on Vercel/CI, where real env vars are injected.
+for (const file of process.env.VERCEL || process.env.CI ? [] : [".env", ".env.local"]) {
   try {
     process.loadEnvFile(file);
   } catch {
