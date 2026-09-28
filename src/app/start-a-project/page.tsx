@@ -7,6 +7,8 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
+import { HeroField } from "@/components/three/HeroField";
+import { HeroParallax } from "@/components/motion/HeroParallax";
 
 export const metadata: Metadata = buildMetadata({
   title: "Start a Project",
@@ -33,9 +35,11 @@ export default async function StartAProjectPage({ searchParams }: PageProps<"/st
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Start a Project", path: "/start-a-project" }])} />
-      <section className="dark-section relative overflow-hidden bg-deep text-white">
+      <section data-hero className="dark-section relative flex min-h-[70vh] flex-col justify-center overflow-hidden bg-deep text-white">
         <DarkBackdrop />
-        <div className="container-x relative pb-14 pt-[calc(var(--header-h)+2.5rem)] sm:pb-16">
+        <HeroField base="ring" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,41,0.85)_0%,rgba(7,17,41,0.5)_45%,rgba(7,17,41,0)_75%)]" />
+        <HeroParallax className="container-x relative w-full pb-14 pt-[calc(var(--header-h)+2.5rem)] sm:pb-16">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Start a Project" }]} className="mb-8" />
           <SectionLabel number="12" tone="dark">
             Start a Project
@@ -54,7 +58,7 @@ export default async function StartAProjectPage({ searchParams }: PageProps<"/st
               </li>
             ))}
           </ol>
-        </div>
+        </HeroParallax>
       </section>
 
       <section className="bg-white">

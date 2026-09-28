@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/Button";
 import { ApplicationForm } from "@/components/careers/ApplicationForm";
 import { ViewTracker } from "@/components/analytics/ViewTracker";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
+import { HeroField } from "@/components/three/HeroField";
+import { HeroParallax } from "@/components/motion/HeroParallax";
 import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
 
 export const dynamicParams = false;
@@ -59,9 +61,11 @@ export default async function JobPage({ params }: PageProps<"/careers/[slug]">) 
       <ViewTracker event={ANALYTICS_EVENTS.JOB_VIEW} props={{ job: job.slug, status: job.status }} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Careers", path: "/careers" }, { name: job.title, path: `/careers/${job.slug}` }])} />
 
-      <section className="dark-section relative overflow-hidden bg-deep text-white">
+      <section data-hero className="dark-section relative flex min-h-[70vh] flex-col justify-center overflow-hidden bg-deep text-white">
         <DarkBackdrop />
-        <div className="container-x relative pb-14 pt-[calc(var(--header-h)+2.5rem)] sm:pb-16">
+        <HeroField base="wave" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,41,0.85)_0%,rgba(7,17,41,0.5)_45%,rgba(7,17,41,0)_75%)]" />
+        <HeroParallax className="container-x relative w-full pb-14 pt-[calc(var(--header-h)+2.5rem)] sm:pb-16">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Careers", href: "/careers" }, { label: job.title }]} className="mb-8" />
           <div className="flex flex-wrap items-center gap-3">
             <SectionLabel tone="dark">{job.department}</SectionLabel>
@@ -91,7 +95,7 @@ export default async function JobPage({ params }: PageProps<"/careers/[slug]">) 
               Apply for this role
             </Button>
           </div>
-        </div>
+        </HeroParallax>
       </section>
 
       <section className="bg-white">

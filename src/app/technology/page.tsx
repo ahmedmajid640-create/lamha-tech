@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { technologyPrinciples } from "@/data/technology";
 import { PageHero } from "@/components/sections/PageHero";
+import { Statement } from "@/components/sections/Statement";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TechnologyGrid } from "@/components/sections/TechnologyGrid";
 import { Reveal } from "@/components/ui/Reveal";
@@ -37,7 +38,15 @@ export default function TechnologyPage() {
           </Button>
         }
         accent="cluster"
+        field="wave"
         visual={<ArchitectureVisual />}
+      />
+
+      <Statement
+        number="00"
+        label="Philosophy"
+        size="md"
+        text="We choose technology for the problem, not the trend. The workload, the team that will own the system and the budget that has to sustain it decide the stack, never habit or hype."
       />
 
       <section aria-labelledby="principles-heading" className="bg-white">

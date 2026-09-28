@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { projectCategories, type Project } from "@/data/projects";
 import { CaseStudyCard, PlaceholderCard } from "./CaseStudyCard";
+import { Parallax } from "@/components/motion/Motion";
 import { cn } from "@/lib/utils";
 
 const PLACEHOLDER_LABELS = ["Web platform", "Mobile product", "SaaS system", "AI & automation", "Enterprise integration", "Brand & interface"];
@@ -54,7 +55,9 @@ export function WorkGrid({ projects, placeholders = 6 }: { projects: Project[]; 
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
             {Array.from({ length: placeholders }).map((_, i) => (
-              <PlaceholderCard key={i} index={i} label={PLACEHOLDER_LABELS[i % PLACEHOLDER_LABELS.length]} />
+              <Parallax key={i} distance={[36, -24, 56][i % 3]}>
+                <PlaceholderCard index={i} label={PLACEHOLDER_LABELS[i % PLACEHOLDER_LABELS.length]} />
+              </Parallax>
             ))}
           </div>
         </div>

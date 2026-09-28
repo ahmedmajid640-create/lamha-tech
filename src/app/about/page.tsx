@@ -4,6 +4,7 @@ import { site } from "@/data/site";
 import { founder } from "@/data/leadership";
 import { whyLamha } from "@/data/whyLamha";
 import { PageHero } from "@/components/sections/PageHero";
+import { Statement } from "@/components/sections/Statement";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Reveal } from "@/components/ui/Reveal";
@@ -48,6 +49,7 @@ export default function AboutPage() {
         }
         description="We exist to solve meaningful problems through technology, engineering and continuous innovation."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About" }]}
+        field="wave"
         actions={
           <>
             <Button href="/start-a-project" size="lg" icon="arrow">
@@ -78,6 +80,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <Statement number="02" label="Our vision" text={site.vision} tone="dark" aside={{ title: "Mission", body: site.mission }} />
 
       {/* Why we exist */}
       <section aria-labelledby="why-exist-heading" className="bg-cloud">

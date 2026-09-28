@@ -8,6 +8,7 @@ import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { Button } from "@/components/ui/Button";
+import { KineticMarquee } from "@/components/motion/KineticMarquee";
 
 export const metadata: Metadata = buildMetadata({
   title: "Services — Software, Digital Experience and Growth",
@@ -58,6 +59,10 @@ export default function ServicesPage() {
           </ol>
         </div>
       </section>
+
+      <div className="dark-section bg-abyss text-white">
+        <KineticMarquee words={["Software", "Web", "Mobile", "Full-Stack", "QA", "Security", "Design", "Brand", "Motion", "Strategy", "SEO", "Analytics", "Scale"]} />
+      </div>
 
       <section className="bg-cloud">
         <div className="container-x section-y">

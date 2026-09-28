@@ -12,6 +12,7 @@ import { CareerCard } from "@/components/careers/CareerCard";
 import { ViewTracker } from "@/components/analytics/ViewTracker";
 import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
 import { CTASection } from "@/components/sections/CTASection";
+import { KineticMarquee } from "@/components/motion/KineticMarquee";
 
 export const metadata: Metadata = buildMetadata({
   title: "Careers — Build What Comes Next With Us",
@@ -54,6 +55,10 @@ export default function CareersPage() {
           </>
         }
       />
+
+      <div className="dark-section bg-abyss text-white">
+        <KineticMarquee words={["Build", "Engineer", "Evolve", "Impact"]} />
+      </div>
 
       {/* Philosophy strip */}
       <section aria-label="Engineering philosophy" className="border-b border-slate-200 bg-white">

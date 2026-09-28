@@ -4,6 +4,7 @@ import { getSolution, solutions } from "@/data/solutions";
 import { getService } from "@/data/services";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { PageHero } from "@/components/sections/PageHero";
+import { Statement } from "@/components/sections/Statement";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Reveal } from "@/components/ui/Reveal";
@@ -52,8 +53,11 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
           </>
         }
         accent={(["cluster", "grid", "icosahedron", "rings"] as const)[solutions.findIndex((s) => s.slug === solution.slug) % 4]}
+        field={(["ring", "sphere", "wave", "ring"] as const)[solutions.findIndex((s) => s.slug === solution.slug) % 4]}
         visual={<ArchitectureVisual />}
       />
+
+      <Statement number="00" label={`Solutions · ${solution.navLabel}`} text={solution.intro} size="md" aside={{ title: "Engagement", body: solution.engagementModels.map((m) => m.title).join(" · ") }} />
 
       {/* Typical problems */}
       <section aria-labelledby="problems-heading" className="bg-white">

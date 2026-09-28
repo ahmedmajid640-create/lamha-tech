@@ -14,7 +14,16 @@ import { ServiceVisual } from "@/components/visuals/ServiceVisual";
 import { DarkBackdrop } from "@/components/visuals/GridPattern";
 import { AccentCanvas } from "@/components/three/AccentCanvas";
 import { accentForVisual } from "@/components/three/variants";
+import { HeroField, type HeroFieldBase } from "@/components/three/HeroField";
+import { HeroParallax } from "@/components/motion/HeroParallax";
 import { Magnetic, Rise, TextReveal, Tilt } from "@/components/motion/Motion";
+import { SectionNav } from "./SectionNav";
+
+const FIELD_BY_FAMILY: Record<string, HeroFieldBase> = {
+  "technology-engineering": "sphere",
+  "digital-experience": "ring",
+  "growth-optimization": "wave",
+};
 import { ServiceCard } from "./ServiceCard";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { TechnologyGrid } from "@/components/sections/TechnologyGrid";
@@ -67,9 +76,11 @@ export function ServiceDetail({ service }: { service: Service }) {
       />
 
       {/* Hero */}
-      <section className="dark-section relative overflow-hidden bg-deep text-white">
+      <section data-hero className="dark-section relative flex min-h-[80vh] flex-col justify-center overflow-hidden bg-deep text-white">
         <DarkBackdrop />
-        <div className="container-x relative pb-16 pt-[calc(var(--header-h)+2.5rem)] sm:pb-20 lg:pb-24">
+        <HeroField base={FIELD_BY_FAMILY[service.family] ?? "sphere"} />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,41,0.85)_0%,rgba(7,17,41,0.5)_45%,rgba(7,17,41,0)_75%)]" />
+        <HeroParallax className="container-x relative w-full pb-16 pt-[calc(var(--header-h)+2.5rem)] sm:pb-20 lg:pb-24">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }, { label: service.title }]} className="mb-10" />
           <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-6">
@@ -103,22 +114,10 @@ export function ServiceDetail({ service }: { service: Service }) {
               </Rise>
             </div>
           </div>
-        </div>
-        {/* In-page navigation */}
-        <nav aria-label="On this page" className="relative border-t border-white/10 bg-deep/80 backdrop-blur">
-          <div className="container-x -mx-5 overflow-x-auto px-5 sm:mx-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <ul className="flex gap-6 whitespace-nowrap py-3.5 text-sm">
-              {SECTIONS.map((s) => (
-                <li key={s.id}>
-                  <a href={`#${s.id}`} className="text-slate-400 transition-colors hover:text-white">
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
+        </HeroParallax>
       </section>
+      {/* Sticky in-page navigation with active section */}
+      <SectionNav sections={SECTIONS} />
 
       {/* 01 Overview */}
       <section id="overview" className="scroll-mt-20 bg-white">
