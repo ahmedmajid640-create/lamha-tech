@@ -7,7 +7,7 @@ import { GhostNumber } from "@/components/motion/GhostNumber";
 import { Magnetic, Rise, Stagger, StaggerItem, TextReveal } from "@/components/motion/Motion";
 
 const points = [
-  { title: "Internal systems", description: "Operational tooling built to remove friction from how LAMHA itself runs." },
+  { title: "Internal systems", description: "Operational tooling built to remove friction from how LAMHA Technologies itself runs." },
   { title: "Automation", description: "Workflows and integrations that replace repetitive manual work with reliable processes." },
   { title: "Reusable technology", description: "Selected internal technologies may later become reusable products, published only when approved." },
 ];
@@ -28,7 +28,7 @@ export function ProductsRD({ number = "07" }: { number?: string }) {
             </h2>
             <Rise delay={0.2}>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
-                LAMHA develops internal systems, automation and technology to solve real operational problems. Selected technologies may later become reusable products.
+                LAMHA Technologies develops internal systems, automation and technology to solve real operational problems. Selected technologies may later become reusable products.
               </p>
             </Rise>
             <Stagger as="ul" className="mt-10 space-y-6">

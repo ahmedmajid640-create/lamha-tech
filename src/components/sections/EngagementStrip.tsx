@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, StaggerItem } from "@/components/motion/Motion";
 
-/** How clients can engage LAMHA, as an editorial index (no cards). Sourced from the solutions data. */
+/** How clients can engage LAMHA Technologies, as an editorial index (no cards). Sourced from the solutions data. */
 const models = [
   { n: "01", title: "Fixed-scope project", description: "A defined deliverable, timeline and budget. Best for MVPs, websites, integrations and clearly scoped builds.", fit: "Startups · SMEs", href: "/solutions/startups" },
   { n: "02", title: "Dedicated team", description: "A cross-functional squad that works as your engineering department, month to month, inside your tools and rituals.", fit: "Growing products · Enterprise", href: "/solutions/enterprise" },

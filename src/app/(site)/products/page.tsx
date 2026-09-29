@@ -20,7 +20,7 @@ export const metadata: Metadata = buildMetadata({
  * product names, screenshots or commercial claims are published here.
  */
 const approach = [
-  { number: "01", title: "Solve our own problems first", description: "Internal tooling starts from real operational friction inside LAMHA, which keeps the work grounded in genuine needs." },
+  { number: "01", title: "Solve our own problems first", description: "Internal tooling starts from real operational friction inside LAMHA Technologies, which keeps the work grounded in genuine needs." },
   { number: "02", title: "Engineer to product standards", description: "Internal systems are built with the same architecture, testing and security discipline we apply to client work." },
   { number: "03", title: "Generalize only when proven", description: "A system becomes a candidate product only after it has demonstrated value in day-to-day operation." },
   { number: "04", title: "Publish when approved", description: "Product details, names and availability are shared publicly only once they are approved for release." },
@@ -34,7 +34,7 @@ export default function ProductsPage() {
         number="07"
         label="Products & R&D"
         title="We Build for Ourselves, Too."
-        description="LAMHA develops internal systems, automation and technology to solve real operational problems. Selected technologies may later become reusable products."
+        description="LAMHA Technologies develops internal systems, automation and technology to solve real operational problems. Selected technologies may later become reusable products."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Products & R&D" }]}
         actions={
           <>
@@ -52,7 +52,7 @@ export default function ProductsPage() {
 
       <section aria-labelledby="approach-heading" className="bg-white">
         <div className="container-x section-y">
-          <SectionHeading number="01" label="Our R&D approach" title={<span id="approach-heading">Two engines: services and proprietary technology</span>} description="LAMHA operates as a technology services company and as a builder of its own systems. The two reinforce each other." />
+          <SectionHeading number="01" label="Our R&D approach" title={<span id="approach-heading">Two engines: services and proprietary technology</span>} description="LAMHA Technologies operates as a technology services company and as a builder of its own systems. The two reinforce each other." />
           <ol className="mt-12 grid gap-px overflow-hidden rounded-lg border border-slate-200 bg-slate-200 md:grid-cols-2">
             {approach.map((a, i) => (
               <Reveal key={a.number} as="li" delay={i * 60}>

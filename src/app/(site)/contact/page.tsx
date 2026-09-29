@@ -17,7 +17,7 @@ export const metadata: Metadata = buildMetadata({
 
 const channels = [
   { icon: Briefcase, title: "New project", description: "Share requirements, budget and timeline through the structured project form.", href: "/start-a-project", cta: "Start a Project", email: site.contact.projectsEmail },
-  { icon: Mail, title: "General inquiries", description: "Questions about LAMHA, partnerships or press.", href: null, cta: null, email: site.contact.generalEmail },
+  { icon: Mail, title: "General inquiries", description: "Questions about LAMHA Technologies, partnerships or press.", href: null, cta: null, email: site.contact.generalEmail },
   { icon: MessageSquare, title: "Careers", description: "Applications, introductions and questions about working with us.", href: "/careers", cta: "View careers", email: site.contact.careersEmail },
 ];
 

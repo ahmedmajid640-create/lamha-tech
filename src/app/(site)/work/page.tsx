@@ -31,7 +31,7 @@ export default function WorkPage() {
             Ideas Built Into <span className="text-gradient-blue">Real Products.</span>
           </>
         }
-        description="A selection of projects that show our approach to solving real-world problems through technology. Approved LAMHA projects and case studies will appear here."
+        description="A selection of projects that show our approach to solving real-world problems through technology. Approved LAMHA Technologies projects and case studies will appear here."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Work" }]}
         actions={
           <Button href="/start-a-project" size="lg" icon="arrow">

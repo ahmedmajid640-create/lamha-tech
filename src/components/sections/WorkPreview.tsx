@@ -17,7 +17,7 @@ export function WorkPreview({ number = "08" }: { number?: string }) {
               Ideas Built Into <span className="text-gradient-blue">Real Products.</span>
             </span>
           }
-          description="Approved LAMHA projects and case studies will appear here."
+          description="Approved LAMHA Technologies projects and case studies will appear here."
           tone="dark"
         >
           <Button href="/work" variant="outline-light" size="sm" icon="arrow">

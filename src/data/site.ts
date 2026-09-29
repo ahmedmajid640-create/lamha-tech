@@ -38,7 +38,7 @@ export const site = {
       "LAMHA Technologies (Pvt.) Ltd. is a technology company that designs, builds, tests and evolves software, digital products and technology solutions for businesses, startups and organizations worldwide.",
     paragraphs: [
       "We work across three service families: Technology Engineering (software, web, mobile, full-stack, QA and security), Digital Experience (UI/UX, brand identity and motion) and Growth & Optimization (strategy, SEO, analytics and scale).",
-      "Alongside client work, LAMHA develops its own internal systems and automation. Selected technologies may later become reusable products, and the company is preparing to expand into new engineering frontiers as it becomes operationally ready.",
+      "Alongside client work, LAMHA Technologies develops its own internal systems and automation. Selected technologies may later become reusable products, and the company is preparing to expand into new engineering frontiers as it becomes operationally ready.",
     ],
   },
   /**

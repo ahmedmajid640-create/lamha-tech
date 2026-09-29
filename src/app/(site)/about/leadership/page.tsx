@@ -28,7 +28,7 @@ export default function LeadershipPage() {
         number="10"
         label="Leadership"
         title="The people accountable for the work."
-        description="LAMHA's leadership combines founding vision, executive management and board oversight. Approved biographies and portraits will be published as they become available."
+        description="LAMHA Technologies's leadership combines founding vision, executive management and board oversight. Approved biographies and portraits will be published as they become available."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About", href: "/about" }, { label: "Leadership" }]}
         actions={
           <Button href="/about" variant="outline-light" size="lg">
@@ -62,7 +62,7 @@ export default function LeadershipPage() {
         </div>
       </section>
 
-      <section aria-labelledby="founder-heading" className="bg-white">
+      <section id={founder.slug} aria-labelledby="founder-heading" className="scroll-mt-28 bg-white">
         <div className="container-x section-y">
           <div className="grid items-center gap-12 lg:grid-cols-12">
             <div className="lg:col-span-5">

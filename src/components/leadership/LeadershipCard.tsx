@@ -38,7 +38,7 @@ export function Portrait({ leader, className, size = "md" }: { leader: Leader; c
 export function LeadershipCard({ leader, tone = "light", className }: { leader: Leader; tone?: "light" | "dark"; className?: string }) {
   const dark = tone === "dark";
   return (
-    <article className={cn("group flex h-full flex-col", className)}>
+    <article id={leader.slug} className={cn("group flex h-full flex-col scroll-mt-28", className)}>
       <Portrait leader={leader} className="transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1" />
       <div className="mt-5">
         <h3 className={cn("text-lg font-semibold", dark ? "text-white" : "text-navy")}>{leader.name}</h3>

@@ -215,7 +215,7 @@ export const solutions: Solution[] = [
       {
         title: "Future engineering frontiers",
         description:
-          "LAMHA's information architecture is prepared for future engineering and R&D services. These will be published only when LAMHA is operationally ready to deliver them.",
+          "LAMHA Technologies's information architecture is prepared for future engineering and R&D services. These will be published only when LAMHA Technologies is operationally ready to deliver them.",
       },
     ],
     relatedServices: ["digital-strategy", "software-development", "full-stack", "security", "analytics"],

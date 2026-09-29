@@ -33,7 +33,7 @@ const beliefs = [
 const direction = [
   { title: "Technology services", description: "Growing the software, digital experience and growth practices that serve clients worldwide." },
   { title: "Proprietary technology", description: "Developing internal systems and automation that may become reusable products once approved." },
-  { title: "New engineering frontiers", description: "Preparing to expand into engineering and R&D services when LAMHA is operationally ready to deliver them." },
+  { title: "New engineering frontiers", description: "Preparing to expand into engineering and R&D services when LAMHA Technologies is operationally ready to deliver them." },
 ];
 
 export default function AboutPage() {
@@ -42,7 +42,7 @@ export default function AboutPage() {
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "About", path: "/about" }])} />
       <PageHero
         number="09"
-        label="About LAMHA"
+        label="About LAMHA Technologies"
         title={
           <>
             A Technology Company Driven by <span className="text-gradient-blue">Real Impact.</span>
@@ -68,7 +68,7 @@ export default function AboutPage() {
         <div className="container-x section-y">
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <SectionLabel number="01">About LAMHA</SectionLabel>
+              <SectionLabel number="01">About LAMHA Technologies</SectionLabel>
               <h2 id="story-heading" className="mt-4 text-h2 font-semibold text-navy">
                 Who we are
               </h2>
@@ -192,7 +192,7 @@ export default function AboutPage() {
       {/* Where we're going */}
       <section aria-labelledby="direction-heading" className="dark-section bg-deep text-white">
         <div className="container-x section-y">
-          <SectionHeading number="07" label="Where we're going" title={<span id="direction-heading">Two engines, one direction</span>} description="LAMHA combines technology services with proprietary technology, and is preparing the ground for future engineering frontiers." tone="dark" />
+          <SectionHeading number="07" label="Where we're going" title={<span id="direction-heading">Two engines, one direction</span>} description="LAMHA Technologies combines technology services with proprietary technology, and is preparing the ground for future engineering frontiers." tone="dark" />
           <ol className="mt-12 grid gap-4 md:grid-cols-3">
             {direction.map((d, i) => (
               <Reveal key={d.title} as="li" delay={i * 70}>

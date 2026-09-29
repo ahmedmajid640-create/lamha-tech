@@ -78,12 +78,12 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
         </div>
       </section>
 
-      {/* How LAMHA helps */}
+      {/* How LAMHA Technologies helps */}
       <section aria-labelledby="help-heading" className="bg-cloud">
         <div className="container-x section-y">
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <SectionLabel number="02">How LAMHA helps</SectionLabel>
+              <SectionLabel number="02">How LAMHA Technologies helps</SectionLabel>
               <h2 id="help-heading" className="mt-4 text-h2 font-semibold text-navy">
                 From problem to working system
               </h2>

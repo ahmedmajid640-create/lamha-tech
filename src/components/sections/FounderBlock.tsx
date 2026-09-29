@@ -15,7 +15,7 @@ export function FounderBlock({ number = "09" }: { number?: string }) {
       <div className="container-x section-y relative">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
-            <SectionLabel number={number}>About LAMHA</SectionLabel>
+            <SectionLabel number={number}>About LAMHA Technologies</SectionLabel>
             <h2 id="about-heading" className="mt-6 text-h2 font-semibold text-navy">
               <TextReveal lines={["A Technology Company", "Driven by Real Impact."]} />
             </h2>
