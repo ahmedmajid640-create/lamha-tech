@@ -69,7 +69,7 @@ export function organizationJsonLd() {
     alternateName: ["LAMHA"],
     url: site.url,
     // Positive disambiguation: states what this organization is, without referencing unrelated companies.
-    disambiguatingDescription: `${site.legalName} is an independent software and technology company headquartered in ${site.contact.city}, ${site.contact.country}, operating ${site.url.replace(/^https?:\/\//, "")}.`,
+    disambiguatingDescription: `${site.name} (legal name ${site.legalName}) is an independent software and technology company headquartered in ${site.contact.city}, ${site.contact.country}, operating ${site.url.replace(/^https?:\/\//, "")}.`,
     // TODO(owner): when the SECP company registration number may be published, add
     // identifier: { "@type": "PropertyValue", propertyID: "SECP registration", value: "<number>" }.
     logo: { "@type": "ImageObject", url: absoluteUrl("/logo-512.png"), width: 512, height: 512, caption: `${site.name} logo` },

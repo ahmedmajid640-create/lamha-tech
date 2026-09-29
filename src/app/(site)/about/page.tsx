@@ -19,7 +19,7 @@ import { CTASection } from "@/components/sections/CTASection";
 export const metadata: Metadata = buildMetadata({
   title: "About Us",
   description:
-    "About LAMHA Technologies (Pvt.) Ltd., Islamabad: turning real-world problems into practical software and digital products. Mission, vision and leadership.",
+    "About LAMHA Technologies, Islamabad: turning real-world problems into practical software and digital products. Mission, vision and leadership.",
   path: "/about",
 });
 
@@ -75,7 +75,7 @@ export default function AboutPage() {
             </div>
             <div className="space-y-5 text-lg leading-relaxed text-slate-600 lg:col-span-7 lg:col-start-6">
               <p>{site.positioning}</p>
-              <p>{site.legalName} operates as a multidisciplinary team across software engineering, digital product design, quality, security and automation, working with businesses, startups and organizations internationally.</p>
+              <p>{site.name} operates as a multidisciplinary team across software engineering, digital product design, quality, security and automation, working with businesses, startups and organizations internationally.</p>
               <p className="font-medium text-navy">{site.supportingLine}</p>
             </div>
           </div>

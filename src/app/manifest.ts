@@ -3,7 +3,7 @@ import { site } from "@/data/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: site.legalName,
+    name: site.name,
     short_name: "LAMHA",
     description: site.description,
     start_url: "/",

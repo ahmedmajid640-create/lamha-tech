@@ -29,7 +29,7 @@ export default function OpenGraphImage() {
           </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 30, fontWeight: 700, letterSpacing: 8 }}>LAMHA</div>
-            <div style={{ fontSize: 13, letterSpacing: 4, color: "#97a3b6" }}>TECHNOLOGIES (PVT.) LTD.</div>
+            <div style={{ fontSize: 13, letterSpacing: 4, color: "#97a3b6" }}>TECHNOLOGIES · ISLAMABAD, PAKISTAN</div>
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>

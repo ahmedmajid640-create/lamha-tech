@@ -146,7 +146,7 @@ export function ImmersiveHero() {
 
             {/* Corner meta */}
             <div className="pointer-events-none absolute bottom-6 left-5 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-slate-500 sm:left-8 sm:block lg:left-12">
-              {site.legalName}
+              {site.name}
             </div>
             <div className="pointer-events-none absolute bottom-6 right-5 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-slate-400 sm:right-8 sm:block lg:right-12">
               <LocalTime />

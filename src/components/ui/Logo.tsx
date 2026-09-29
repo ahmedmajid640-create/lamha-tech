@@ -50,7 +50,7 @@ export function LamhaLogo({
               tone === "dark" ? "text-slate-500" : "text-slate-400",
             )}
           >
-            Technologies (Pvt.) Ltd.
+            Technologies
           </span>
         )}
       </span>
