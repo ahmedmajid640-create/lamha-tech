@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { site } from "@/data/site";
 import { founder } from "@/data/leadership";
@@ -176,8 +177,8 @@ export default function AboutPage() {
               { label: "Email", value: <a className="text-blue hover:underline" href={`mailto:${site.contact.generalEmail}`}>{site.contact.generalEmail}</a> },
               ...(site.contact.phone ? [{ label: "Phone", value: <a className="text-blue hover:underline" href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}>{site.contact.phone}</a> }] : []),
               { label: "Founder", value: founder.name },
-              { label: "Leadership", value: <a className="text-blue hover:underline" href="/about/leadership">Founder, Co-Founder, CEO and Board</a> },
-              { label: "Services", value: <a className="text-blue hover:underline" href="/services">13 services across engineering, digital experience and growth</a> },
+              { label: "Leadership", value: <Link className="text-blue hover:underline" href="/about/leadership">Founder, Co-Founder, CEO and Board</Link> },
+              { label: "Services", value: <Link className="text-blue hover:underline" href="/services">13 services across engineering, digital experience and growth</Link> },
             ].map((row) => (
               <div key={row.label}>
                 <dt className="label-caps text-slate-500">{row.label}</dt>
