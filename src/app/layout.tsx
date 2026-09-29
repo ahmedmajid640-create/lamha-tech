@@ -63,14 +63,10 @@ export const metadata: Metadata = {
     description: site.description,
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  // One canonical favicon for Search (Google uses a single favicon per host): the official mark as a
+  // 192px PNG (multiple of 48, square). /favicon.ico is served statically for legacy browser requests.
   icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/logo-48.png", sizes: "48x48", type: "image/png" },
-      { url: "/logo-96.png", sizes: "96x96", type: "image/png" },
-      { url: "/logo-192.png", sizes: "192x192", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
+    icon: [{ url: "/logo-192.png", sizes: "192x192", type: "image/png" }],
     apple: "/apple-icon",
   },
   authors: [{ name: site.legalName, url: site.url }],
