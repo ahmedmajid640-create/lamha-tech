@@ -8,6 +8,7 @@ import { addNoteAction, assignInquiryAction, updateInquiryStatusAction } from "@
 import { ActionForm, NoteForm } from "@/components/admin/Forms";
 import { Card, Dl, Empty, INQUIRY_STATUSES, PageHeader, StatusBadge, fmtDate } from "@/components/admin/ui";
 import { ActivityList } from "@/components/admin/Activity";
+import { RepliesCard } from "@/components/admin/Replies";
 
 export const metadata: Metadata = { title: "Inquiry" };
 
@@ -18,10 +19,11 @@ export default async function InquiryDetailPage({ params }: { params: Promise<{ 
   const inquiry = await prisma.projectInquiry.findUnique({ where: { id }, include: { attachments: true, assignedTo: { select: { id: true, name: true } } } });
   if (!inquiry) notFound();
 
-  const [notes, activity, team] = await Promise.all([
+  const [notes, activity, team, replies] = await Promise.all([
     prisma.note.findMany({ where: { entityType: "INQUIRY", entityId: id }, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true } } } }),
     prisma.auditLog.findMany({ where: { entityType: "inquiry", entityId: id }, orderBy: { createdAt: "desc" }, take: 50 }),
     prisma.user.findMany({ where: { active: true }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.reply.findMany({ where: { entityType: "INQUIRY", entityId: id }, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true } } } }),
   ]);
 
   const canDownload = can(user.role, "files:download");
@@ -58,6 +60,7 @@ export default async function InquiryDetailPage({ params }: { params: Promise<{ 
               ]}
             />
           </Card>
+          <RepliesCard entityType="INQUIRY" entityId={inquiry.id} to={inquiry.email} defaultSubject={`Re: ${inquiry.projectName || inquiry.service} — LAMHA Technologies`} canReply={can(user.role, "reply:send")} replies={replies} />
           <Card title="Project">
             <Dl
               items={[

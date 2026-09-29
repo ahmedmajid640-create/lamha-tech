@@ -2,13 +2,14 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { ApplicationStatus, ContactStatus, InquiryStatus, Role } from "@prisma/client";
+import type { ApplicationStatus, ContactStatus, InquiryStatus, NoteEntity, Role } from "@prisma/client";
 import { getPrisma } from "@/lib/server/db";
 import { audit } from "@/lib/server/audit";
 import { rateLimit } from "@/lib/server/rate-limit";
 import { createSession, destroySession, ForbiddenError, generatePassword, getSessionUser, hashPassword, passwordPolicyError, requestContext, requirePermission, requireUser, verifyPassword } from "@/lib/server/auth";
 import { assignableRoles, roleRank } from "@/lib/server/rbac";
 import { runBackup } from "@/lib/server/backup";
+import { sendReply } from "@/lib/server/reply";
 
 export type ActionState = { ok: boolean; message?: string; secret?: string } | null;
 
@@ -223,6 +224,58 @@ export async function addNoteAction(_prev: ActionState, fd: FormData): Promise<A
     const base = entityType === "INQUIRY" ? "inquiries" : entityType === "APPLICATION" ? "applications" : "contacts";
     revalidatePath(`/admin/${base}/${entityId}`);
     return { ok: true, message: "Note added." };
+  } catch (err) {
+    return handle(err);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Email replies                                                        */
+/* ------------------------------------------------------------------ */
+const ENTITY_BASE: Record<NoteEntity, "inquiries" | "applications" | "contacts"> = { INQUIRY: "inquiries", APPLICATION: "applications", CONTACT: "contacts" };
+
+export async function sendReplyAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
+  try {
+    const user = await requirePermission("reply:send");
+    const entityType = str(fd, "entityType", 20) as NoteEntity;
+    const entityId = str(fd, "entityId", 64);
+    const subject = str(fd, "subject", 200);
+    const body = str(fd, "body", 10000);
+    if (!["INQUIRY", "APPLICATION", "CONTACT"].includes(entityType)) return fail("Unknown record type.");
+    if (subject.length < 2) return fail("Enter a subject.");
+    if (body.length < 2) return fail("Write a message first.");
+    const limit = rateLimit(`admin-reply:${user.id}`, { limit: 30, windowMs: 60 * 60 * 1000 });
+    if (!limit.ok) return fail("Too many emails sent in the last hour. Try again later.");
+
+    // The recipient is always the address stored on the record; it is never taken from the form.
+    const prisma = getPrisma();
+    const record =
+      entityType === "INQUIRY"
+        ? await prisma.projectInquiry.findUnique({ where: { id: entityId }, select: { email: true, status: true } })
+        : entityType === "APPLICATION"
+          ? await prisma.jobApplication.findUnique({ where: { id: entityId }, select: { email: true, status: true } })
+          : await prisma.contactMessage.findUnique({ where: { id: entityId }, select: { email: true, status: true } });
+    if (!record) return fail("Record not found.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.email)) return fail("This record has no valid email address.");
+
+    const result = await sendReply(user, { entityType, entityId, to: record.email, subject, body });
+
+    // First successful reply moves a fresh record forward in its pipeline (audited like a manual change).
+    if (result.ok && record.status === "NEW") {
+      if (entityType === "CONTACT") {
+        await prisma.contactMessage.update({ where: { id: entityId }, data: { status: "REPLIED" } });
+        await audit({ actor: user, action: "contact.status_changed", entityType: "contact", entityId, details: { from: "NEW", to: "REPLIED", via: "reply" } });
+      } else if (entityType === "INQUIRY") {
+        await prisma.projectInquiry.update({ where: { id: entityId }, data: { status: "CONTACTED" } });
+        await audit({ actor: user, action: "inquiry.status_changed", entityType: "inquiry", entityId, details: { from: "NEW", to: "CONTACTED", via: "reply" } });
+      }
+    }
+
+    const base = ENTITY_BASE[entityType];
+    revalidatePath(`/admin/${base}/${entityId}`);
+    revalidatePath(`/admin/${base}`);
+    revalidatePath("/admin");
+    return { ok: result.ok, message: result.message };
   } catch (err) {
     return handle(err);
   }

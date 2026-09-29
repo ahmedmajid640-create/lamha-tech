@@ -8,6 +8,7 @@ import { addNoteAction, assignApplicationAction, updateApplicationStatusAction }
 import { ActionForm, NoteForm } from "@/components/admin/Forms";
 import { APPLICATION_STATUSES, Card, Dl, PageHeader, StatusBadge, btnCls, fmtDate } from "@/components/admin/ui";
 import { ActivityList } from "@/components/admin/Activity";
+import { RepliesCard } from "@/components/admin/Replies";
 
 export const metadata: Metadata = { title: "Application" };
 
@@ -27,10 +28,11 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   const prisma = getPrisma();
   const app = await prisma.jobApplication.findUnique({ where: { id }, include: { assignedTo: { select: { id: true, name: true } } } });
   if (!app) notFound();
-  const [notes, activity, team] = await Promise.all([
+  const [notes, activity, team, replies] = await Promise.all([
     prisma.note.findMany({ where: { entityType: "APPLICATION", entityId: id }, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true } } } }),
     prisma.auditLog.findMany({ where: { OR: [{ entityType: "application", entityId: id }, { entityType: "cv", entityId: id }] }, orderBy: { createdAt: "desc" }, take: 50 }),
     prisma.user.findMany({ where: { active: true }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.reply.findMany({ where: { entityType: "APPLICATION", entityId: id }, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true } } } }),
   ]);
 
   return (
@@ -69,6 +71,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
               </div>
             )}
           </Card>
+          <RepliesCard entityType="APPLICATION" entityId={app.id} to={app.email} defaultSubject={`Re: your application for ${app.roleTitle} at LAMHA Technologies`} canReply={can(user.role, "reply:send")} replies={replies} />
           <Card title="CV">
             {app.cvStorageKey ? (
               <div className="flex flex-wrap items-center justify-between gap-3">

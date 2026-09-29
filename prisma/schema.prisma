@@ -215,6 +215,7 @@ model User {
 
   sessions             Session[]
   notes                Note[]
+  replies              Reply[]
   auditLogs            AuditLog[]
   assignedInquiries    ProjectInquiry[] @relation("InquiryAssignee")
   assignedApplications JobApplication[] @relation("ApplicationAssignee")
@@ -244,6 +245,31 @@ model Note {
   createdAt  DateTime   @default(now())
 
   @@index([entityType, entityId])
+}
+
+enum ReplyStatus {
+  SENT
+  FAILED
+}
+
+/// Outbound email replies sent from the portal to a requester / candidate (append-only)
+model Reply {
+  id         String      @id @default(uuid())
+  entityType NoteEntity
+  entityId   String
+  authorId   String?
+  author     User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  toEmail    String
+  subject    String
+  body       String
+  status     ReplyStatus
+  provider   String
+  providerId String?
+  error      String?
+  createdAt  DateTime    @default(now())
+
+  @@index([entityType, entityId])
+  @@index([authorId])
 }
 
 model AuditLog {

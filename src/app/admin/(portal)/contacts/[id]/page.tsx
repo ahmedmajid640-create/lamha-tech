@@ -8,6 +8,7 @@ import { addNoteAction, updateContactStatusAction } from "@/app/admin/actions";
 import { ActionForm, NoteForm } from "@/components/admin/Forms";
 import { CONTACT_STATUSES, Card, Dl, PageHeader, StatusBadge, fmtDate } from "@/components/admin/ui";
 import { ActivityList } from "@/components/admin/Activity";
+import { RepliesCard } from "@/components/admin/Replies";
 
 export const metadata: Metadata = { title: "Contact message" };
 
@@ -17,9 +18,10 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
   const prisma = getPrisma();
   const msg = await prisma.contactMessage.findUnique({ where: { id } });
   if (!msg) notFound();
-  const [notes, activity] = await Promise.all([
+  const [notes, activity, replies] = await Promise.all([
     prisma.note.findMany({ where: { entityType: "CONTACT", entityId: id }, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true } } } }),
     prisma.auditLog.findMany({ where: { entityType: "contact", entityId: id }, orderBy: { createdAt: "desc" }, take: 50 }),
+    prisma.reply.findMany({ where: { entityType: "CONTACT", entityId: id }, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true } } } }),
   ]);
   return (
     <>
@@ -48,6 +50,7 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
             />
             <p className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-slate-900">{msg.message}</p>
           </Card>
+          <RepliesCard entityType="CONTACT" entityId={msg.id} to={msg.email} defaultSubject={`Re: ${msg.topic} — LAMHA Technologies`} canReply={can(user.role, "reply:send")} replies={replies} />
           <Card title={`Internal notes (${notes.length})`}>
             {can(user.role, "notes:add") ? <NoteForm action={addNoteAction} entityType="CONTACT" entityId={msg.id} /> : <p className="text-xs text-slate-500">Your role can read notes but not add them.</p>}
             {notes.length > 0 && (

@@ -14,6 +14,8 @@ export type AuditAction =
   | "application.assigned"
   | "contact.status_changed"
   | "note.added"
+  | "reply.sent"
+  | "reply.failed"
   | "file.downloaded"
   | "export.created"
   | "user.created"

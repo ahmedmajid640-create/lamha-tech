@@ -14,6 +14,7 @@ export type Permission =
   | "view:audit"
   | "view:users"
   | "notes:add"
+  | "reply:send"
   | "status:update"
   | "assign"
   | "files:download"
@@ -34,6 +35,7 @@ const MIN_ROLE: Record<Permission, Role> = {
   "view:audit": "ADMIN",
   "view:users": "ADMIN",
   "notes:add": "STAFF",
+  "reply:send": "STAFF",
   "status:update": "MANAGER",
   assign: "MANAGER",
   "files:download": "STAFF",

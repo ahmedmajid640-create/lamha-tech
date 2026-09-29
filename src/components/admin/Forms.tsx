@@ -120,6 +120,48 @@ export function NoteForm({ action, entityType, entityId }: { action: Action; ent
   );
 }
 
+/** Compose and send an email reply to the record's submitter. The recipient address is resolved server-side from the record. */
+export function ReplyForm({ action, entityType, entityId, to, defaultSubject }: { action: Action; entityType: string; entityId: string; to: string; defaultSubject: string }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction, pending] = useActionState(async (prev: ActionState, fd: FormData) => {
+    const result = await action(prev, fd);
+    if (result?.ok) formRef.current?.reset();
+    return result;
+  }, null);
+  return (
+    <form
+      ref={formRef}
+      action={formAction}
+      className="space-y-3"
+      onSubmit={(e) => {
+        if (!window.confirm(`Send this email to ${to}?`)) e.preventDefault();
+      }}
+    >
+      <input type="hidden" name="entityType" value={entityType} />
+      <input type="hidden" name="entityId" value={entityId} />
+      <label className="block text-xs font-medium text-slate-600">
+        To
+        <input value={to} readOnly className={cn(inputCls, "mt-1 bg-slate-50 text-slate-600")} />
+      </label>
+      <label className="block text-xs font-medium text-slate-600">
+        Subject
+        <input name="subject" required minLength={2} maxLength={200} defaultValue={defaultSubject} className={cn(inputCls, "mt-1")} />
+      </label>
+      <label className="block text-xs font-medium text-slate-600">
+        Message
+        <textarea name="body" required minLength={2} maxLength={10000} rows={8} placeholder="Write your reply…" className={cn(inputCls, "mt-1")} />
+      </label>
+      <p className="text-xs text-slate-500">Sent from the website&apos;s email address, signed with your name. The recipient&apos;s answer goes to the company inbox.</p>
+      <div className="flex items-center gap-3">
+        <button type="submit" disabled={pending} className={btnCls}>
+          {pending ? "Sending…" : "Send email"}
+        </button>
+        <Feedback state={state} />
+      </div>
+    </form>
+  );
+}
+
 export function FieldsForm({
   action,
   fields,

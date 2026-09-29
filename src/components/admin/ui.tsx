@@ -22,6 +22,8 @@ const TONE: Record<string, string> = {
   CLOSED: "bg-slate-100 text-slate-600 ring-slate-200",
   REJECTED: "bg-rose-50 text-rose-700 ring-rose-200",
   SPAM: "bg-rose-50 text-rose-700 ring-rose-200",
+  SENT: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+  FAILED: "bg-rose-50 text-rose-700 ring-rose-200",
 };
 
 export function StatusBadge({ status }: { status: string }) {

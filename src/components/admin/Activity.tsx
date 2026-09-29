@@ -13,6 +13,10 @@ export function describeAction(e: Pick<AuditLog, "action" | "details">): string 
       return d.to ? "Assigned" : "Unassigned";
     case "note.added":
       return "Note added";
+    case "reply.sent":
+      return `Email sent to ${String(d.to ?? "recipient")}`;
+    case "reply.failed":
+      return `Email to ${String(d.to ?? "recipient")} failed: ${String(d.error ?? "unknown error")}`;
     case "file.downloaded":
       return `Downloaded ${String(d.name ?? "file")}`;
     case "export.created":
