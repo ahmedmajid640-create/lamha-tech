@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/data/site";
-import { publishedLeadership, founder } from "@/data/leadership";
+import { publishedLeadership, founder, leaderPath, leaderPageTitle, PROFILE_CREATED, PROFILE_MODIFIED, type Leader } from "@/data/leadership";
 import { publishedServices } from "@/data/services";
 
 type BuildMetadataArgs = {
@@ -10,7 +10,9 @@ type BuildMetadataArgs = {
   /** Use the full title verbatim (skip the " | LAMHA Technologies" suffix). */
   absoluteTitle?: boolean;
   noIndex?: boolean;
-  type?: "website" | "article";
+  type?: "website" | "article" | "profile";
+  /** Page-specific share image (site path). Defaults to the generated OG image. */
+  image?: { path: string; alt: string };
 };
 
 export function absoluteUrl(path: string): string {
@@ -25,9 +27,11 @@ export function buildMetadata({
   absoluteTitle = false,
   noIndex = false,
   type = "website",
+  image,
 }: BuildMetadataArgs): Metadata {
   const url = absoluteUrl(path);
   const fullTitle = absoluteTitle ? title : `${title} | ${site.name}`;
+  const ogImage = image ? { url: absoluteUrl(image.path), alt: image.alt } : { url: absoluteUrl("/opengraph-image"), width: 1200, height: 630, alt: site.tagline };
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
@@ -39,13 +43,13 @@ export function buildMetadata({
       siteName: site.name,
       type,
       locale: "en_US",
-      images: [{ url: absoluteUrl("/opengraph-image"), width: 1200, height: 630, alt: site.tagline }],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [absoluteUrl("/opengraph-image")],
+      images: [ogImage.url],
     },
     robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
   };
@@ -97,24 +101,56 @@ export function organizationJsonLd() {
   };
 }
 
+/** Stable Person identifier. Unchanged since the leadership page first published Person entities; never derive it from the profile URL. */
 export function PERSON_ID(slug: string) {
   return absoluteUrl(`/about/leadership#${slug}`);
 }
 
-/** One Person entity per published leader: name, title, portrait, employer link. Nothing beyond what the site already states. */
-export function peopleJsonLd() {
-  return publishedLeadership.map((l) => ({
-    "@context": "https://schema.org",
+/**
+ * The single Person entity for a leader (same @id everywhere it is referenced).
+ * Fields: name, role, approved description, portrait, canonical profile URL, employer, stated discipline,
+ * work location (the employer's published city) and the verified LinkedIn profile where one was supplied.
+ */
+export function personJsonLd(l: Leader) {
+  return {
     "@type": "Person",
     "@id": PERSON_ID(l.slug),
     name: l.name,
     jobTitle: l.role,
     ...(l.bio ? { description: l.bio } : {}),
     ...(l.portrait ? { image: absoluteUrl(l.portrait) } : {}),
-    url: absoluteUrl("/about/leadership"),
+    url: absoluteUrl(leaderPath(l)),
+    mainEntityOfPage: absoluteUrl(leaderPath(l)),
     worksFor: { "@id": ORG_ID() },
+    ...(l.discipline ? { hasOccupation: { "@type": "Occupation", name: l.discipline } } : {}),
+    workLocation: { "@type": "Place", address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressCountry: site.contact.countryCode } },
+    // sameAs only for a verified profile of this exact person; absent otherwise (never guessed).
     ...(l.profileUrl ? { sameAs: [l.profileUrl] } : {}),
-  }));
+  };
+}
+
+/** Person entities for the leadership index page (one per published leader). */
+export function peopleJsonLd() {
+  return publishedLeadership.map((l) => ({ "@context": "https://schema.org", ...personJsonLd(l) }));
+}
+
+/** ProfilePage for a leader's canonical profile route; its mainEntity is that leader's Person. */
+export function profilePageJsonLd(l: Leader) {
+  const url = absoluteUrl(leaderPath(l));
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${url}#webpage`,
+    url,
+    name: leaderPageTitle(l),
+    description: l.metaDescription,
+    inLanguage: "en",
+    dateCreated: PROFILE_CREATED,
+    dateModified: PROFILE_MODIFIED,
+    isPartOf: { "@id": WEBSITE_ID() },
+    ...(l.portrait ? { primaryImageOfPage: { "@type": "ImageObject", url: absoluteUrl(l.portrait), caption: `Portrait of ${l.name}, ${l.role} at ${site.name}` } } : {}),
+    mainEntity: personJsonLd(l),
+  };
 }
 
 export function websiteJsonLd() {

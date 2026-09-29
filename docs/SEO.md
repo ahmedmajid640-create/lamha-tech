@@ -10,9 +10,10 @@ foundations and the manual verification steps.
 | --- | --- |
 | Unique title, description, canonical, Open Graph, Twitter card per page | `buildMetadata()` in `src/lib/seo.ts`, used by every page |
 | robots.txt (allow all, disallow `/api/`, sitemap reference) | `src/app/robots.ts` → `/robots.txt` |
-| sitemap.xml (static pages, 13 services, 4 solutions, open jobs only) | `src/app/sitemap.ts` → `/sitemap.xml` |
+| sitemap.xml (static pages, 4 leadership profiles, 13 services, 4 solutions, open jobs only) | `src/app/sitemap.ts` → `/sitemap.xml` |
 | Organization + WebSite JSON-LD on every page | root layout |
 | WebPage JSON-LD (home), BreadcrumbList (inner pages), Service + FAQPage (service pages) | page components |
+| Person JSON-LD for the four leaders (leadership index) and ProfilePage → mainEntity → Person on each canonical profile `/about/leadership/<slug>` | `personJsonLd()` / `profilePageJsonLd()` in `src/lib/seo.ts`, `src/app/(site)/about/leadership/[slug]/page.tsx` |
 | Verification meta tags for Google / Bing | env vars, see below |
 | Web manifest, SVG icon, Apple touch icon, generated OG image | `src/app/manifest.ts`, `icon.svg`, `apple-icon.tsx`, `opengraph-image.tsx` |
 | IndexNow key file + submission script | `public/<key>.txt`, `npm run seo:indexnow` |
@@ -21,6 +22,18 @@ foundations and the manual verification steps.
 Structured data uses only facts already on the site: legal name, tagline, description, Islamabad location,
 published contact email/phone, founder and leadership names/roles, and the 13 service names. No addresses
 beyond city, no employees counts, awards, clients or certifications.
+
+### Person entities (leadership)
+
+- One `Person` per leader with a stable `@id` of the form `https://lamhatechnologies.com/about/leadership#<slug>`.
+  The same `@id` is referenced by `Organization.founder` / `Organization.member` (root layout), the Person list on
+  `/about/leadership`, and `ProfilePage.mainEntity` on `/about/leadership/<slug>`. Never mint a second id.
+- `Person.worksFor` → `#organization`; `Person.url` → the canonical profile page.
+- `Person.sameAs` holds only a LinkedIn URL the owner has verified for that exact person (`profileUrl` in
+  `src/data/leadership.ts`). Leaders without a verified profile have no `sameAs`. Person profiles never go into
+  `Organization.sameAs`.
+- Profile copy (`profile[]`) may only restate approved role descriptions and published company facts. Google decides
+  independently whether any of this appears as a person result; nothing here guarantees a knowledge panel.
 
 ## Google Search Console (manual, ~5 minutes)
 

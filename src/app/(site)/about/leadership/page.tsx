@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildMetadata, breadcrumbJsonLd, peopleJsonLd } from "@/lib/seo";
-import { founder, publishedLeadership } from "@/data/leadership";
+import { founder, leaderPath, leaderRoleLine, publishedLeadership } from "@/data/leadership";
 import { site } from "@/data/site";
 import { PageHero } from "@/components/sections/PageHero";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -75,8 +75,19 @@ export default function LeadershipPage() {
               <h2 id="founder-heading" className="mt-4 text-h2 font-semibold text-navy">
                 {founder.name}
               </h2>
-              <p className="mt-2 text-lg font-medium text-blue">{founder.role}</p>
+              <p className="mt-2 text-lg font-medium text-blue">{leaderRoleLine(founder)}</p>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">{founder.bio ?? "Leadership biography coming soon."}</p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button href={leaderPath(founder)} variant="secondary" icon="arrow">
+                  Full profile
+                </Button>
+                {founder.profileUrl && (
+                  <a href={founder.profileUrl} rel="me noopener noreferrer" target="_blank" className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline">
+                    LinkedIn profile
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

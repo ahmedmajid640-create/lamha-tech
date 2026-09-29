@@ -1,0 +1,117 @@
+import { describe, expect, it } from "vitest";
+
+// site.url is read from the environment at module load; pin the production host before importing.
+process.env.NEXT_PUBLIC_SITE_URL = "https://lamhatechnologies.com";
+
+const seo = await import("@/lib/seo");
+const { leadership, publishedLeadership, leaderPath, leaderRoleLine, leaderPageTitle } = await import("@/data/leadership");
+const { default: sitemap } = await import("@/app/sitemap");
+
+const ORG = "https://lamhatechnologies.com/#organization";
+const LINKEDIN: Record<string, string | null> = {
+  "syeda-laiba-haider": "https://www.linkedin.com/in/syeda-laiba-b5a209362/",
+  "ahmed-majid": "https://www.linkedin.com/in/ahmed-majid-522486218/",
+  "maira-almas": null,
+  "syed-hamad-haider": "https://www.linkedin.com/in/syed-hamad-haider-21636a40/",
+};
+const ROLES: Record<string, string> = {
+  "syeda-laiba-haider": "Founder",
+  "ahmed-majid": "Co-Founder",
+  "maira-almas": "Chief Executive Officer",
+  "syed-hamad-haider": "Board of Directors",
+};
+
+describe("leadership data", () => {
+  it("publishes exactly the four approved people with their approved roles", () => {
+    expect(publishedLeadership.map((l) => l.slug).sort()).toEqual(Object.keys(ROLES).sort());
+    for (const l of publishedLeadership) expect(l.role).toBe(ROLES[l.slug]);
+  });
+
+  it("holds only the verified LinkedIn profiles (none for Maira Almas)", () => {
+    for (const l of leadership) expect(l.profileUrl).toBe(LINKEDIN[l.slug]);
+  });
+
+  it("derives canonical profile paths, role lines and titles", () => {
+    const founder = leadership[0];
+    expect(leaderPath(founder)).toBe("/about/leadership/syeda-laiba-haider");
+    expect(leaderRoleLine(founder)).toBe("Founder of LAMHA Technologies");
+    expect(leaderPageTitle(founder)).toBe("Syeda Laiba Haider — Founder of LAMHA Technologies");
+    const board = leadership.find((l) => l.slug === "syed-hamad-haider")!;
+    expect(leaderRoleLine(board)).toBe("Member of the Board of Directors of LAMHA Technologies");
+    expect(leaderPageTitle(board)).toBe("Syed Hamad Haider — Board of Directors | LAMHA Technologies");
+    for (const l of leadership) expect(l.metaDescription.length).toBeLessThanOrEqual(160);
+  });
+});
+
+describe("Organization entity", () => {
+  it("keeps the canonical identity and references people only by their stable ids", () => {
+    const org = seo.organizationJsonLd();
+    expect(org["@id"]).toBe(ORG);
+    expect(org.name).toBe("LAMHA Technologies");
+    expect(org.legalName).toBe("LAMHA TECHNOLOGIES (PRIVATE) LIMITED");
+    expect(org.alternateName).toEqual(["LAMHA"]);
+    expect(org.url).toBe("https://lamhatechnologies.com");
+    expect(org.founder).toEqual({ "@id": "https://lamhatechnologies.com/about/leadership#syeda-laiba-haider" });
+    expect(org.member).toHaveLength(4);
+    // Person profiles never leak into the organization's sameAs.
+    expect(org.sameAs.some((u: string) => u.includes("linkedin.com/in/"))).toBe(false);
+  });
+});
+
+describe("Person entities", () => {
+  const people = seo.peopleJsonLd();
+
+  it("emits one Person per leader with the stable @id, worksFor and canonical profile url", () => {
+    expect(people).toHaveLength(4);
+    const ids = people.map((p) => p["@id"]);
+    expect(new Set(ids).size).toBe(4);
+    for (const p of people) {
+      const slug = p["@id"].split("#")[1];
+      expect(p["@id"]).toBe(`https://lamhatechnologies.com/about/leadership#${slug}`);
+      expect(p["@type"]).toBe("Person");
+      expect(p.jobTitle).toBe(ROLES[slug]);
+      expect(p.worksFor).toEqual({ "@id": ORG });
+      expect(p.url).toBe(`https://lamhatechnologies.com/about/leadership/${slug}`);
+      expect(p.mainEntityOfPage).toBe(p.url);
+      expect(p.image).toBe(`https://lamhatechnologies.com/leadership/${slug}.jpg`);
+    }
+  });
+
+  it("sets sameAs for exactly the three verified LinkedIn profiles", () => {
+    for (const p of people) {
+      const slug = p["@id"].split("#")[1];
+      const expected = LINKEDIN[slug];
+      if (expected) expect(p.sameAs).toEqual([expected]);
+      else expect("sameAs" in p).toBe(false);
+    }
+    expect(people.filter((p) => "sameAs" in p)).toHaveLength(3);
+  });
+});
+
+describe("ProfilePage entities", () => {
+  it("makes each leader's Person the mainEntity of their canonical profile page", () => {
+    for (const l of publishedLeadership) {
+      const page = seo.profilePageJsonLd(l);
+      const url = `https://lamhatechnologies.com/about/leadership/${l.slug}`;
+      expect(page["@type"]).toBe("ProfilePage");
+      expect(page.url).toBe(url);
+      expect(page["@id"]).toBe(`${url}#webpage`);
+      expect(page.name).toBe(leaderPageTitle(l));
+      expect(page.mainEntity["@id"]).toBe(`https://lamhatechnologies.com/about/leadership#${l.slug}`);
+      expect(page.mainEntity.name).toBe(l.name);
+      expect(page.mainEntity.worksFor).toEqual({ "@id": ORG });
+      expect(page.isPartOf).toEqual({ "@id": "https://lamhatechnologies.com/#website" });
+    }
+  });
+});
+
+describe("sitemap", () => {
+  it("includes the leadership index and all four profile urls", () => {
+    const urls = sitemap().map((e) => e.url);
+    expect(urls).toContain("https://lamhatechnologies.com/");
+    expect(urls).toContain("https://lamhatechnologies.com/about");
+    expect(urls).toContain("https://lamhatechnologies.com/about/leadership");
+    for (const l of publishedLeadership) expect(urls).toContain(`https://lamhatechnologies.com/about/leadership/${l.slug}`);
+    expect(new Set(urls).size).toBe(urls.length);
+  });
+});

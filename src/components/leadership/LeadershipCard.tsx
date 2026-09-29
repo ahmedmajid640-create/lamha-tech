@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { Leader } from "@/data/leadership";
+import Link from "next/link";
+import { leaderPath, type Leader } from "@/data/leadership";
 import { cn } from "@/lib/utils";
 
 /** Portrait or initials placeholder. Only approved portraits are rendered. */
@@ -41,17 +42,27 @@ export function LeadershipCard({ leader, tone = "light", className }: { leader: 
     <article id={leader.slug} className={cn("group flex h-full flex-col scroll-mt-28", className)}>
       <Portrait leader={leader} className="transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1" />
       <div className="mt-5">
-        <h3 className={cn("text-lg font-semibold", dark ? "text-white" : "text-navy")}>{leader.name}</h3>
+        <h3 className={cn("text-lg font-semibold", dark ? "text-white" : "text-navy")}>
+          <Link href={leaderPath(leader)} className="rounded-sm hover:underline">
+            {leader.name}
+          </Link>
+        </h3>
         <p className={cn("mt-1 text-sm font-medium", dark ? "text-blue-200" : "text-blue")}>{leader.role}</p>
         <p className={cn("mt-3 text-sm leading-relaxed", dark ? "text-slate-400" : "text-slate-500")}>
           {leader.bio ?? "Leadership biography coming soon."}
         </p>
-        {leader.profileUrl && (
-          <a href={leader.profileUrl} rel="me noopener noreferrer" target="_blank" className={cn("mt-3 inline-flex items-center gap-1.5 text-sm font-medium hover:underline", dark ? "text-blue-200" : "text-blue")}>
-            LinkedIn profile
-            <span aria-hidden="true">↗</span>
-          </a>
-        )}
+        <div className={cn("mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm font-medium", dark ? "text-blue-200" : "text-blue")}>
+          <Link href={leaderPath(leader)} className="inline-flex items-center gap-1.5 hover:underline">
+            Full profile
+            <span aria-hidden="true">→</span>
+          </Link>
+          {leader.profileUrl && (
+            <a href={leader.profileUrl} rel="me noopener noreferrer" target="_blank" className="inline-flex items-center gap-1.5 hover:underline">
+              LinkedIn profile
+              <span aria-hidden="true">↗</span>
+            </a>
+          )}
+        </div>
       </div>
     </article>
   );
