@@ -46,6 +46,12 @@ export function LeadershipCard({ leader, tone = "light", className }: { leader: 
         <p className={cn("mt-3 text-sm leading-relaxed", dark ? "text-slate-400" : "text-slate-500")}>
           {leader.bio ?? "Leadership biography coming soon."}
         </p>
+        {leader.profileUrl && (
+          <a href={leader.profileUrl} rel="me noopener noreferrer" target="_blank" className={cn("mt-3 inline-flex items-center gap-1.5 text-sm font-medium hover:underline", dark ? "text-blue-200" : "text-blue")}>
+            LinkedIn profile
+            <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </article>
   );
