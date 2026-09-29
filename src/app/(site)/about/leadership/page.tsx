@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbJsonLd, peopleJsonLd } from "@/lib/seo";
 import { founder, publishedLeadership } from "@/data/leadership";
 import { site } from "@/data/site";
 import { PageHero } from "@/components/sections/PageHero";
@@ -23,6 +23,7 @@ export default function LeadershipPage() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "About", path: "/about" }, { name: "Leadership", path: "/about/leadership" }])} />
+      <JsonLd data={peopleJsonLd()} />
       <PageHero
         number="10"
         label="Leadership"

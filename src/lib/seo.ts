@@ -67,8 +67,8 @@ export function organizationJsonLd() {
     legalName: site.legalName,
     alternateName: ["LAMHA", "LAMHA Technologies (Pvt.) Ltd."],
     url: site.url,
-    logo: { "@type": "ImageObject", url: absoluteUrl("/icon.svg") },
-    image: absoluteUrl("/opengraph-image"),
+    logo: { "@type": "ImageObject", url: absoluteUrl("/logo-512.png"), width: 512, height: 512, caption: `${site.name} logo` },
+    image: [absoluteUrl("/logo-512.png"), absoluteUrl("/opengraph-image")],
     slogan: site.tagline,
     description: site.description,
     email: site.contact.generalEmail,
@@ -76,8 +76,8 @@ export function organizationJsonLd() {
     address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressRegion: "Islamabad Capital Territory", addressCountry: site.contact.countryCode },
     foundingLocation: { "@type": "Place", name: `${site.contact.city}, ${site.contact.country}` },
     areaServed: "Worldwide",
-    founder: { "@type": "Person", name: founder.name, jobTitle: founder.role, worksFor: { "@id": ORG_ID() } },
-    member: publishedLeadership.map((l) => ({ "@type": "Person", name: l.name, jobTitle: l.role })),
+    founder: { "@id": PERSON_ID(founder.slug) },
+    member: publishedLeadership.map((l) => ({ "@id": PERSON_ID(l.slug) })),
     contactPoint: [
       { "@type": "ContactPoint", contactType: "sales", email: site.contact.projectsEmail, telephone: site.contact.phone ?? undefined, availableLanguage: ["English"], url: absoluteUrl("/start-a-project") },
       { "@type": "ContactPoint", contactType: "customer support", email: site.contact.generalEmail, availableLanguage: ["English"], url: absoluteUrl("/contact") },
@@ -90,6 +90,26 @@ export function organizationJsonLd() {
     },
     sameAs: site.social.map((s) => s.href).filter((h): h is string => Boolean(h)),
   };
+}
+
+export function PERSON_ID(slug: string) {
+  return absoluteUrl(`/about/leadership#${slug}`);
+}
+
+/** One Person entity per published leader: name, title, portrait, employer link. Nothing beyond what the site already states. */
+export function peopleJsonLd() {
+  return publishedLeadership.map((l) => ({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": PERSON_ID(l.slug),
+    name: l.name,
+    jobTitle: l.role,
+    ...(l.bio ? { description: l.bio } : {}),
+    ...(l.portrait ? { image: absoluteUrl(l.portrait) } : {}),
+    url: absoluteUrl("/about/leadership"),
+    worksFor: { "@id": ORG_ID() },
+    ...(l.profileUrl ? { sameAs: [l.profileUrl] } : {}),
+  }));
 }
 
 export function websiteJsonLd() {
