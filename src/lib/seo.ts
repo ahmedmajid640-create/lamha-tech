@@ -75,7 +75,7 @@ export function organizationJsonLd() {
     logo: { "@type": "ImageObject", url: absoluteUrl("/logo-512.png"), width: 512, height: 512, caption: `${site.name} logo` },
     image: [absoluteUrl("/logo-512.png"), absoluteUrl("/opengraph-image")],
     slogan: site.tagline,
-    description: site.description,
+    description: site.entityDescription,
     email: site.contact.generalEmail,
     telephone: site.contact.phone ?? undefined,
     address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressRegion: "Islamabad Capital Territory", addressCountry: site.contact.countryCode },

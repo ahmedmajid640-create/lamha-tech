@@ -13,6 +13,9 @@ export const site = {
     "LAMHA Technologies helps businesses, startups and organizations turn technical requirements and real-world problems into practical software, digital products and technology solutions.",
   description:
     "LAMHA Technologies is a technology and software company in Islamabad, Pakistan, building software, web and mobile products and digital solutions.",
+  /** Fuller factual description for the Organization entity (no snippet length limit). Every claim appears on the site. */
+  entityDescription:
+    "LAMHA Technologies is a technology and software company based in Islamabad, Pakistan, building software, web and mobile products, digital solutions and technology solutions for businesses, startups and organizations.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   locale: "en",
   cta: {
