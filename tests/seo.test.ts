@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 process.env.NEXT_PUBLIC_SITE_URL = "https://lamhatechnologies.com";
 
 const seo = await import("@/lib/seo");
-const { leadership, publishedLeadership, leaderPath, leaderRoleLine, leaderPageTitle } = await import("@/data/leadership");
+const leadershipModule = await import("@/data/leadership");
+const { leadership, publishedLeadership, leaderPath, leaderRoleLine, leaderPageTitle } = leadershipModule;
 const { default: sitemap } = await import("@/app/sitemap");
 
 const ORG = "https://lamhatechnologies.com/#organization";
@@ -51,10 +52,15 @@ describe("Organization entity", () => {
     expect(org.legalName).toBe("LAMHA TECHNOLOGIES (PRIVATE) LIMITED");
     expect(org.alternateName).toEqual(["LAMHA"]);
     expect(org.url).toBe("https://lamhatechnologies.com");
-    expect(org.founder).toEqual({ "@id": "https://lamhatechnologies.com/about/leadership#syeda-laiba-haider" });
+    // Founder and Co-Founder are both founders of the organization; their jobTitles stay distinct.
+    expect(org.founder).toEqual([
+      { "@id": "https://lamhatechnologies.com/about/leadership#syeda-laiba-haider" },
+      { "@id": "https://lamhatechnologies.com/about/leadership#ahmed-majid" },
+    ]);
     expect(org.member).toHaveLength(4);
-    // Person profiles never leak into the organization's sameAs.
-    expect(org.sameAs.some((u: string) => u.includes("linkedin.com/in/"))).toBe(false);
+    // Person profiles never leak into the organization's sameAs; the property is absent until an official page exists.
+    const sameAs = (org as { sameAs?: string[] }).sameAs;
+    expect(sameAs === undefined || !sameAs.some((u) => u.includes("linkedin.com/in/"))).toBe(true);
   });
 });
 
@@ -86,6 +92,12 @@ describe("Person entities", () => {
     }
     expect(people.filter((p) => "sameAs" in p)).toHaveLength(3);
   });
+
+  it("states board membership from the Person side only for the board member", () => {
+    const board = people.find((p) => p["@id"].endsWith("#syed-hamad-haider"))!;
+    expect((board as { memberOf?: unknown }).memberOf).toEqual({ "@id": ORG });
+    for (const p of people.filter((p) => p !== board)) expect("memberOf" in p).toBe(false);
+  });
 });
 
 describe("ProfilePage entities", () => {
@@ -113,5 +125,14 @@ describe("sitemap", () => {
     expect(urls).toContain("https://lamhatechnologies.com/about/leadership");
     for (const l of publishedLeadership) expect(urls).toContain(`https://lamhatechnologies.com/about/leadership/${l.slug}`);
     expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it("uses fixed content dates for lastmod, never the build time", () => {
+    const { PROFILE_MODIFIED } = leadershipModule;
+    for (const e of sitemap()) {
+      expect(typeof e.lastModified).toBe("string");
+      expect(e.lastModified).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      if (/\/about\/leadership\//.test(e.url)) expect(e.lastModified).toBe(PROFILE_MODIFIED);
+    }
   });
 });

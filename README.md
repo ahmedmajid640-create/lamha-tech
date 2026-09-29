@@ -1,6 +1,6 @@
 # LAMHA Technologies — Website MVP
 
-Corporate website and lead-generation platform for **LAMHA Technologies (Pvt.) Ltd.** — live at https://lamhatechnologies.com — built to the
+Corporate website and lead-generation platform for **LAMHA Technologies** (legal name LAMHA TECHNOLOGIES (PRIVATE) LIMITED) — live at https://lamhatechnologies.com — built to the
 Final Website PRD v2.0 (`docs/LAMHA_Website_PRD_v2.0.pdf`).
 
 > Technology That Turns Problems Into Progress.

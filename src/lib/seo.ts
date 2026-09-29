@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/data/site";
-import { publishedLeadership, founder, leaderPath, leaderPageTitle, PROFILE_CREATED, PROFILE_MODIFIED, type Leader } from "@/data/leadership";
+import { publishedLeadership, leaderPath, leaderPageTitle, PROFILE_CREATED, PROFILE_MODIFIED, type Leader } from "@/data/leadership";
 import { publishedServices } from "@/data/services";
 
 type BuildMetadataArgs = {
@@ -85,7 +85,9 @@ export function organizationJsonLd() {
     address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressRegion: "Islamabad Capital Territory", addressCountry: site.contact.countryCode },
     foundingLocation: { "@type": "Place", name: `${site.contact.city}, ${site.contact.country}` },
     areaServed: "Worldwide",
-    founder: { "@id": PERSON_ID(founder.slug) },
+    // schema.org founder = a person who founded the organization: the Founder and the Co-Founder.
+    // Each Person keeps its own jobTitle ("Founder" / "Co-Founder"), so the distinction is preserved.
+    founder: publishedLeadership.filter((l) => FOUNDER_ROLES.includes(l.role)).map((l) => ({ "@id": PERSON_ID(l.slug) })),
     member: publishedLeadership.map((l) => ({ "@id": PERSON_ID(l.slug) })),
     contactPoint: [
       { "@type": "ContactPoint", contactType: "sales", email: site.contact.projectsEmail, telephone: site.contact.phone ?? undefined, availableLanguage: ["English"], url: absoluteUrl("/start-a-project") },
@@ -97,9 +99,14 @@ export function organizationJsonLd() {
       name: "LAMHA Technologies services",
       itemListElement: publishedServices.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s.title, url: absoluteUrl(`/services/${s.slug}`) } })),
     },
-    sameAs: site.social.map((s) => s.href).filter((h): h is string => Boolean(h)),
+    // Only official company profiles; omitted entirely until one is supplied.
+    ...(orgSameAs.length ? { sameAs: orgSameAs } : {}),
   };
 }
+
+const FOUNDER_ROLES = ["Founder", "Co-Founder"];
+const BOARD_ROLE = "Board of Directors";
+const orgSameAs = site.social.map((s) => s.href).filter((h): h is string => Boolean(h));
 
 /** Stable Person identifier. Unchanged since the leadership page first published Person entities; never derive it from the profile URL. */
 export function PERSON_ID(slug: string) {
@@ -122,6 +129,8 @@ export function personJsonLd(l: Leader) {
     url: absoluteUrl(leaderPath(l)),
     mainEntityOfPage: absoluteUrl(leaderPath(l)),
     worksFor: { "@id": ORG_ID() },
+    // Board membership is stated from both sides: Organization.member (already) and Person.memberOf.
+    ...(l.role === BOARD_ROLE ? { memberOf: { "@id": ORG_ID() } } : {}),
     ...(l.discipline ? { hasOccupation: { "@type": "Occupation", name: l.discipline } } : {}),
     workLocation: { "@type": "Place", address: { "@type": "PostalAddress", addressLocality: site.contact.city, addressCountry: site.contact.countryCode } },
     // sameAs only for a verified profile of this exact person; absent otherwise (never guessed).
