@@ -41,10 +41,17 @@ export const site = {
       "Alongside client work, LAMHA develops its own internal systems and automation. Selected technologies may later become reusable products, and the company is preparing to expand into new engineering frontiers as it becomes operationally ready.",
     ],
   },
+  /**
+   * Official external profiles (single source of truth for footer links and Organization.sameAs).
+   * TODO(owner): add the LinkedIn company page URL when created; add others only if they are official LAMHA accounts.
+   * Entries with null href are hidden everywhere. Never add directories or unofficial listings here.
+   */
   social: [
-    // Add approved profile URLs when available. Entries with null href are hidden.
     { label: "LinkedIn", href: null as string | null },
     { label: "GitHub", href: null as string | null },
+    { label: "Facebook", href: null as string | null },
+    { label: "Instagram", href: null as string | null },
+    { label: "X", href: null as string | null },
   ],
   mission: "To solve meaningful problems through technology, engineering and continuous innovation.",
   vision:

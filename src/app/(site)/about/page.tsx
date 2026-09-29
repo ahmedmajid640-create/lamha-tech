@@ -163,6 +163,31 @@ export default function AboutPage() {
       {/* Leadership */}
       <LeadershipGrid number="06" />
 
+      {/* Company information: the same facts the Organization structured data states */}
+      <section aria-labelledby="company-facts-heading" className="border-t border-slate-200 bg-white">
+        <div className="container-x section-y-sm">
+          <SectionHeading number="06b" label="Company information" title={<span id="company-facts-heading">LAMHA Technologies at a glance</span>} />
+          <dl className="mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { label: "Legal name", value: site.legalName },
+              { label: "Type", value: "Technology and software company" },
+              { label: "Location", value: `${site.contact.city}, ${site.contact.country} · remote-first, serving clients worldwide` },
+              { label: "Website", value: <a className="text-blue hover:underline" href={site.url}>{site.url.replace(/^https?:\/\//, "")}</a> },
+              { label: "Email", value: <a className="text-blue hover:underline" href={`mailto:${site.contact.generalEmail}`}>{site.contact.generalEmail}</a> },
+              ...(site.contact.phone ? [{ label: "Phone", value: <a className="text-blue hover:underline" href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}>{site.contact.phone}</a> }] : []),
+              { label: "Founder", value: founder.name },
+              { label: "Leadership", value: <a className="text-blue hover:underline" href="/about/leadership">Founder, Co-Founder, CEO and Board</a> },
+              { label: "Services", value: <a className="text-blue hover:underline" href="/services">13 services across engineering, digital experience and growth</a> },
+            ].map((row) => (
+              <div key={row.label}>
+                <dt className="label-caps text-slate-500">{row.label}</dt>
+                <dd className="mt-2 text-base text-navy">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {/* Where we're going */}
       <section aria-labelledby="direction-heading" className="dark-section bg-deep text-white">
         <div className="container-x section-y">

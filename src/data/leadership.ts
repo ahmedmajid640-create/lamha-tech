@@ -14,6 +14,7 @@ export type Leader = {
   portrait: string | null;
   /** CSS object-position for the portrait crop (keeps faces in frame on square cards). */
   portraitPosition?: string;
+  /** TODO(owner): approved LinkedIn (or other professional) profile URL; feeds Person.sameAs. null = not yet supplied. */
   profileUrl: string | null;
   featured: boolean;
   status: "published" | "draft";
