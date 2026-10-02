@@ -214,16 +214,7 @@
   }
 }
 
-/* Custom cursor + intro */
-html.custom-cursor,
-html.custom-cursor * {
-  cursor: none !important;
-}
-html.custom-cursor input,
-html.custom-cursor textarea,
-html.custom-cursor select {
-  cursor: auto !important;
-}
+/* Intro */
 html.preloading {
   overflow: hidden;
 }
